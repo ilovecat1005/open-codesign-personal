@@ -198,9 +198,8 @@ export function PasteKey({ onValidated, onBack }: PasteKeyProps) {
             className="w-full h-[40px] px-3 rounded-[var(--radius-md)] bg-[var(--color-surface)] border border-[var(--color-border)] text-[13px] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:shadow-[0_0_0_3px_var(--color-focus-ring)] transition-[box-shadow,border-color] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)]"
           />
           <span className="text-[12px] text-[var(--color-text-muted)] leading-[1.5]">
-            Override the default endpoint for your provider. Useful for relay services
-            (e.g. third-party AI gateways) and self-hosted proxies. Leave empty for the
-            official endpoint.
+            Override the default endpoint for your provider. Useful for relay services (e.g.
+            third-party AI gateways) and self-hosted proxies. Leave empty for the official endpoint.
           </span>
         </label>
       </details>
