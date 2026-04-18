@@ -48,7 +48,7 @@ export function Onboarding() {
   const idx = stepIndex(step);
 
   return (
-    <div className="h-full flex items-center justify-center bg-[var(--color-background)] px-[var(--space-6)] py-[var(--space-8)] relative overflow-hidden">
+    <div className="h-full flex items-center justify-center bg-[var(--color-background)] px-6 py-8 relative overflow-hidden">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
@@ -57,7 +57,7 @@ export function Onboarding() {
             'radial-gradient(ellipse 80% 50% at 50% 0%, var(--color-accent-soft), transparent 70%)',
         }}
       />
-      <div className="relative w-full max-w-[480px] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-2xl)] shadow-[var(--shadow-card)] p-[var(--space-8)] flex flex-col gap-[var(--space-6)]">
+      <div className="relative w-full max-w-[480px] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-2xl)] shadow-[var(--shadow-card)] p-8 flex flex-col gap-6">
         <header className="flex items-center justify-between">
           <Wordmark badge="pre-alpha" />
           <Stepper current={idx} total={3} />
@@ -92,8 +92,11 @@ export function Onboarding() {
 
 function Stepper({ current, total }: { current: number; total: number }) {
   return (
-    <div className="flex items-center gap-[var(--space-2)]">
-      <span className="text-[var(--text-xs)] font-mono text-[var(--color-text-muted)] tracking-[0.04em]">
+    <div className="flex items-center gap-2">
+      <span
+        className="text-[11px] text-[var(--color-text-muted)] tracking-[0.05em]"
+        style={{ fontFamily: 'var(--font-mono)' }}
+      >
         {current.toString().padStart(2, '0')} / {total.toString().padStart(2, '0')}
       </span>
       <span className="flex items-center gap-[3px]" aria-hidden="true">
@@ -101,7 +104,7 @@ function Stepper({ current, total }: { current: number; total: number }) {
           <span
             // biome-ignore lint/suspicious/noArrayIndexKey: stepper dots are positional
             key={i}
-            className={`h-[3px] rounded-[var(--radius-full)] transition-[width,background-color] duration-[var(--duration-base)] ease-[var(--ease-out)] ${
+            className={`h-[3px] rounded-full transition-[width,background-color] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${
               i < current
                 ? 'w-[14px] bg-[var(--color-accent)]'
                 : 'w-[6px] bg-[var(--color-border-strong)]'

@@ -129,29 +129,35 @@ export function PasteKey({ onValidated, onBack }: PasteKeyProps) {
 
   return (
     <div className="flex flex-col gap-5">
-      <div>
-        <h2 className="text-xl font-semibold text-[var(--color-text-primary)] mb-1">
+      <div className="flex flex-col gap-2">
+        <h2 className="text-[20px] font-semibold text-[var(--color-text-primary)] tracking-[-0.01em] leading-[1.2]">
           Paste your API key
         </h2>
-        <p className="text-sm text-[var(--color-text-secondary)]">
+        <p className="text-[14px] text-[var(--color-text-secondary)] leading-[1.55]">
           We auto-detect the provider and validate against /v1/models. Your key is encrypted with
           the OS keychain.
         </p>
       </div>
 
       <label className="flex flex-col gap-2">
-        <span className="text-xs uppercase tracking-wide text-[var(--color-text-muted)]">
+        <span
+          className="text-[10px] uppercase tracking-[0.08em] text-[var(--color-text-muted)] font-medium"
+          style={{ fontFamily: 'var(--font-mono)' }}
+        >
           API key
         </span>
-        <input
-          ref={inputRef}
-          type="password"
-          value={apiKey}
-          onChange={(e) => setApiKey(e.target.value)}
-          placeholder="sk-ant-…  /  sk-…  /  sk-or-…"
-          spellCheck={false}
-          className="w-full px-3 py-2 rounded-[var(--radius-md)] bg-[var(--color-surface)] border border-[var(--color-border)] text-sm font-mono text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-accent)]"
-        />
+        <div className="relative">
+          <input
+            ref={inputRef}
+            type="password"
+            value={apiKey}
+            onChange={(e) => setApiKey(e.target.value)}
+            placeholder="sk-ant-…  /  sk-…  /  sk-or-…"
+            spellCheck={false}
+            style={{ fontFamily: 'var(--font-mono)' }}
+            className="w-full h-[40px] px-3 rounded-[var(--radius-md)] bg-[var(--color-surface)] border border-[var(--color-border)] text-[13px] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:shadow-[0_0_0_3px_var(--color-focus-ring)] transition-[box-shadow,border-color] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)]"
+          />
+        </div>
       </label>
 
       <StatusLine provider={provider} state={state} helpUrl={helpUrl} />

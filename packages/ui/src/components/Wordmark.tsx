@@ -21,7 +21,10 @@ export function Wordmark({ badge, size = 'md' }: WordmarkProps) {
         open<span className="text-[var(--color-text-muted)] font-normal">/</span>codesign
       </span>
       {badge ? (
-        <span className="inline-flex items-center h-[18px] px-[6px] ml-[2px] rounded-[var(--radius-sm)] bg-[var(--color-accent-soft)] text-[10px] font-medium uppercase tracking-[0.06em] text-[var(--color-accent)] font-mono">
+        <span
+          className="inline-flex items-center h-[18px] px-[6px] ml-[6px] rounded-[var(--radius-sm)] bg-[var(--color-accent-soft)] text-[10px] font-medium uppercase tracking-[0.08em] text-[var(--color-accent)]"
+          style={{ fontFamily: 'var(--font-mono)' }}
+        >
           {badge}
         </span>
       ) : null}

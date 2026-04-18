@@ -23,11 +23,11 @@ export function ChooseModel({
 
   return (
     <div className="flex flex-col gap-5">
-      <div>
-        <h2 className="text-xl font-semibold text-[var(--color-text-primary)] mb-1">
+      <div className="flex flex-col gap-2">
+        <h2 className="text-[20px] font-semibold text-[var(--color-text-primary)] tracking-[-0.01em] leading-[1.2]">
           Pick default models
         </h2>
-        <p className="text-sm text-[var(--color-text-secondary)]">
+        <p className="text-[14px] text-[var(--color-text-secondary)] leading-[1.55]">
           Recommended starters for {shortlist.label}. Switchable per-design later.
         </p>
       </div>
@@ -47,12 +47,12 @@ export function ChooseModel({
         onChange={setModelFast}
       />
 
-      <p className="text-xs text-[var(--color-text-muted)]">
+      <p className="text-[12px] text-[var(--color-text-muted)] leading-[1.5]">
         Estimated cost: ~$0.01–0.05 per design session (varies by provider and prompt length).
       </p>
 
       {errorMessage !== null ? (
-        <p className="text-sm text-[var(--color-error)]">{errorMessage}</p>
+        <p className="text-[13px] text-[var(--color-error)]">{errorMessage}</p>
       ) : null}
 
       <div className="flex justify-between gap-2 pt-2">
@@ -83,13 +83,17 @@ interface ModelPickerProps {
 function ModelPicker({ label, hint, value, options, onChange }: ModelPickerProps) {
   return (
     <label className="flex flex-col gap-2">
-      <span className="text-xs uppercase tracking-wide text-[var(--color-text-muted)]">
+      <span
+        className="text-[10px] uppercase tracking-[0.08em] text-[var(--color-text-muted)] font-medium"
+        style={{ fontFamily: 'var(--font-mono)' }}
+      >
         {label}
       </span>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full px-3 py-2 rounded-[var(--radius-md)] bg-[var(--color-surface)] border border-[var(--color-border)] text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)]"
+        style={{ fontFamily: 'var(--font-mono)' }}
+        className="w-full h-[40px] px-3 rounded-[var(--radius-md)] bg-[var(--color-surface)] border border-[var(--color-border)] text-[13px] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] focus:shadow-[0_0_0_3px_var(--color-focus-ring)] transition-[box-shadow,border-color] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer"
       >
         {options.map((opt) => (
           <option key={opt} value={opt}>
@@ -97,7 +101,7 @@ function ModelPicker({ label, hint, value, options, onChange }: ModelPickerProps
           </option>
         ))}
       </select>
-      <span className="text-xs text-[var(--color-text-muted)]">{hint}</span>
+      <span className="text-[12px] text-[var(--color-text-muted)] leading-[1.4]">{hint}</span>
     </label>
   );
 }
