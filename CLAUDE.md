@@ -8,6 +8,8 @@ open-codesign is an Electron desktop app that turns natural-language prompts int
 
 The full vision and locked decisions live in `docs/VISION.md`. Read it before suggesting architectural changes.
 
+> Note: `docs/` is gitignored — internal team materials (research, roadmaps, handoffs) live there but are not part of the public repo. Clone contributors will not have this directory; team members will find it present locally after cloning and copying the internal docs back.
+
 ## Hard constraints (do not violate)
 
 These are project-level commitments, not preferences:
@@ -60,7 +62,7 @@ packages/
   exporters/         # PDF / PPTX / ZIP exporters (lazy-loaded)
   templates/         # Built-in demo prompts and starter templates
   shared/            # Types, utils, zod schemas
-docs/                # Vision, roadmap, principles, RFCs
+docs/                # Vision, roadmap, principles, RFCs (gitignored — internal only)
 examples/            # Reproductions of Claude Design public demos
 ```
 
