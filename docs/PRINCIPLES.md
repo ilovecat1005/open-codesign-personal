@@ -68,6 +68,17 @@ Concrete examples:
 
 Rule of thumb: **if tier 1 takes more than 2 days, the feature is too ambitious for first cut — pick a simpler tier 1.**
 
+## 5b. Compatible, upgradeable, never bloated, always elegant
+
+These four constraints are non-negotiable for every PR. Mark each one in the PR description.
+
+- **Compatibility**: every public API, every IPC channel, every config key is versioned (`v1`, `v2`, …). When a contract changes, ship the old + new side by side for at least one minor version. No silent shape changes.
+- **Upgradeability**: every feature has a clear upgrade path documented inline. If tier-1 needs to evolve to tier-2, the boundary should already exist (no full rewrite). Persistent data (config, SQLite, history) carries a `schema_version`; migrations live in one obvious place.
+- **No bloat**: every PR reports `du -sh release/` delta. Adding > 1 MB needs justification. Adding any prod dep needs a PR-description block (license / size / why-not-alternatives / could-it-be-peer-dep). Cap is 30 prod deps total.
+- **Elegant by default**: visible UI must use only `packages/ui` tokens, transitions must use the project's standard easing (`cubic-bezier(0.16, 1, 0.3, 1)`), spacing must come from a 4-px scale, typography from the Plus Jakarta Sans + JetBrains Mono pair. No off-the-shelf "AI-app aesthetic" (gradients, glass-morphism without purpose). Empty states, loading states, and errors get the same level of polish as the happy path.
+
+When a PR reviewer asks "is this aligned with §5b?", the answer must be yes on all four — not three of four.
+
 ## 6. No premature abstraction
 
 - ❌ No factory patterns, plugin systems, or DI containers without 2+ real callers

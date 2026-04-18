@@ -49,4 +49,5 @@ pnpm-debug.log*
 
 # Local data
 .claude/workspace/
+.claude/worktrees/
 *.local

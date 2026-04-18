@@ -14,10 +14,11 @@ These are project-level commitments, not preferences:
 
 1. **Install size budget: ≤ 80 MB.** Adding a dependency that pushes us over requires PR justification with size diff and alternatives considered. CI enforces this.
 2. **No bundled model runtimes.** No Ollama, llama.cpp, Python, or browser binaries shipped in the installer. Use system installs or lazy-download on demand.
-3. **BYOK only.** No proxied API calls, no cloud account, no telemetry by default. User credentials stay in `~/.config/open-codesign/config.toml`.
+3. **BYOK only.** No proxied API calls, no cloud account, no telemetry by default. User credentials stay in `~/.config/open-codesign/config.toml` (encrypted via Electron `safeStorage`).
 4. **Local-first storage.** Designs, history, and codebase scans live on disk (SQLite via `better-sqlite3`). No mandatory cloud sync.
 5. **Apache-2.0 compatible only.** Reject GPL/AGPL/SSPL/proprietary deps. Check license before adding anything.
 6. **Lazy-load heavy features.** PPTX export, web capture, codebase scan, etc. must dynamic-import on first use, not on app start.
+7. **Compatibility, upgradeability, no bloat, elegance** — the four PRINCIPLES §5b checks. Every PR description must mark all four green.
 
 ## Stack & conventions
 
@@ -67,11 +68,13 @@ examples/            # Reproductions of Claude Design public demos
 
 - **Always read `docs/VISION.md` and `docs/PRINCIPLES.md` first** for any non-trivial change. The constraints are not negotiable.
 - **Use the planning-with-files workflow** for any task spanning > 5 tool calls or > 3 files. Plans live in `.claude/workspace/`.
+- **Use git worktrees for parallel work.** See `docs/COLLABORATION.md` for the workflow. Never run two unrelated feature branches in the same checkout.
 - **Check `docs/RESEARCH_QUEUE.md`** before starting work that touches sandbox / inline-comment / slider / PPTX / pi-ai capabilities — research may still be pending and decisions unresolved.
 - **Respect the lean budget.** Before adding a dependency: search for a tiny alternative, consider inlining, ask if it can be a peer dep.
 - **UI must use `packages/ui` tokens.** Don't hard-code colors, fonts, or spacing in app code. If a token is missing, add it to `packages/ui` first.
 - **No "design for the future" abstractions.** Three similar lines is fine. Don't introduce factories, plugin systems, or config-driven dispatch unless we have two real callers.
 - **No comments explaining what code does.** Names should do that. Only comment the *why* when it's surprising.
+- **Schema-version everything that lives on disk.** Config files, SQLite tables, IPC payloads, exported bundle formats — all carry a `schemaVersion` field so we can migrate without breaking older installs.
 
 ## Things to avoid
 
