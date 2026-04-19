@@ -405,6 +405,39 @@ describe('generate()', () => {
     expect(result.message).not.toContain('```html');
   });
 
+  it('strips empty markdown fences left over after streaming-extracted artifacts', async () => {
+    // The streaming parser consumes the artifact body via structured events but
+    // the surrounding ```html / ``` wrappers come through as text deltas. We've
+    // seen this in production logs: model wraps a real artifact tag inside a
+    // markdown fence, parser extracts the artifact, and the chat bubble ends
+    // up showing an orphan ```html\n``` shell.
+    const wrapped = `Sure, here you go.
+
+\`\`\`html
+<artifact identifier="design-1" type="html" title="Hello">
+${SAMPLE_HTML}
+</artifact>
+\`\`\``;
+    completeMock.mockResolvedValueOnce({
+      content: wrapped,
+      inputTokens: 1,
+      outputTokens: 1,
+      costUsd: 0,
+    });
+
+    const result = await generate({
+      prompt: 'design a thing',
+      history: [],
+      model: MODEL,
+      apiKey: 'sk-test',
+    });
+
+    expect(result.artifacts).toHaveLength(1);
+    expect(result.artifacts[0]?.content).toContain(SAMPLE_HTML);
+    expect(result.message).toContain('Sure, here you go.');
+    expect(result.message).not.toContain('```');
+  });
+
   it('throws CodesignError INPUT_UNSUPPORTED_MODE when mode is not create', async () => {
     await expect(
       // Cast required: the type is narrowed to 'create', we force an unsupported

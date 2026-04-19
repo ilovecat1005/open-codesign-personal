@@ -136,6 +136,13 @@ function collect(events: Iterable<ArtifactEvent>, into: Collected): void {
   }
 }
 
+function stripEmptyFences(text: string): string {
+  // Streaming parsers emit ```html and the closing ``` as text deltas around
+  // structured artifact events, so the artifact body is consumed but the empty
+  // fence shell remains in the chat message. Drop those leftover wrappers.
+  return text.replace(/```[a-zA-Z0-9]*\s*```/g, '').trim();
+}
+
 function extractHtmlDocument(source: string): string | null {
   const doctypeMatch = source.match(/<!doctype html[\s\S]*?<\/html>/i);
   if (doctypeMatch) return doctypeMatch[0].trim();
@@ -333,7 +340,7 @@ async function runModel(input: ModelRunInput): Promise<GenerateOutput> {
     });
 
     return {
-      message: collected.text.trim(),
+      message: stripEmptyFences(collected.text),
       artifacts: collected.artifacts,
       inputTokens: result.inputTokens,
       outputTokens: result.outputTokens,
