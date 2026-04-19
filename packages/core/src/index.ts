@@ -430,7 +430,12 @@ function reasoningMismatch(
   err: unknown,
   sentReasoning: ReasoningLevel | undefined,
 ): 'add' | 'drop' | null {
-  if (extractStatus(err) !== 400) return null;
+  // Don't gate on extractStatus(err) === 400: pi-ai (and several upstream
+  // SDKs) surface the HTTP code as a leading "400 ..." substring in the
+  // message rather than as an `err.status` property. The reasoning patterns
+  // below are specific enough that a false positive is highly unlikely; the
+  // cost of one is a single extra request, while a false negative bubbles up
+  // as an opaque PROVIDER_ERROR the user has no path to recover from.
   const msg = errorMessage(err);
   if (sentReasoning === undefined && REASONING_REQUIRED_PATTERNS.some((p) => p.test(msg))) {
     return 'add';

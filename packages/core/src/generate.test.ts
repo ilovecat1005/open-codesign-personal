@@ -378,6 +378,32 @@ describe('generate()', () => {
     expect(completeMock).toHaveBeenCalledTimes(1);
   });
 
+  it('auto-retries when error has only the status in its message string (no err.status property)', async () => {
+    // pi-ai often surfaces the HTTP code as a leading "400 ..." substring in
+    // the message rather than as err.status — observed with
+    // openrouter/openai/gpt-oss-120b:free in production.
+    const err = new Error('400 Reasoning is mandatory for this endpoint and cannot be disabled.');
+    completeMock.mockRejectedValueOnce(err);
+    completeMock.mockResolvedValueOnce({
+      content: RESPONSE,
+      inputTokens: 1,
+      outputTokens: 1,
+      costUsd: 0,
+    });
+
+    const result = await generate({
+      prompt: 'design a meditation app',
+      history: [],
+      model: { provider: 'openrouter', modelId: 'openai/gpt-oss-120b:free' },
+      apiKey: 'sk-test',
+    });
+
+    expect(completeMock).toHaveBeenCalledTimes(2);
+    const second = completeMock.mock.calls[1]?.[2] as { reasoning?: string };
+    expect(second.reasoning).toBe('medium');
+    expect(result.artifacts).toHaveLength(1);
+  });
+
   it('passes reasoning=high for Anthropic claude-opus-4-7 (first-party provider)', async () => {
     completeMock.mockResolvedValueOnce({
       content: RESPONSE,
