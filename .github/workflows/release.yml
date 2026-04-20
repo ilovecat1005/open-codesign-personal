@@ -156,7 +156,7 @@ jobs:
 
       # Build all workspace packages (turborepo respects dep graph)
       - name: Build workspace
-        run: pnpm -r build --filter '!@open-codesign/desktop'
+        run: pnpm --filter '!@open-codesign/desktop' -r build
 
       # Package the Electron app.
       # CSC_IDENTITY_AUTO_DISCOVERY=false: skip ad-hoc Mac signing prompt.
