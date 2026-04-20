@@ -7,6 +7,7 @@ import {
 import { Button } from '@open-codesign/ui';
 import {
   AlertTriangle,
+  Check,
   CheckCircle,
   ChevronDown,
   Cpu,
@@ -683,10 +684,24 @@ function ModelsTab() {
           )}
         <div className="flex items-center justify-between gap-[var(--space-3)] min-h-[var(--size-control-sm)]">
           <SectionTitle>{t('settings.providers.sectionTitle')}</SectionTitle>
-          <Button variant="secondary" size="sm" onClick={() => setShowAddCustom(true)}>
-            <Plus className="w-3.5 h-3.5" />
-            {t('settings.providers.addProvider')}
-          </Button>
+          <AddProviderMenu
+            open={showAddMenu}
+            setOpen={setShowAddMenu}
+            hasCodexImported={rows.some((r) => r.provider.startsWith('codex-'))}
+            hasClaudeCodeImported={rows.some((r) => r.provider === 'claude-code-imported')}
+            onImportCodex={() => {
+              setShowAddMenu(false);
+              void handleImportCodex();
+            }}
+            onImportClaudeCode={() => {
+              setShowAddMenu(false);
+              void handleImportClaudeCode();
+            }}
+            onAddCustom={() => {
+              setShowAddMenu(false);
+              setShowAddCustom(true);
+            }}
+          />
         </div>
 
         {loading && (
@@ -1142,6 +1157,123 @@ export function Settings() {
           {tab === 'advanced' ? <AdvancedTab /> : null}
         </section>
       </div>
+    </div>
+  );
+}
+
+interface AddProviderMenuProps {
+  open: boolean;
+  setOpen: (v: boolean) => void;
+  hasCodexImported: boolean;
+  hasClaudeCodeImported: boolean;
+  onImportCodex: () => void;
+  onImportClaudeCode: () => void;
+  onAddCustom: () => void;
+}
+
+function AddProviderMenu({
+  open,
+  setOpen,
+  hasCodexImported,
+  hasClaudeCodeImported,
+  onImportCodex,
+  onImportClaudeCode,
+  onAddCustom,
+}: AddProviderMenuProps) {
+  const t = useT();
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    function onDown(e: MouseEvent) {
+      if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setOpen(false);
+    }
+    window.addEventListener('mousedown', onDown);
+    window.addEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('mousedown', onDown);
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [open, setOpen]);
+
+  const items: Array<{
+    key: string;
+    label: string;
+    desc: string;
+    disabled: boolean;
+    onClick: () => void;
+  }> = [
+    {
+      key: 'codex',
+      label: t('settings.providers.import.codexMenu', { defaultValue: '从 Codex 导入' }),
+      desc: t('settings.providers.import.codexMenuDesc', {
+        defaultValue: '读取 ~/.codex/config.toml',
+      }),
+      disabled: hasCodexImported,
+      onClick: onImportCodex,
+    },
+    {
+      key: 'claudeCode',
+      label: t('settings.providers.import.claudeCodeMenu', {
+        defaultValue: '从 Claude Code 导入',
+      }),
+      desc: t('settings.providers.import.claudeCodeMenuDesc', {
+        defaultValue: '读取已登录的 Claude Code 会话',
+      }),
+      disabled: hasClaudeCodeImported,
+      onClick: onImportClaudeCode,
+    },
+    {
+      key: 'custom',
+      label: t('settings.providers.import.customMenu', { defaultValue: '自定义服务' }),
+      desc: t('settings.providers.import.customMenuDesc', {
+        defaultValue: '手动填写 API key 和 URL',
+      }),
+      disabled: false,
+      onClick: onAddCustom,
+    },
+  ];
+
+  return (
+    <div ref={rootRef} className="relative">
+      <Button variant="secondary" size="sm" onClick={() => setOpen(!open)}>
+        <Plus className="w-3.5 h-3.5" />
+        {t('settings.providers.addProvider')}
+      </Button>
+      {open ? (
+        <div
+          role="menu"
+          className="absolute right-0 top-full mt-[6px] z-50 w-[260px] rounded-[10px] border border-[var(--color-border-muted)] bg-[var(--color-surface-elevated)] shadow-[0_8px_28px_rgba(0,0,0,0.1)] overflow-hidden"
+        >
+          {items.map((item) => (
+            <button
+              key={item.key}
+              type="button"
+              role="menuitem"
+              disabled={item.disabled}
+              onClick={item.onClick}
+              className="w-full text-left px-[14px] py-[10px] flex flex-col gap-[2px] transition-colors disabled:opacity-40 disabled:cursor-not-allowed hover:enabled:bg-[var(--color-surface-hover)]"
+            >
+              <span className="flex items-center gap-[6px] text-[13px] font-medium text-[var(--color-text-primary)]">
+                {item.label}
+                {item.disabled ? (
+                  <Check className="w-[12px] h-[12px] text-[var(--color-accent)]" />
+                ) : null}
+              </span>
+              <span className="text-[11px] text-[var(--color-text-muted)] leading-[1.4]">
+                {item.disabled
+                  ? t('settings.providers.import.alreadyImported', {
+                      defaultValue: '已导入',
+                    })
+                  : item.desc}
+              </span>
+            </button>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -105,7 +105,7 @@ export function TopBar() {
               type="button"
               onClick={() => setView('hub')}
               aria-label={t('topbar.openMyDesigns')}
-              className="inline-flex items-center gap-[6px] rounded-[var(--radius-sm)] px-[var(--space-2)] py-[var(--space-1)] transition-colors duration-[var(--duration-faster)] max-w-[280px]"
+              className="inline-flex items-center gap-[6px] rounded-[var(--radius-sm)] px-[var(--space-2)] py-[var(--space-1)] transition-colors duration-[var(--duration-faster)] max-w-[520px]"
               style={{
                 fontFamily: 'var(--font-display)',
                 fontSize: '19px',
@@ -122,7 +122,9 @@ export function TopBar() {
               }}
             >
               <FolderOpen className="w-4 h-4 shrink-0" aria-hidden />
-              <span className="truncate">{currentDesign?.name ?? t('sidebar.noDesign')}</span>
+              <span className="truncate" title={currentDesign?.name ?? ''}>
+                {currentDesign?.name ?? t('sidebar.noDesign')}
+              </span>
             </button>
           </div>
         )}
