@@ -14,7 +14,12 @@ function assistantWithToolCall(toolCallId: string, inputArg: string): AgentMessa
     role: 'assistant',
     content: [
       { type: 'text', text: 'ok' },
-      { type: 'toolCall', id: toolCallId, name: 'str_replace_based_edit_tool', input: { inputArg } },
+      {
+        type: 'toolCall',
+        id: toolCallId,
+        name: 'str_replace_based_edit_tool',
+        input: { inputArg },
+      },
     ],
   } as unknown as AgentMessage;
 }
@@ -52,10 +57,7 @@ describe('buildTransformContext — size-based block compaction', () => {
     // on the final turn. v1 window-based prune preserved it verbatim.
     const transform = buildTransformContext();
     const huge = 'x'.repeat(50_000);
-    const messages: AgentMessage[] = [
-      userMsg('build it'),
-      assistantText(huge),
-    ];
+    const messages: AgentMessage[] = [userMsg('build it'), assistantText(huge)];
     const out = await transform(messages);
     const last = out[out.length - 1] as { content: Array<{ text?: string }> };
     const text = last.content[0]?.text ?? '';
@@ -72,7 +74,9 @@ describe('buildTransformContext — size-based block compaction', () => {
       toolResult('call-0', 'ok'),
     ];
     const out = await transform(messages);
-    const a = out[1] as { content: Array<{ type?: string; id?: string; name?: string; input?: unknown }> };
+    const a = out[1] as {
+      content: Array<{ type?: string; id?: string; name?: string; input?: unknown }>;
+    };
     const tc = a.content.find((c) => c.type === 'toolCall');
     expect(tc?.id).toBe('call-0');
     expect(tc?.name).toBe('str_replace_based_edit_tool');
