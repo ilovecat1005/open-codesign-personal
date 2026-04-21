@@ -81,7 +81,7 @@ export class CodexTokenStore {
   }
 
   async write(auth: StoredCodexAuth): Promise<void> {
-    await mkdir(dirname(this.filePath), { recursive: true });
+    await mkdir(dirname(this.filePath), { recursive: true, mode: 0o700 });
     const body = JSON.stringify(auth, null, 2);
     await writeFile(this.filePath, body, { encoding: 'utf8', mode: 0o600 });
     this.cache = auth;
