@@ -167,6 +167,24 @@ import { withBase } from 'vitepress'
   <!-- 待替换为真实社区评价：Star 数量、用户引语、HN/PH 提及 -->
 </div>
 
+<div class="codesign-community">
+  <div class="community-card">
+    <h3>用户交流群（微信）</h3>
+    <p class="community-hint">扫码加入中文讨论组。二维码每 7 天刷新，当前截至 <strong>4 月 28 日</strong> 有效。过期请到 <a href="https://github.com/OpenCoworkAI/open-codesign/issues">GitHub Issues</a> 留言提醒我们更新。</p>
+    <img
+      :src="withBase('/community/wechat-group.jpg')"
+      alt="Open CoDesign 用户交流群微信二维码"
+      class="wechat-qr"
+      width="240"
+    />
+  </div>
+  <div class="community-card">
+    <h3>GitHub 社区</h3>
+    <p class="community-hint">Bug 报告、功能需求、异步讨论都在 GitHub Issues。安全问题请走 <a href="https://github.com/OpenCoworkAI/open-codesign/blob/main/SECURITY.md">SECURITY.md</a> 私下联系。</p>
+    <p class="community-cta"><a href="https://github.com/OpenCoworkAI/open-codesign/issues" class="community-button">打开 Issues →</a></p>
+  </div>
+</div>
+
 </div>
 
 <div class="codesign-cta">

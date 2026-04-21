@@ -249,6 +249,11 @@ Found a bug or have a feature request?
 3. **Open a new issue** using our [bug report](https://github.com/OpenCoworkAI/open-codesign/issues/new?template=bug_report.yml) or [feature request](https://github.com/OpenCoworkAI/open-codesign/issues/new?template=feature_request.yml) template.
 4. For security vulnerabilities, see [SECURITY.md](./SECURITY.md).
 
+## Community
+
+- **GitHub Issues** — [bug reports, feature requests, and async discussion](https://github.com/OpenCoworkAI/open-codesign/issues).
+- **WeChat group (Chinese-speaking users)** — scan the QR in [README.zh-CN.md#社群](./README.zh-CN.md#%E7%A4%BE%E7%BE%A4). WeChat group codes rotate every 7 days; we refresh the image in-repo on that cadence.
+
 ## Contributing
 
 Read [CONTRIBUTING.md](./CONTRIBUTING.md). Open an issue before writing code, sign commits with DCO, run `pnpm lint && pnpm typecheck && pnpm test` before a PR.

@@ -167,6 +167,19 @@ import { withBase } from 'vitepress'
   <!-- Replace with real social proof: star count, user quotes, HN/PH mentions -->
 </div>
 
+<div class="codesign-community">
+  <div class="community-card">
+    <h3>GitHub</h3>
+    <p class="community-hint">Bug reports, feature requests, and async discussion all happen in Issues. Security issues → <a href="https://github.com/OpenCoworkAI/open-codesign/blob/main/SECURITY.md">SECURITY.md</a>.</p>
+    <p class="community-cta"><a href="https://github.com/OpenCoworkAI/open-codesign/issues" class="community-button">Open Issues →</a></p>
+  </div>
+  <div class="community-card">
+    <h3>WeChat (中文社群)</h3>
+    <p class="community-hint">Chinese-speaking users chat in our WeChat group — the QR lives in the <a href="/open-codesign/zh/#社群">Chinese landing page</a>. Codes rotate every 7 days; we refresh in-repo.</p>
+    <p class="community-cta"><a href="/open-codesign/zh/#社群" class="community-button">View QR →</a></p>
+  </div>
+</div>
+
 </div>
 
 <div class="codesign-cta">

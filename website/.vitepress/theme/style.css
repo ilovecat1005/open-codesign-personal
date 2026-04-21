@@ -365,3 +365,73 @@ body {
   display: block;
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.04), 0 12px 32px -12px rgba(26, 26, 26, 0.24);
 }
+
+/* Community — two-card row directly under "Trusted by builders" with the
+ * WeChat QR image on one side and GitHub Issues on the other. Both cards
+ * share the same card skeleton; WeChat card is taller because of the QR.
+ */
+.codesign-community {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem auto 0;
+  max-width: 820px;
+  padding: 0 1.5rem;
+}
+.community-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 1.1rem 1.25rem 1.25rem;
+  border: 1px solid var(--vp-c-divider, rgba(0, 0, 0, 0.08));
+  background: var(--vp-c-bg-soft, rgba(0, 0, 0, 0.02));
+  border-radius: 12px;
+}
+.community-card h3 {
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+}
+.community-hint {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--vp-c-text-2, #6b6b6b);
+}
+.community-hint a {
+  color: var(--vp-c-brand-1, #c96442);
+  text-decoration: none;
+}
+.community-hint a:hover {
+  text-decoration: underline;
+}
+.community-card .wechat-qr {
+  display: block;
+  margin: 0.25rem auto 0;
+  width: 100%;
+  max-width: 240px;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--vp-c-divider, rgba(0, 0, 0, 0.08));
+  background: #fff;
+}
+.community-cta {
+  margin: auto 0 0;
+  padding-top: 0.25rem;
+}
+.community-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  background: var(--vp-c-brand-1, #c96442);
+  color: #fff !important;
+  text-decoration: none !important;
+  font-size: 0.86rem;
+  font-weight: 500;
+  transition: transform 120ms ease-out, background-color 120ms ease;
+}
+.community-button:hover {
+  transform: translateY(-1px);
+  background: var(--vp-c-brand-2, #b8583a);
+}

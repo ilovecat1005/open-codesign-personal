@@ -240,6 +240,18 @@ Open CoDesign 可以把一句自然语言提示词，直接变成一个完成度
 - `@mariozechner/pi-ai`（多 provider 模型抽象）
 - `better-sqlite3`、`electron-builder`
 
+## 社群
+
+中文用户交流群（微信）：
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/OpenCoworkAI/open-codesign/main/website/public/community/wechat-group.jpg" alt="Open CoDesign 用户交流群微信二维码" width="260" />
+</p>
+
+> ⚠️ 微信群二维码每 7 天自动失效（当前截至 **4 月 28 日** 有效）。扫码失败请到 [GitHub Issues](https://github.com/OpenCoworkAI/open-codesign/issues) 留言，我们会更新这里的图片。
+
+英文或异步讨论：[GitHub Issues](https://github.com/OpenCoworkAI/open-codesign/issues) · 安全问题：[SECURITY.md](./SECURITY.md)。
+
 ## 参与贡献
 
 请先阅读 [CONTRIBUTING.md](./CONTRIBUTING.md)。开始写代码前建议先开 issue，提交时需要签 DCO，发 PR 前请先运行 `pnpm lint && pnpm typecheck && pnpm test`。
