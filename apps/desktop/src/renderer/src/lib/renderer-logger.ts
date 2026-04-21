@@ -97,12 +97,7 @@ export const rendererLogger = {
   warn: (scope: string, message: string, data?: Record<string, unknown>): void => {
     forward('warn', scope, message, data);
   },
-  error: (
-    scope: string,
-    message: string,
-    data?: Record<string, unknown>,
-    stack?: string,
-  ): void => {
+  error: (scope: string, message: string, data?: Record<string, unknown>, stack?: string): void => {
     forward('error', scope, message, data, stack);
   },
 };

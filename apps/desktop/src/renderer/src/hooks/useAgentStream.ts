@@ -87,7 +87,10 @@ export function useAgentStream(): void {
 
     const handleTurnStart = (event: AgentStreamEvent) => {
       // TODO: replace with rendererLogger once renderer-logger lands
-      console.debug('[agent] turn_start', { generationId: event.generationId, designId: event.designId });
+      console.debug('[agent] turn_start', {
+        generationId: event.generationId,
+        designId: event.designId,
+      });
       const previous = inFlight.current;
       const sameRun =
         previous &&
