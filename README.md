@@ -109,7 +109,7 @@ Open source, desktop-native, and built for people who do not want their design w
 
 **Requires:** one API key or local Ollama
 
-**Runs on:** macOS, Windows, Linux
+**Runs on:** macOS 12+ (Monterey or later), Windows 10+, Linux (glibc ≥ 2.31)
 
 ### 1. Install
 
