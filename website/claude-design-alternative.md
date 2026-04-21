@@ -1,79 +1,79 @@
 ---
-title: Claude Design Alternative — Open-Source, Self-Hosted, BYOK
-description: Looking for a Claude Design alternative? Open CoDesign is the open-source Claude Design alternative — self-hosted, multi-model BYOK, local-first, Apache-2.0. Runs on macOS, Windows, Linux.
+title: Open CoDesign vs Claude Design
+description: Comparison of Open CoDesign — an open-source, self-hosted, BYOK desktop AI design tool — against Anthropic Claude Design. Feature matrix, tradeoffs, and when each is the right choice.
 head:
   - - meta
     - property: og:title
-      content: Claude Design Alternative — Open CoDesign (Open Source)
+      content: Open CoDesign vs Claude Design — Feature Comparison
   - - meta
     - property: og:description
-      content: Open CoDesign is the open-source Claude Design alternative. Self-hosted, BYOK, local-first. Any model — Anthropic, OpenAI, Gemini, DeepSeek, Ollama.
+      content: Honest side-by-side of Open CoDesign (open-source, self-hosted, BYOK) and Anthropic Claude Design. When to pick each.
 ---
 
-# The Open-Source Claude Design Alternative
+# Open CoDesign vs Claude Design
 
-**Open CoDesign** is the open-source Claude Design alternative. A self-hosted desktop AI design tool that turns prompts into HTML prototypes, React components, slide decks, PDFs, and marketing assets — on your laptop, with any model you already pay for. Apache-2.0 licensed.
+Both tools turn prompts into polished designs. They make different trade-offs. This page exists so you can decide quickly which one fits your workflow.
 
-[Download for macOS / Windows / Linux →](https://github.com/OpenCoworkAI/open-codesign/releases) · [Quickstart (90 s)](./quickstart) · [Star on GitHub](https://github.com/OpenCoworkAI/open-codesign)
+[Download Open CoDesign →](https://github.com/OpenCoworkAI/open-codesign/releases) · [Quickstart (90 s)](./quickstart)
 
-## Why a Claude Design alternative?
+## At a glance
 
-Anthropic's Claude Design is a great web app — but it forces three things that don't work for every team:
+Claude Design is a hosted web app by Anthropic that runs Claude Opus on their infrastructure. Open CoDesign is an Apache-2.0 desktop app you run on your own machine with whichever model provider you already use.
 
-1. **Subscription lock-in.** Rate-limited at $200/month; no way to control cost on rough drafts.
-2. **Single-model ceiling.** Claude Opus only. No GPT, no Gemini, no local model.
-3. **Cloud processing.** Every prompt, every design goes to Anthropic's servers. No meaningful export, no version history, no codebase awareness.
+Pick **Claude Design** if you want zero setup, are happy on an Anthropic subscription, and don't need model flexibility or offline use.
 
-Open CoDesign is the open-source Claude Design alternative for teams that need BYOK cost control, multi-model flexibility, or on-device privacy.
+Pick **Open CoDesign** if you want BYOK cost control, any model beyond Claude, on-device privacy, local version history, or multiple export formats.
 
-## Open CoDesign vs Claude Design
+## Feature matrix
 
-|                       | Open CoDesign (open-source) | Claude Design |
-| --------------------- | :-------------------------: | :-----------: |
-| License               | **Apache-2.0**              | Closed        |
-| Runs on               | **Your laptop (macOS / Windows / Linux)** | Cloud (browser) |
-| Models                | **Any — Anthropic, OpenAI, Gemini, DeepSeek, OpenRouter, SiliconFlow, Ollama, OpenAI-compatible** | Anthropic Opus only |
-| Keyless proxy support | **Yes (IP-allowlisted)**    | No            |
-| Config import         | **Claude Code + Codex, one click** | No    |
-| Built-in design skills | **12 modules (slide decks, dashboards, landing pages, …)** | None |
-| Demo prompts          | **15 ready-to-edit**        | Blank canvas  |
-| Data location         | **SQLite on your machine**  | Anthropic servers |
-| Version history       | **Local snapshots**         | None          |
-| Export                | **HTML, PDF, PPTX, ZIP, Markdown** | HTML       |
-| Inline element comments | **Yes (AI rewrites only the pinned region)** | No |
-| AI-tunable sliders    | **Yes**                     | No            |
-| Responsive frames     | **Phone / tablet / desktop** | Limited      |
-| Price                 | **Free (BYOK token cost)**  | Subscription  |
+|                         | Open CoDesign (open-source) | Claude Design |
+| ----------------------- | :-------------------------: | :-----------: |
+| License                 | **Apache-2.0**              | Closed        |
+| Runs on                 | **Your laptop (macOS / Windows / Linux)** | Cloud (browser) |
+| Models                  | **Any — Anthropic, OpenAI, Gemini, DeepSeek, OpenRouter, SiliconFlow, Ollama, OpenAI-compatible** | Claude Opus |
+| Keyless proxy support   | **Yes (IP-allowlisted)**    | No            |
+| Config import           | **Claude Code + Codex, one click** | No    |
+| Built-in design skills  | **12 modules** (slide decks, dashboards, landing pages, charts, pricing, data tables, …) | — |
+| Demo prompts            | **15 ready-to-edit**        | Blank canvas  |
+| Data location           | **SQLite on your machine**  | Anthropic servers |
+| Version history         | **Local snapshots**         | —             |
+| Export                  | **HTML · PDF · PPTX · ZIP · Markdown** | HTML       |
+| Inline element comments | **Yes (AI rewrites only the pinned region)** | — |
+| AI-tunable sliders      | **Yes**                     | —             |
+| Responsive frames       | **Phone · tablet · desktop** | Limited      |
+| Price                   | **Free (BYOK token cost)**  | Subscription  |
 
-## What you get
+## Why someone would choose Open CoDesign
 
-- **Bring any API key** — Anthropic Claude, OpenAI GPT, Google Gemini, DeepSeek, OpenRouter, SiliconFlow, local Ollama, or any OpenAI-compatible endpoint.
-- **Import your existing Claude Code or Codex config** in one click — providers, models, keys, all at once.
-- **Twelve built-in design skill modules** — slide decks, dashboards, landing pages, SVG charts, glassmorphism, editorial typography, heroes, pricing, footers, chat UIs, data tables, calendars.
-- **Fifteen demo prompts** in English and 简体中文 — landing page, dashboard, pitch slide, pricing page, mobile app, chat UI, event calendar, receipt/invoice, portfolio, settings panel, and more.
-- **Inline comment → AI patch loop** — click any element in the preview, leave a note, the model rewrites only that region.
-- **AI-generated tunable sliders** — the model exposes the parameters worth tuning (color, spacing, font); drag to refine without re-prompting.
-- **Phone / tablet / desktop responsive frames** — true responsive preview, switch with one click.
-- **Five export formats** — HTML (inlined CSS), PDF (via your local Chrome), PPTX, ZIP, Markdown. All on-device.
-- **Four-tab Settings** — Models, Appearance (light/dark, EN/ZH), Storage, Advanced.
-- **Local-first, zero telemetry by default.** SQLite for designs, encrypted TOML via Electron `safeStorage` for keys.
+- **BYOK means cost control.** Ship drafts on a cheap model (DeepSeek, local Ollama, GPT-4o-mini), polish on Claude Opus only when it matters.
+- **Data stays on-device.** Your prompts, designs, and any codebase scans never leave your laptop unless you send them to a model provider yourself.
+- **Local version history.** Every iteration is a snapshot you can diff and roll back.
+- **Interactive surface.** Click an element, leave a note, watch the model rewrite only that region. Drag AI-generated sliders to tune color, spacing, and typography without re-prompting.
+- **Real exports.** PDF via your local Chrome, PPTX via `pptxgenjs`, ZIP asset bundle, Markdown with frontmatter — all lazy-loaded so the cold-start bundle stays lean.
+- **Import what you already have.** One click pulls every provider / model / key out of your Claude Code or Codex config.
 
-## Is this a fork of Claude Design?
+## Why someone would stay on Claude Design
 
-No. Open CoDesign is an independent, clean-room open-source project inspired by what Claude Design proves is possible. We don't use any Anthropic proprietary code. The name "Claude Design" belongs to Anthropic; we are the open-source alternative, not an affiliate.
+- Zero install, nothing to configure.
+- Seamless integration with Anthropic's product surface.
+- You explicitly want Opus-only and don't care about multi-model.
 
-## Install
+Both are reasonable answers. Use what fits.
 
-- [Download pre-built installer](https://github.com/OpenCoworkAI/open-codesign/releases) — macOS DMG, Windows EXE, Linux AppImage
-- [90-second Quickstart](./quickstart) — first design from prompt to export
+## Is Open CoDesign a fork of Claude Design?
+
+No. Open CoDesign is an independent, clean-room open-source project built by OpenCoworkAI. It shares no code with Anthropic's Claude Design. The name "Claude Design" belongs to Anthropic; Open CoDesign is an independent alternative, not affiliated with Anthropic.
+
+## Install Open CoDesign
+
+- [Pre-built installer](https://github.com/OpenCoworkAI/open-codesign/releases) — macOS DMG, Windows EXE, Linux AppImage
+- [90-second Quickstart](./quickstart) — from prompt to export
 - [Build from source](./quickstart#build-from-source) — Node 22 LTS + pnpm 9.15+
 
-## Questions
+## FAQ
 
 - **Is it really free?** Yes. You pay only the token cost to whichever model provider you bring.
 - **Does it send anything to the cloud?** Only the prompts you send to your own model provider. Nothing goes to OpenCoworkAI or a shared backend.
 - **Can I use it with Ollama?** Yes. Any OpenAI-compatible endpoint works, keyless proxies included.
-- **Can I self-host?** It's a desktop app — it already runs entirely on your machine.
-- **What license?** Apache-2.0. Fork it, ship it, sell it. Keep the NOTICE.
+- **License?** Apache-2.0. Fork it, ship it, sell it. Keep the NOTICE.
 
-Ready to try the open-source Claude Design alternative? [Download Open CoDesign →](https://github.com/OpenCoworkAI/open-codesign/releases)

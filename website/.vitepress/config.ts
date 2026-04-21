@@ -189,9 +189,9 @@ export default defineConfig({
 
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Why', link: '/#how-it-compares' },
       { text: 'Features', link: '/#features' },
       { text: 'Quickstart', link: '/quickstart' },
+      { text: 'vs Claude Design', link: '/claude-design-alternative' },
       { text: 'Architecture', link: '/architecture' },
       { text: 'Roadmap', link: '/roadmap' },
       {
@@ -207,6 +207,7 @@ export default defineConfig({
         items: [
           { text: 'Overview', link: '/' },
           { text: 'Quickstart', link: '/quickstart' },
+          { text: 'vs Claude Design', link: '/claude-design-alternative' },
         ],
       },
       {
@@ -249,6 +250,7 @@ export default defineConfig({
         nav: [
           { text: '首页', link: '/zh/' },
           { text: '快速开始', link: '/zh/quickstart' },
+          { text: '对比 Claude Design', link: '/zh/claude-design-alternative' },
           { text: 'GitHub', link: 'https://github.com/OpenCoworkAI/open-codesign' },
         ],
         sidebar: [
@@ -257,6 +259,7 @@ export default defineConfig({
             items: [
               { text: '简介', link: '/zh/' },
               { text: '快速开始', link: '/zh/quickstart' },
+              { text: '对比 Claude Design', link: '/zh/claude-design-alternative' },
             ],
           },
         ],
