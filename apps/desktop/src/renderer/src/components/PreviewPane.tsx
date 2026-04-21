@@ -1,8 +1,10 @@
 import { useT } from '@open-codesign/i18n';
 import {
+  type ElementRectsMessage,
   type IframeErrorMessage,
   type OverlayMessage,
   buildSrcdoc,
+  isElementRectsMessage,
   isIframeErrorMessage,
   isOverlayMessage,
 } from '@open-codesign/runtime';
@@ -69,11 +71,12 @@ export function scaleRectForZoom(
   };
 }
 
-export type AllowedPreviewMessageType = 'ELEMENT_SELECTED' | 'IFRAME_ERROR';
+export type AllowedPreviewMessageType = 'ELEMENT_SELECTED' | 'IFRAME_ERROR' | 'ELEMENT_RECTS';
 
 export interface PreviewMessageHandlers {
   onElementSelected: (msg: OverlayMessage) => void;
   onIframeError: (msg: IframeErrorMessage) => void;
+  onElementRects: (msg: ElementRectsMessage) => void;
 }
 
 export type PreviewMessageOutcome =
@@ -103,6 +106,12 @@ export function handlePreviewMessage(
       if (isIframeErrorMessage(data)) {
         handlers.onIframeError(data);
         return { status: 'handled', type: 'IFRAME_ERROR' };
+      }
+      return { status: 'rejected', reason: 'shape', type: envelope.type };
+    case 'ELEMENT_RECTS':
+      if (isElementRectsMessage(data)) {
+        handlers.onElementRects(data);
+        return { status: 'handled', type: 'ELEMENT_RECTS' };
       }
       return { status: 'rejected', reason: 'shape', type: envelope.type };
     default:
@@ -276,6 +285,9 @@ export function PreviewPane({ onPickStarter }: PreviewPaneProps) {
   const openCommentBubble = useCodesignStore((s) => s.openCommentBubble);
   const closeCommentBubble = useCodesignStore((s) => s.closeCommentBubble);
   const addComment = useCodesignStore((s) => s.addComment);
+  const applyLiveRects = useCodesignStore((s) => s.applyLiveRects);
+  const clearLiveRects = useCodesignStore((s) => s.clearLiveRects);
+  const liveRects = useCodesignStore((s) => s.liveRects);
 
   // Active iframe ref consumed by TweakPanel (postMessage target) and by the
   // window.message guard. We re-point this whenever the active design changes
@@ -304,7 +316,35 @@ export function PreviewPane({ onPickStarter }: PreviewPaneProps) {
     if (el) {
       postModeToPreviewWindow(el.contentWindow, interactionMode, pushIframeError);
     }
-  }, [currentDesignId, interactionMode, pushIframeError]);
+    // New iframe / new design → liveRects from the old one are stale.
+    clearLiveRects();
+  }, [currentDesignId, interactionMode, pushIframeError, clearLiveRects]);
+
+  // Tell the sandbox which selectors to track. The sandbox re-measures each
+  // on scroll/resize and broadcasts ELEMENT_RECTS; we merge into liveRects.
+  // Selectors: all comments on the current snapshot + the active bubble's
+  // selector (usually the freshly-pinned one, included for the moment
+  // between click and save).
+  // biome-ignore lint/correctness/useExhaustiveDependencies: currentDesignId is intentional — iframeRef.current is a ref so biome can't see that it changes with the active design. When the design switches we MUST resend WATCH_SELECTORS to the newly-active iframe; the currentDesignId dependency is what triggers that re-run.
+  useEffect(() => {
+    const win = iframeRef.current?.contentWindow;
+    if (!win) return;
+    const selectors = new Set<string>();
+    if (currentSnapshotId) {
+      for (const c of comments) {
+        if (c.snapshotId === currentSnapshotId) selectors.add(c.selector);
+      }
+    }
+    if (commentBubble) selectors.add(commentBubble.selector);
+    try {
+      win.postMessage(
+        { __codesign: true, type: 'WATCH_SELECTORS', selectors: Array.from(selectors) },
+        '*',
+      );
+    } catch {
+      /* sandbox gone — retry happens next render */
+    }
+  }, [comments, currentSnapshotId, commentBubble, currentDesignId]);
 
   useEffect(() => {
     function onMessage(event: MessageEvent): void {
@@ -334,6 +374,9 @@ export function PreviewPane({ onPickStarter }: PreviewPaneProps) {
         },
         onIframeError: (msg) =>
           pushIframeError(formatIframeError(msg.kind, msg.message, msg.source, msg.lineno)),
+        onElementRects: (msg) => {
+          applyLiveRects(msg.entries);
+        },
       });
 
       if (outcome.status === 'rejected' && outcome.reason === 'unknown-type') {
@@ -343,7 +386,7 @@ export function PreviewPane({ onPickStarter }: PreviewPaneProps) {
 
     window.addEventListener('message', onMessage);
     return () => window.removeEventListener('message', onMessage);
-  }, [pushIframeError, selectCanvasElement, openCommentBubble, previewZoom]);
+  }, [pushIframeError, selectCanvasElement, openCommentBubble, previewZoom, applyLiveRects]);
 
   // Pool entries: active design first (using the freshest in-memory
   // previewHtml), then any other recently-visited designs that still have a
@@ -379,21 +422,23 @@ export function PreviewPane({ onPickStarter }: PreviewPaneProps) {
     <PinOverlay
       comments={snapshotComments}
       zoom={previewZoom}
-      onPinClick={(c) =>
+      liveRects={liveRects}
+      onPinClick={(c) => {
+        const live = liveRects[c.selector] ?? c.rect;
         openCommentBubble({
           selector: c.selector,
           tag: c.tag,
           outerHTML: c.outerHTML,
           rect: {
-            top: c.rect.top * (previewZoom / 100),
-            left: c.rect.left * (previewZoom / 100),
-            width: c.rect.width * (previewZoom / 100),
-            height: c.rect.height * (previewZoom / 100),
+            top: live.top * (previewZoom / 100),
+            left: live.left * (previewZoom / 100),
+            width: live.width * (previewZoom / 100),
+            height: live.height * (previewZoom / 100),
           },
           existingCommentId: c.id,
           initialText: c.text,
-        })
-      }
+        });
+      }}
     />
   );
 
@@ -481,54 +526,67 @@ export function PreviewPane({ onPickStarter }: PreviewPaneProps) {
           {body}
           {previewHtml ? <TweakPanel iframeRef={iframeRef} /> : null}
         </div>
-        {commentBubble && interactionMode === 'comment' ? (
-          <CommentBubble
-            key={commentBubble.selector}
-            selector={commentBubble.selector}
-            tag={commentBubble.tag}
-            outerHTML={commentBubble.outerHTML}
-            rect={commentBubble.rect}
-            {...(commentBubble.initialText !== undefined
-              ? { initialText: commentBubble.initialText }
-              : {})}
-            onClose={() => {
-              const win = iframeRef.current?.contentWindow;
-              if (win) {
-                try {
-                  win.postMessage({ __codesign: true, type: 'CLEAR_PIN' }, '*');
-                } catch {
-                  /* noop */
-                }
-              }
-              closeCommentBubble();
-            }}
-            onSendToClaude={async (text: string) => {
-              await addComment({
-                kind: 'edit',
-                selector: commentBubble.selector,
-                tag: commentBubble.tag,
-                outerHTML: commentBubble.outerHTML,
-                rect: commentBubble.rect,
-                text,
-                scope: 'element',
-                ...(commentBubble.parentOuterHTML
-                  ? { parentOuterHTML: commentBubble.parentOuterHTML }
-                  : {}),
-              });
-              const win = iframeRef.current?.contentWindow;
-              if (win) {
-                try {
-                  win.postMessage({ __codesign: true, type: 'CLEAR_PIN' }, '*');
-                } catch {
-                  /* noop */
-                }
-              }
-              closeCommentBubble();
-              // Stage only — user clicks the "Apply" button on the chip bar
-              // to send all accumulated edits in one go.
-            }}
-          />
-        ) : null}
+        {commentBubble && interactionMode === 'comment'
+          ? (() => {
+              const liveForBubble = liveRects[commentBubble.selector];
+              const scaled = liveForBubble
+                ? {
+                    top: liveForBubble.top * (previewZoom / 100),
+                    left: liveForBubble.left * (previewZoom / 100),
+                    width: liveForBubble.width * (previewZoom / 100),
+                    height: liveForBubble.height * (previewZoom / 100),
+                  }
+                : commentBubble.rect;
+              return (
+                <CommentBubble
+                  key={commentBubble.selector}
+                  selector={commentBubble.selector}
+                  tag={commentBubble.tag}
+                  outerHTML={commentBubble.outerHTML}
+                  rect={scaled}
+                  {...(commentBubble.initialText !== undefined
+                    ? { initialText: commentBubble.initialText }
+                    : {})}
+                  onClose={() => {
+                    const win = iframeRef.current?.contentWindow;
+                    if (win) {
+                      try {
+                        win.postMessage({ __codesign: true, type: 'CLEAR_PIN' }, '*');
+                      } catch {
+                        /* noop */
+                      }
+                    }
+                    closeCommentBubble();
+                  }}
+                  onSendToClaude={async (text: string) => {
+                    await addComment({
+                      kind: 'edit',
+                      selector: commentBubble.selector,
+                      tag: commentBubble.tag,
+                      outerHTML: commentBubble.outerHTML,
+                      rect: commentBubble.rect,
+                      text,
+                      scope: 'element',
+                      ...(commentBubble.parentOuterHTML
+                        ? { parentOuterHTML: commentBubble.parentOuterHTML }
+                        : {}),
+                    });
+                    const win = iframeRef.current?.contentWindow;
+                    if (win) {
+                      try {
+                        win.postMessage({ __codesign: true, type: 'CLEAR_PIN' }, '*');
+                      } catch {
+                        /* noop */
+                      }
+                    }
+                    closeCommentBubble();
+                    // Stage only — user clicks the "Apply" button on the chip bar
+                    // to send all accumulated edits in one go.
+                  }}
+                />
+              );
+            })()
+          : null}
       </div>
     </div>
   );

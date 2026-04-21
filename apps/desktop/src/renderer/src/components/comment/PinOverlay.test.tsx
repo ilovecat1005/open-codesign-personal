@@ -1,6 +1,6 @@
 import type { CommentRow } from '@open-codesign/shared';
 import { describe, expect, it } from 'vitest';
-import { pinStyle, variantFor } from './PinOverlay';
+import { pinStyle, pinStyleFromRect, variantFor } from './PinOverlay';
 
 function comment(overrides: Partial<CommentRow> = {}): CommentRow {
   return {
@@ -49,5 +49,13 @@ describe('pinStyle', () => {
     const pos = pinStyle(comment({ rect: { top: 100, left: 50, width: 80, height: 40 } }), 50);
     // scale = 0.5; top = 100*0.5 - 10 = 40; left = 50*0.5 + 80*0.5 - 10 = 55
     expect(pos).toEqual({ top: '40px', left: '55px' });
+  });
+
+  it('pinStyleFromRect uses the supplied rect instead of the stored one', () => {
+    // This is the path PinOverlay takes when liveRects has an entry for the
+    // comment's selector: the badge stays glued to the element's current
+    // position in the iframe viewport, even after the user scrolls.
+    const live = pinStyleFromRect({ top: 10, left: 5, width: 80, height: 40 }, 100);
+    expect(live).toEqual({ top: '0px', left: '75px' });
   });
 });
