@@ -20,6 +20,7 @@ import type {
   WireApi,
 } from '@open-codesign/shared';
 import { contextBridge, ipcRenderer } from 'electron';
+import type { CodexOAuthStatus } from '../main/codex-oauth-ipc';
 import type {
   ConnectionTestError,
   ConnectionTestResult,
@@ -28,6 +29,7 @@ import type {
 } from '../main/connection-ipc';
 
 export type { ConnectionTestError, ConnectionTestResult, ModelsListResponse, TestEndpointResponse };
+export type { CodexOAuthStatus };
 
 export interface ValidateKeyResult {
   ok: true;
@@ -341,6 +343,11 @@ const api = {
     get: () => ipcRenderer.invoke('preferences:v1:get') as Promise<Preferences>,
     update: (patch: Partial<Preferences>) =>
       ipcRenderer.invoke('preferences:v1:update', patch) as Promise<Preferences>,
+  },
+  codexOAuth: {
+    status: () => ipcRenderer.invoke('codex-oauth:v1:status') as Promise<CodexOAuthStatus>,
+    login: () => ipcRenderer.invoke('codex-oauth:v1:login') as Promise<CodexOAuthStatus>,
+    logout: () => ipcRenderer.invoke('codex-oauth:v1:logout') as Promise<CodexOAuthStatus>,
   },
   connection: {
     test: (input: {

@@ -86,6 +86,17 @@ export async function loadConfigOnBoot(): Promise<void> {
   }
 }
 
+/**
+ * Overwrite the cached config reference. For use by sibling IPC modules (e.g.
+ * `codex-oauth-ipc`) that mutate `config.providers` via their own write path
+ * and need `getCachedConfig` / `toState` to reflect the change immediately.
+ * Callers are responsible for having already persisted `next` to disk.
+ */
+export function setCachedConfig(next: Config): void {
+  cachedConfig = next;
+  configLoaded = true;
+}
+
 export function getCachedConfig(): Config | null {
   if (!configLoaded) {
     throw new CodesignError(

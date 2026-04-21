@@ -25,6 +25,7 @@ import type { BrowserWindow as ElectronBrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import type { AgentStreamEvent } from '../preload/index';
 import { registerChatMessagesIpc, registerChatMessagesUnavailableIpc } from './chat-messages-ipc';
+import { registerCodexOAuthIpc } from './codex-oauth-ipc';
 import { registerCommentsIpc, registerCommentsUnavailableIpc } from './comments-ipc';
 import { registerConnectionIpc } from './connection-ipc';
 import { scanDesignSystem } from './design-system';
@@ -849,6 +850,7 @@ void app.whenReady().then(async () => {
   registerLocaleIpc();
   registerConnectionIpc();
   registerOnboardingIpc();
+  registerCodexOAuthIpc();
   registerPreferencesIpc();
   registerExporterIpc(() => mainWindow);
   registerDiagnosticsIpc();
