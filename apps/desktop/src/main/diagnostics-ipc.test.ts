@@ -251,10 +251,7 @@ describe('diagnostics:v1:reportEvent', () => {
     const db = initInMemoryDb();
     registerDiagnosticsIpc(db);
     await expect(
-      invoke(
-        'diagnostics:v1:reportEvent',
-        baseReportInput(1, { notes: 'x'.repeat(4001) }),
-      ),
+      invoke('diagnostics:v1:reportEvent', baseReportInput(1, { notes: 'x'.repeat(4001) })),
     ).rejects.toThrow(/4000 characters/);
   });
 

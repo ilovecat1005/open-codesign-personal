@@ -1,6 +1,6 @@
 import { useT } from '@open-codesign/i18n';
 import type { DiagnosticEventRow, ReportEventInput } from '@open-codesign/shared';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useCodesignStore } from '../../store';
 import { formatRelativeTime } from '../settings/DiagnosticsPanel';
 
@@ -64,6 +64,19 @@ const DEFAULT_INCLUDE: IncludeFlags = {
   timeline: true,
 };
 
+/**
+ * Pure helper: returns the focusable elements inside a dialog panel, filtered
+ * to the standard tab-stop shape. Exported so the Tab-trap behavior can be
+ * unit-tested without mounting the full dialog.
+ */
+export function pickFocusTargets(dialog: HTMLElement): HTMLElement[] {
+  return Array.from(
+    dialog.querySelectorAll<HTMLElement>(
+      'button:not([disabled]), [href], input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    ),
+  ).filter((el) => !el.hasAttribute('aria-hidden'));
+}
+
 export function ReportEventDialog({ eventId, onClose }: ReportEventDialogProps) {
   const t = useT();
   const recentEvents = useCodesignStore((s) => s.recentEvents);
@@ -80,6 +93,8 @@ export function ReportEventDialog({ eventId, onClose }: ReportEventDialogProps) 
   const [triedRefresh, setTriedRefresh] = useState(false);
   const [recentWarning, setRecentWarning] = useState<RecentReportWarning | null>(null);
   const [warningDismissed, setWarningDismissed] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const notesRef = useRef<HTMLTextAreaElement>(null);
 
   // Reset state whenever the dialog opens on a new event.
   useEffect(() => {
@@ -126,6 +141,38 @@ export function ReportEventDialog({ eventId, onClose }: ReportEventDialogProps) 
     setTriedRefresh(true);
     void refreshDiagnosticEvents().finally(() => setLoading(false));
   }, [eventId, event, triedRefresh, refreshDiagnosticEvents]);
+
+  // Auto-focus the notes textarea when the dialog opens on an event.
+  useEffect(() => {
+    if (eventId === null) return;
+    if (!event) return;
+    notesRef.current?.focus();
+  }, [eventId, event]);
+
+  // Trap Tab / Shift-Tab inside the dialog so focus can't escape to the
+  // underlying panel while the modal is open.
+  useEffect(() => {
+    if (eventId === null) return;
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key !== 'Tab') return;
+      if (!dialog) return;
+      const focusable = pickFocusTargets(dialog);
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last?.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first?.focus();
+      }
+    }
+    dialog.addEventListener('keydown', onKeyDown);
+    return () => dialog.removeEventListener('keydown', onKeyDown);
+  }, [eventId]);
 
   if (eventId === null) return null;
 
@@ -178,6 +225,7 @@ export function ReportEventDialog({ eventId, onClose }: ReportEventDialogProps) 
       }}
     >
       <div
+        ref={dialogRef}
         role="document"
         className="w-full max-w-lg rounded-[var(--radius-2xl)] bg-[var(--color-background)] border border-[var(--color-border)] shadow-[var(--shadow-elevated)] p-6 space-y-4 animate-[panel-in_160ms_ease-out]"
       >
@@ -247,6 +295,7 @@ ${t('diagnostics.report.message')}: ${event.message}`}
                 {t('diagnostics.report.notes')}
               </span>
               <textarea
+                ref={notesRef}
                 rows={3}
                 maxLength={MAX_NOTES}
                 value={notes}

@@ -15,8 +15,7 @@ export async function loadDiagnosticEvents(
   const result = await api.listEvents({ schemaVersion: 1, limit: 100, includeTransient });
   // `dbAvailable` is optional on the wire for backwards compat with older main
   // processes that pre-date FIX-9; default to true (optimistic) when missing.
-  const dbAvailable =
-    (result as { dbAvailable?: boolean }).dbAvailable === false ? false : true;
+  const dbAvailable = (result as { dbAvailable?: boolean }).dbAvailable !== false;
   return { events: result.events, dbAvailable };
 }
 
@@ -147,9 +146,7 @@ export function DiagnosticsPanel() {
       {events.length === 0 ? (
         <div className="flex flex-col items-center justify-center gap-2 py-10 text-[var(--text-sm)] text-[var(--color-text-muted)]">
           <AlertCircle className="w-5 h-5" />
-          {dbAvailable
-            ? t('settings.diagnostics.empty')
-            : t('settings.diagnostics.dbUnavailable')}
+          {dbAvailable ? t('settings.diagnostics.empty') : t('settings.diagnostics.dbUnavailable')}
         </div>
       ) : (
         <table className="w-full text-[var(--text-sm)] border-t border-[var(--color-border-subtle)]">

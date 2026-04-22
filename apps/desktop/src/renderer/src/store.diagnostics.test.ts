@@ -68,7 +68,7 @@ describe('diagnostics slice', () => {
     ];
     const listEvents = vi
       .fn<(...args: unknown[]) => Promise<ListEventsResult>>()
-      .mockResolvedValue({ schemaVersion: 1, events });
+      .mockResolvedValue({ schemaVersion: 1, events, dbAvailable: true });
     const reportEvent = vi.fn<(...args: unknown[]) => Promise<ReportEventResult>>();
     stubWindow(listEvents, reportEvent);
 
@@ -91,7 +91,7 @@ describe('diagnostics slice', () => {
     ];
     const listEvents = vi
       .fn<(...args: unknown[]) => Promise<ListEventsResult>>()
-      .mockResolvedValue({ schemaVersion: 1, events });
+      .mockResolvedValue({ schemaVersion: 1, events, dbAvailable: true });
     const reportEvent = vi.fn<(...args: unknown[]) => Promise<ReportEventResult>>();
     stubWindow(listEvents, reportEvent);
 
