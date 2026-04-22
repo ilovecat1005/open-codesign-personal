@@ -36,7 +36,7 @@ Playwright-powered web capture (on-demand), handoff bundle to open-cowork, exter
 
 ## v0.5 — Signing + distribution
 
-Apple Developer ID + Windows Authenticode code-signing, opt-in auto-update, Homebrew Cask + winget + Scoop manifests verified, install size ≤ 80 MB enforced at release time.
+Apple Developer ID + Windows Authenticode code-signing, opt-in auto-update, Homebrew Cask + winget + Scoop manifests verified.
 
 ## v1.0 — Public milestone
 

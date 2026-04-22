@@ -98,7 +98,6 @@ Four tabs in the desktop Settings:
 
 ## Hard constraints (non-negotiable project commitments)
 
-- Install size budget ≤ 80 MB across macOS and Windows installers (CI-enforced)
 - No bundled model runtimes (no Ollama binary, no Python, no browser binary shipped)
 - BYOK only — no proxied API calls, no cloud account, no telemetry by default
 - Local-first storage — all user data stays on disk

@@ -55,7 +55,7 @@ body:
     attributes:
       label: Hard-constraints check
       description: >
-        Open CoDesign has a set of non-negotiable constraints (install size ≤ 80 MB, no bundled runtimes,
+        Open CoDesign has a set of non-negotiable constraints (no bundled runtimes,
         BYOK only, local-first storage, MIT-compatible licenses, lazy-loaded heavy features).
         Please confirm you have reviewed them.
       options:

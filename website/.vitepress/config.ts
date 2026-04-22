@@ -156,7 +156,7 @@ export default defineConfig({
             name: 'Which platforms are supported?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'macOS (Apple Silicon and Intel), Windows (x64 and arm64), and Linux (AppImage). The install size is under 80 MB and heavy features like PDF and PPTX export are lazy-loaded.',
+              text: 'macOS (Apple Silicon and Intel), Windows (x64 and arm64), and Linux (AppImage, .deb, .rpm). Heavy features like PDF and PPTX export are lazy-loaded.',
             },
           },
         ],

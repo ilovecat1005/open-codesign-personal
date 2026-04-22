@@ -24,7 +24,6 @@ Open CoDesign is an open-source AI design tool — Electron desktop app that tur
 - `packages/shared/` — types, utils, zod schemas
 
 **Hard constraints (CI-enforced):**
-- Install size ≤ 80 MB
 - ≤ 30 prod dependencies
 - Apache-2.0 compatible licenses only (reject GPL/AGPL/SSPL)
 - All LLM calls via `@mariozechner/pi-ai` (no direct provider SDK imports in app code)

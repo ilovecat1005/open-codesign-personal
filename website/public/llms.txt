@@ -12,8 +12,7 @@
 - Local-first: SQLite (design history) + encrypted TOML config via Electron `safeStorage`, nothing leaves the machine
 - BYOK: no API proxying, no per-token surcharges, no cloud account required, no telemetry by default
 - Supported providers: Anthropic Claude, OpenAI GPT, Google Gemini, DeepSeek, OpenRouter, SiliconFlow, local Ollama, any OpenAI-compatible endpoint. Keyless (IP-allowlisted) proxies supported.
-- Install size budget: ≤ 80 MB (enforced by CI)
-- Platforms: macOS (Apple Silicon + Intel), Windows (x64 + arm64), Linux (AppImage)
+- Platforms: macOS (Apple Silicon + Intel), Windows (x64 + arm64), Linux (AppImage, .deb, .rpm)
 - Minimum Node for building from source: 22 LTS; pnpm 9.15+
 
 ## What it produces
@@ -85,7 +84,7 @@ Q: Which AI models does Open CoDesign support?
 A: Anthropic Claude, OpenAI GPT, Google Gemini, DeepSeek, OpenRouter, SiliconFlow, local Ollama, and any OpenAI-compatible endpoint. Keyless (IP-allowlisted) corporate proxies are also supported.
 
 Q: Which platforms are supported?
-A: macOS (Apple Silicon + Intel), Windows (x64 + arm64), and Linux (AppImage). Install size is under 80 MB. Heavy features like PDF and PPTX export are lazy-loaded on first use.
+A: macOS (Apple Silicon + Intel), Windows (x64 + arm64), and Linux (AppImage, .deb, .rpm). Heavy features like PDF and PPTX export are lazy-loaded on first use.
 
 Q: Is Open CoDesign free?
 A: Yes. MIT-licensed. Free to download, use, modify, and redistribute. You only pay the token cost to whichever model provider you bring your own key for.

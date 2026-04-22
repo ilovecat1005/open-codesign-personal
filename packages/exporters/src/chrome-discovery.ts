@@ -4,7 +4,7 @@ import { CodesignError, ERROR_CODES } from '@open-codesign/shared';
 
 /**
  * Locate a system Chrome/Chromium binary. We refuse to bundle Chromium —
- * PRINCIPLES §1 caps the installer at 80 MB and a Chrome download is ~150 MB.
+ * PRINCIPLES §1 forbids bundled runtimes and a Chrome download is ~150 MB.
  * Throws `EXPORTER_NO_CHROME` (loud, with install link) when nothing is found.
  */
 const CHROME_INSTALL_URL = 'https://www.google.com/chrome';
