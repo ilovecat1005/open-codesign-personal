@@ -6,6 +6,18 @@ describe('scrubPromptInLine', () => {
     const input = 'prompt: "design a meditation app"';
     expect(scrubPromptInLine(input)).toBe('prompt: "<redacted prompt>"');
   });
+
+  it('scrubs JSON-quoted "prompt" key as emitted by structured loggers', () => {
+    const input = 'generate.request {"prompt":"build a dashboard","model":"sonnet"}';
+    expect(scrubPromptInLine(input)).toBe(
+      'generate.request {"prompt":"<redacted prompt>","model":"sonnet"}',
+    );
+  });
+
+  it('scrubs template-literal prompt form', () => {
+    const input = 'prompt = `multi\nline\npayload`';
+    expect(scrubPromptInLine(input)).toBe('prompt = `<redacted prompt>`');
+  });
 });
 
 describe('redactPaths', () => {
