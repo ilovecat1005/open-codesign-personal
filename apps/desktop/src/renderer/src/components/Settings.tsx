@@ -1015,6 +1015,27 @@ function ModelsTab() {
     }
   }
 
+  async function handleAddOllama() {
+    if (!window.codesign) return;
+    try {
+      await window.codesign.settings.addProvider({
+        provider: 'ollama',
+        apiKey: '',
+        modelPrimary: SHORTLIST.ollama.defaultPrimary,
+      });
+      await reloadRows();
+      pushToast({ variant: 'success', title: t('settings.providers.import.ollamaDone') });
+    } catch (err) {
+      reportableErrorToast({
+        code: 'OLLAMA_ADD_FAILED',
+        scope: 'settings',
+        title: t('settings.providers.toast.saveFailed'),
+        description: err instanceof Error ? err.message : t('settings.common.unknownError'),
+        ...(err instanceof Error && err.stack !== undefined ? { stack: err.stack } : {}),
+      });
+    }
+  }
+
   async function handleImportGemini() {
     if (!window.codesign) return;
     // Capture pre-import warnings (e.g. "AIzaSy pattern mismatch") so a
@@ -1512,6 +1533,7 @@ function ModelsTab() {
             open={showAddMenu}
             setOpen={setShowAddMenu}
             hasClaudeCodeImported={rows.some((r) => r.provider === 'claude-code-imported')}
+            hasOllamaImported={rows.some((r) => r.provider === 'ollama')}
             onImportCodex={() => {
               setShowAddMenu(false);
               void handleImportCodex();
@@ -1519,6 +1541,10 @@ function ModelsTab() {
             onImportClaudeCode={() => {
               setShowAddMenu(false);
               void handleImportClaudeCode();
+            }}
+            onAddOllama={() => {
+              setShowAddMenu(false);
+              void handleAddOllama();
             }}
             onAddCustom={() => {
               setShowAddMenu(false);
@@ -2137,8 +2163,10 @@ interface AddProviderMenuProps {
   open: boolean;
   setOpen: (v: boolean) => void;
   hasClaudeCodeImported: boolean;
+  hasOllamaImported: boolean;
   onImportCodex: () => void;
   onImportClaudeCode: () => void;
+  onAddOllama: () => void;
   onAddCustom: () => void;
   onAddCliProxyApi: () => void;
 }
@@ -2147,8 +2175,10 @@ function AddProviderMenu({
   open,
   setOpen,
   hasClaudeCodeImported,
+  hasOllamaImported,
   onImportCodex,
   onImportClaudeCode,
+  onAddOllama,
   onAddCustom,
   onAddCliProxyApi,
 }: AddProviderMenuProps) {
@@ -2197,6 +2227,13 @@ function AddProviderMenu({
       }),
       disabled: hasClaudeCodeImported,
       onClick: onImportClaudeCode,
+    },
+    {
+      key: 'ollama',
+      label: t('settings.providers.import.ollamaMenu'),
+      desc: t('settings.providers.import.ollamaMenuDesc'),
+      disabled: hasOllamaImported,
+      onClick: onAddOllama,
     },
     {
       key: 'custom',
