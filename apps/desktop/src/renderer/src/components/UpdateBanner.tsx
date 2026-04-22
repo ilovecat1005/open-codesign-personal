@@ -3,11 +3,11 @@ import { BRAND } from '@open-codesign/shared';
 import { X } from 'lucide-react';
 import type { StoreApi } from 'zustand';
 import { useStore } from 'zustand';
-import type { UpdateState } from '../state/update-store';
+import { type UpdateState, shouldShowBanner } from '../state/update-store';
 
 export function UpdateBanner({ store }: { store: StoreApi<UpdateState> }) {
   const t = useT();
-  const show = useStore(store, (s) => s.shouldShowBanner());
+  const show = useStore(store, shouldShowBanner);
   const version = useStore(store, (s) => s.version);
   const releaseUrl = useStore(store, (s) => s.releaseUrl);
   const dismissFn = useStore(store, (s) => s.dismiss);

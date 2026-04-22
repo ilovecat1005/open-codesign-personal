@@ -14,7 +14,6 @@ export interface UpdateState {
   setAvailable(info: { version: string; releaseUrl: string }): void;
   dismiss(): void;
   markDismissedVersionReady(dismissedVersion: string): void;
-  shouldShowBanner(): boolean;
 }
 
 export function createUpdateStore(init: { dismissedVersion: string }): StoreApi<UpdateState> {
@@ -32,10 +31,12 @@ export function createUpdateStore(init: { dismissedVersion: string }): StoreApi<
     },
     markDismissedVersionReady: (dismissedVersion) =>
       set({ dismissedVersion, dismissedVersionReady: true }),
-    shouldShowBanner: () => {
-      const { status, version, dismissedVersion, dismissedVersionReady } = get();
-      if (!dismissedVersionReady) return false;
-      return status === 'available' && version !== '' && version !== dismissedVersion;
-    },
   }));
+}
+
+// Pure predicate — kept out of the store so consumers (React + tests) read
+// primitive fields directly, making Zustand's subscription explicit.
+export function shouldShowBanner(s: UpdateState): boolean {
+  if (!s.dismissedVersionReady) return false;
+  return s.status === 'available' && s.version !== '' && s.version !== s.dismissedVersion;
 }
