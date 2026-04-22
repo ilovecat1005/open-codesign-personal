@@ -778,7 +778,10 @@
       "scope": "Scope",
       "runId": "Run id",
       "fingerprint": "Fingerprint",
-      "message": "Message"
+      "message": "Message",
+      "recentlyReported": "You reported the same issue {relative}.",
+      "viewPrevious": "View previous issue",
+      "continueAnyway": "Continue anyway"
     }
   },
   "demos": {

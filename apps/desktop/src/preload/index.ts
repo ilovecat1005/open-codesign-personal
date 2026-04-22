@@ -515,6 +515,16 @@ const api = {
       ipcRenderer.invoke('diagnostics:v1:listEvents', input) as Promise<ListEventsResult>,
     reportEvent: (input: ReportEventInput) =>
       ipcRenderer.invoke('diagnostics:v1:reportEvent', input) as Promise<ReportEventResult>,
+    isFingerprintRecentlyReported: (fingerprint: string) =>
+      ipcRenderer.invoke('diagnostics:v1:isFingerprintRecentlyReported', {
+        schemaVersion: 1,
+        fingerprint,
+      }) as Promise<{
+        schemaVersion: 1;
+        reported: boolean;
+        ts?: number;
+        issueUrl?: string;
+      }>,
   },
   openExternal: (url: string) =>
     ipcRenderer.invoke('codesign:v1:open-external', url) as Promise<void>,

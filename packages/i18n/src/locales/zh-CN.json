@@ -777,7 +777,10 @@
       "scope": "范围",
       "runId": "Run ID",
       "fingerprint": "指纹",
-      "message": "消息"
+      "message": "消息",
+      "recentlyReported": "你在 {relative} 上报过同样的问题。",
+      "viewPrevious": "查看之前的 issue",
+      "continueAnyway": "仍然继续"
     }
   },
   "demos": {

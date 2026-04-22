@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildReportInput, validateNotes } from './ReportEventDialog';
+import { buildReportInput, pickRecentReport, validateNotes } from './ReportEventDialog';
 
 describe('validateNotes', () => {
   it('accepts empty string', () => {
@@ -46,5 +46,24 @@ describe('buildReportInput', () => {
     expect(result.includeTimeline).toBe(true);
     expect(result.eventId).toBe(1);
     expect(result.notes).toBe('');
+  });
+});
+
+describe('pickRecentReport', () => {
+  it('returns null for unreported fingerprint', () => {
+    expect(pickRecentReport({ reported: false })).toBeNull();
+  });
+
+  it('returns null when payload is missing ts/issueUrl', () => {
+    expect(pickRecentReport({ reported: true })).toBeNull();
+  });
+
+  it('returns a warning view model for a fresh report', () => {
+    const now = 1_000_000;
+    const result = pickRecentReport(
+      { reported: true, ts: now - 5 * 60_000, issueUrl: 'https://x/1' },
+      now,
+    );
+    expect(result).toEqual({ relative: '5m', issueUrl: 'https://x/1' });
   });
 });

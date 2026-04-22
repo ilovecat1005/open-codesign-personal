@@ -2,6 +2,7 @@ import { useT } from '@open-codesign/i18n';
 import type { DiagnosticEventRow, ReportEventInput } from '@open-codesign/shared';
 import { useEffect, useState } from 'react';
 import { useCodesignStore } from '../../store';
+import { formatRelativeTime } from '../settings/DiagnosticsPanel';
 
 export interface ReportEventDialogProps {
   eventId: number | null;
@@ -13,6 +14,26 @@ interface IncludeFlags {
   paths: boolean;
   urls: boolean;
   timeline: boolean;
+}
+
+export interface RecentReportWarning {
+  relative: string;
+  issueUrl: string;
+}
+
+/**
+ * Pure helper: turns the `isFingerprintRecentlyReported` IPC result into the
+ * view model used to render the inline warning, or `null` when the fingerprint
+ * hasn't been reported in the last 24h. Kept pure so it's trivially testable
+ * without mounting the dialog.
+ */
+export function pickRecentReport(
+  result: { reported: boolean; ts?: number; issueUrl?: string } | null | undefined,
+  now: number = Date.now(),
+): RecentReportWarning | null {
+  if (!result || !result.reported) return null;
+  if (typeof result.ts !== 'number' || typeof result.issueUrl !== 'string') return null;
+  return { relative: formatRelativeTime(result.ts, now), issueUrl: result.issueUrl };
 }
 
 const MAX_NOTES = 2000;
@@ -56,6 +77,8 @@ export function ReportEventDialog({ eventId, onClose }: ReportEventDialogProps) 
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
   const [triedRefresh, setTriedRefresh] = useState(false);
+  const [recentWarning, setRecentWarning] = useState<RecentReportWarning | null>(null);
+  const [warningDismissed, setWarningDismissed] = useState(false);
 
   // Reset state whenever the dialog opens on a new event.
   useEffect(() => {
@@ -66,11 +89,32 @@ export function ReportEventDialog({ eventId, onClose }: ReportEventDialogProps) 
       setErr(null);
       setCopied(false);
       setTriedRefresh(false);
+      setRecentWarning(null);
+      setWarningDismissed(false);
     }
   }, [eventId]);
 
   const event: DiagnosticEventRow | undefined =
     eventId !== null ? recentEvents.find((e) => e.id === eventId) : undefined;
+
+  // Pre-submit dedup check — best-effort. If the IPC fails we proceed silently.
+  useEffect(() => {
+    if (!event) return;
+    const check = window.codesign?.diagnostics?.isFingerprintRecentlyReported;
+    if (!check) return;
+    let cancelled = false;
+    void check(event.fingerprint)
+      .then((result) => {
+        if (cancelled) return;
+        setRecentWarning(pickRecentReport(result));
+      })
+      .catch(() => {
+        // Silent fall-through per spec — dedup is non-critical.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [event]);
 
   // If the event isn't in the store yet, refresh once and retry.
   useEffect(() => {
@@ -157,6 +201,34 @@ ${t('diagnostics.report.runId')}: ${event.runId ?? '—'}
 ${t('diagnostics.report.fingerprint')}: ${event.fingerprint}
 ${t('diagnostics.report.message')}: ${event.message}`}
             </pre>
+
+            {recentWarning && !warningDismissed ? (
+              <div className="rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] p-3 space-y-2">
+                <p className="text-[var(--text-sm)] text-[var(--color-text-primary)]">
+                  <span aria-hidden="true">⚠️ </span>
+                  {t('diagnostics.report.recentlyReported', { relative: recentWarning.relative })}
+                </p>
+                <div className="flex items-center gap-3 text-[var(--text-sm)]">
+                  <a
+                    href={recentWarning.issueUrl}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      void window.codesign?.openExternal?.(recentWarning.issueUrl);
+                    }}
+                    className="text-[var(--color-accent)] hover:underline"
+                  >
+                    {t('diagnostics.report.viewPrevious')}
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => setWarningDismissed(true)}
+                    className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+                  >
+                    {t('diagnostics.report.continueAnyway')}
+                  </button>
+                </div>
+              </div>
+            ) : null}
 
             <label className="block space-y-1">
               <span className="text-[var(--text-sm)] text-[var(--color-text-secondary)]">

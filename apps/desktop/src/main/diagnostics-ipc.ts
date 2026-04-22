@@ -14,6 +14,7 @@
  */
 
 import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import {
   type ActionTimelineEntry,
   CodesignError,
@@ -25,10 +26,11 @@ import {
 } from '@open-codesign/shared';
 import { computeFingerprint } from '@open-codesign/shared/fingerprint';
 import type BetterSqlite3 from 'better-sqlite3';
-import { configPath } from './config';
+import { configDir, configPath } from './config';
 import { composeSummaryMarkdown } from './diagnostic-summary';
 import { app, ipcMain, shell } from './electron-runtime';
 import { getLogPath, getLogger, logsDir } from './logger';
+import { findRecent, recordReported } from './reported-fingerprints';
 import {
   getDiagnosticEventById,
   listDiagnosticEvents,
@@ -41,6 +43,11 @@ const logger = getLogger('diagnostics-ipc');
 
 const GITHUB_REPO_URL = 'https://github.com/OpenCoworkAI/open-codesign';
 const GH_BODY_MAX = 7000;
+const REPORTED_FINGERPRINTS_FILENAME = 'reported-fingerprints.json';
+
+function reportedFingerprintsPath(): string {
+  return join(configDir(), REPORTED_FINGERPRINTS_FILENAME);
+}
 
 type LogLevel = 'info' | 'warn' | 'error';
 
@@ -149,6 +156,26 @@ function parseReportEventInput(raw: unknown): ReportEventInput {
     notes: r['notes'] as string,
     timeline: r['timeline'] as ActionTimelineEntry[],
   };
+}
+
+function parseIsFingerprintRecentInput(raw: unknown): string {
+  if (typeof raw !== 'object' || raw === null) {
+    throw new CodesignError(
+      'diagnostics:v1:isFingerprintRecentlyReported expects an object payload',
+      'IPC_BAD_INPUT',
+    );
+  }
+  const r = raw as Record<string, unknown>;
+  if (r['schemaVersion'] !== 1) {
+    throw new CodesignError(
+      'diagnostics:v1:isFingerprintRecentlyReported requires schemaVersion: 1',
+      'IPC_BAD_INPUT',
+    );
+  }
+  if (typeof r['fingerprint'] !== 'string' || (r['fingerprint'] as string).length === 0) {
+    throw new CodesignError('fingerprint must be a non-empty string', 'IPC_BAD_INPUT');
+  }
+  return r['fingerprint'] as string;
 }
 
 /** Regex that matches common API key shapes; used to redact config content. */
@@ -396,6 +423,14 @@ export function registerDiagnosticsIpc(db: Database | null): void {
       const bundlePath = await buildBundle({ summaryMarkdown });
       const issueUrl = buildIssueUrl({ event, summaryMarkdown, bundlePath });
 
+      try {
+        recordReported(reportedFingerprintsPath(), event.fingerprint, issueUrl);
+      } catch (err) {
+        logger.warn('diagnostics.reported.dedupWrite.fail', {
+          message: err instanceof Error ? err.message : String(err),
+        });
+      }
+
       logger.info('diagnostics.reported', {
         eventId: event.id,
         code: event.code,
@@ -406,4 +441,18 @@ export function registerDiagnosticsIpc(db: Database | null): void {
       return { schemaVersion: 1, issueUrl, bundlePath, summaryMarkdown };
     },
   );
+
+  ipcMain.handle('diagnostics:v1:isFingerprintRecentlyReported', (_e: unknown, raw: unknown) => {
+    const fingerprint = parseIsFingerprintRecentInput(raw);
+    const hit = findRecent(reportedFingerprintsPath(), fingerprint);
+    if (hit === undefined) {
+      return { schemaVersion: 1 as const, reported: false };
+    }
+    return {
+      schemaVersion: 1 as const,
+      reported: true,
+      ts: hit.ts,
+      issueUrl: hit.issueUrl,
+    };
+  });
 }
