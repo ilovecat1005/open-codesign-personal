@@ -1,0 +1,215 @@
+import { readFile } from 'node:fs/promises';
+import { homedir } from 'node:os';
+import { join } from 'node:path';
+import type { ProviderEntry } from '@open-codesign/shared';
+
+/**
+ * One-click import for the Gemini CLI (`github.com/google-gemini/gemini-cli`).
+ *
+ * Google's ToS explicitly forbids reusing the CLI's OAuth token from third-party
+ * apps and threatens account suspension for anyone who does. This importer
+ * therefore ONLY handles the static API-key path: the user has set
+ * `GEMINI_API_KEY=AIzaSy…` either in `~/.gemini/.env`, `~/.env`, or the shell
+ * environment, and we extract it. The encrypted keychain fallback
+ * (`~/.gemini/gemini-credentials.json`) is ignored because its encryption key
+ * is derived from hostname+username and cannot be read outside the CLI.
+ *
+ * `settings.json` has no `apiKey` field in the current CLI schema, so we do
+ * NOT read it — the field was removed when Google moved to keychain storage.
+ *
+ * Routing: Google exposes an OpenAI-compatible endpoint at
+ * `generativelanguage.googleapis.com/v1beta/openai`, so the imported provider
+ * uses `wire: openai-chat` with the key as a Bearer token. That keeps us inside
+ * the three wire types the app already supports (no WireApi schema churn).
+ */
+
+/** User home → canonical path of the Gemini CLI's user-scope env file. */
+export function geminiDotEnvPath(home: string = homedir()): string {
+  return join(home, '.gemini', '.env');
+}
+
+/** User home → canonical path of the generic user-scope env file. */
+export function homeDotEnvPath(home: string = homedir()): string {
+  return join(home, '.env');
+}
+
+/** OpenAI-compatible Gemini endpoint. `/openai` suffix puts the server into
+ *  OpenAI wire-protocol mode; bare `/v1beta` is the native Google protocol,
+ *  which we don't speak. */
+export const GEMINI_OPENAI_COMPAT_BASE_URL =
+  'https://generativelanguage.googleapis.com/v1beta/openai';
+
+/** Default model after import. `gemini-2.5-flash` is the cheap/fast default
+ *  Google recommends for first-time users; `gemini-2.5-pro` is reachable by
+ *  changing the model in Settings. */
+export const GEMINI_DEFAULT_MODEL = 'gemini-2.5-flash';
+
+/** Pattern all Google API keys share. Empirically stable: `AIzaSy` prefix +
+ *  33 base64url-safe chars = 39 chars total. Used as a soft filter — we
+ *  surface a warning when the match fails but still return the raw value
+ *  so callers can decide whether to trust it. */
+export const GEMINI_API_KEY_PATTERN = /^AIzaSy[A-Za-z0-9_-]{33}$/;
+
+export type GeminiKeySource = 'gemini-env' | 'home-env' | 'shell-env' | 'none';
+
+export interface GeminiImport {
+  /** Null when no usable key was found anywhere. */
+  provider: ProviderEntry | null;
+  apiKey: string | null;
+  apiKeySource: GeminiKeySource;
+  /** Absolute path of the .env file that supplied the key, if any. Surfaced
+   *  to the UI so we can show a clickable path on the import banner. */
+  keyPath: string | null;
+  warnings: string[];
+}
+
+export interface ReadGeminiCliOptions {
+  /** Defaults to `process.env`. Tests inject a stub. */
+  env?: NodeJS.ProcessEnv;
+}
+
+/**
+ * Minimal .env parser. Handles the subset the Gemini CLI itself emits:
+ *   - `KEY=value` lines, one per line
+ *   - `KEY="value"` / `KEY='value'` with surrounding quotes stripped
+ *   - Leading/trailing whitespace on key or value trimmed
+ *   - `# comment` lines and blank lines ignored
+ *   - Optional `export ` prefix (shells that source the file)
+ *
+ * Does NOT expand `${OTHER_VAR}` references — the Gemini CLI writes the
+ * literal key and no user in practice parameterizes it.
+ */
+export function parseDotEnv(content: string): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const rawLine of content.split(/\r?\n/)) {
+    const line = rawLine.trim();
+    if (line.length === 0) continue;
+    if (line.startsWith('#')) continue;
+    // Allow `export FOO=bar`. Anything else that doesn't match KEY=VALUE is
+    // silently skipped — better than blowing up on a malformed line.
+    const withoutExport = line.startsWith('export ') ? line.slice(7).trimStart() : line;
+    const eq = withoutExport.indexOf('=');
+    if (eq <= 0) continue;
+    const key = withoutExport.slice(0, eq).trim();
+    if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(key)) continue;
+    let value = withoutExport.slice(eq + 1).trim();
+    if (value.length >= 2) {
+      const first = value[0];
+      const last = value[value.length - 1];
+      if ((first === '"' && last === '"') || (first === "'" && last === "'")) {
+        value = value.slice(1, -1);
+      }
+    }
+    out[key] = value;
+  }
+  return out;
+}
+
+async function readEnvFileIfPresent(path: string): Promise<Record<string, string> | null> {
+  try {
+    const raw = await readFile(path, 'utf8');
+    return parseDotEnv(raw);
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === 'ENOENT') return null;
+    throw err;
+  }
+}
+
+/**
+ * Resolve `GEMINI_API_KEY` in the same order the CLI itself does:
+ *   1. `~/.gemini/.env`        (CLI-scoped)
+ *   2. `~/.env`                (generic user-scope)
+ *   3. process.env             (shell export)
+ *
+ * We intentionally skip the per-project bubble-up (`./.gemini/.env` walked up
+ * to filesystem root) because this importer runs inside an Electron main
+ * process without a meaningful CWD — reproducing the walk would read arbitrary
+ * files from wherever the app happened to be launched.
+ *
+ * Vertex AI detection: when `GOOGLE_GENAI_USE_VERTEXAI` is set in the shell,
+ * the user is configured for Vertex and the key (if any) is a service-account
+ * JSON path, not an `AIzaSy…` string. We surface a warning and return null so
+ * the caller can show a helpful "configure Vertex manually" message instead
+ * of silently failing on a bogus provider entry.
+ */
+export async function readGeminiCliConfig(
+  home: string = homedir(),
+  options: ReadGeminiCliOptions = {},
+): Promise<GeminiImport | null> {
+  const env = options.env ?? process.env;
+
+  if (env['GOOGLE_GENAI_USE_VERTEXAI'] === 'true' || env['GOOGLE_GENAI_USE_VERTEXAI'] === '1') {
+    return {
+      provider: null,
+      apiKey: null,
+      apiKeySource: 'none',
+      keyPath: null,
+      warnings: [
+        'Vertex AI detected (GOOGLE_GENAI_USE_VERTEXAI=true). This importer only supports Gemini Developer API keys (AIzaSy…). Configure Vertex manually.',
+      ],
+    };
+  }
+
+  let apiKey: string | null = null;
+  let apiKeySource: GeminiKeySource = 'none';
+  let keyPath: string | null = null;
+
+  const geminiEnvPath = geminiDotEnvPath(home);
+  const geminiEnvFile = await readEnvFileIfPresent(geminiEnvPath);
+  if (geminiEnvFile !== null) {
+    const raw = geminiEnvFile['GEMINI_API_KEY'];
+    if (typeof raw === 'string' && raw.trim().length > 0) {
+      apiKey = raw.trim();
+      apiKeySource = 'gemini-env';
+      keyPath = geminiEnvPath;
+    }
+  }
+
+  if (apiKey === null) {
+    const homeEnvPath = homeDotEnvPath(home);
+    const homeEnvFile = await readEnvFileIfPresent(homeEnvPath);
+    if (homeEnvFile !== null) {
+      const raw = homeEnvFile['GEMINI_API_KEY'];
+      if (typeof raw === 'string' && raw.trim().length > 0) {
+        apiKey = raw.trim();
+        apiKeySource = 'home-env';
+        keyPath = homeEnvPath;
+      }
+    }
+  }
+
+  if (apiKey === null) {
+    const shellKey = env['GEMINI_API_KEY'];
+    if (typeof shellKey === 'string' && shellKey.trim().length > 0) {
+      apiKey = shellKey.trim();
+      apiKeySource = 'shell-env';
+    }
+  }
+
+  if (apiKey === null) return null;
+
+  const warnings: string[] = [];
+  if (!GEMINI_API_KEY_PATTERN.test(apiKey)) {
+    warnings.push(
+      `GEMINI_API_KEY does not match the expected format (AIzaSy + 33 chars). Found at ${keyPath ?? 'shell env'}. The import will proceed but the key may be rejected at validation.`,
+    );
+  }
+
+  const provider: ProviderEntry = {
+    id: 'gemini-import',
+    name: 'Gemini (imported)',
+    builtin: false,
+    wire: 'openai-chat',
+    baseUrl: GEMINI_OPENAI_COMPAT_BASE_URL,
+    defaultModel: GEMINI_DEFAULT_MODEL,
+    envKey: 'GEMINI_API_KEY',
+  };
+
+  return {
+    provider,
+    apiKey,
+    apiKeySource,
+    keyPath,
+    warnings,
+  };
+}

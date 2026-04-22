@@ -23,6 +23,7 @@ import { defaultConfigDir, readConfig, writeConfig } from './config';
 import { dialog, ipcMain, shell } from './electron-runtime';
 import { type ClaudeCodeImport, readClaudeCodeSettings } from './imports/claude-code-config';
 import { type CodexImport, codexAuthPath, readCodexConfig } from './imports/codex-config';
+import { type GeminiImport, readGeminiCliConfig } from './imports/gemini-cli-config';
 import { buildSecretRef, decryptSecret, migrateSecrets, tryBuildSecretRef } from './keychain';
 import { defaultLogsDir, getLogger } from './logger';
 import {
@@ -749,6 +750,21 @@ interface ClaudeCodeDetectionMeta {
 interface ExternalConfigsDetection {
   codex?: CodexImport;
   claudeCode?: ClaudeCodeDetectionMeta;
+  gemini?: GeminiDetectionMeta;
+}
+
+interface GeminiDetectionMeta {
+  hasApiKey: boolean;
+  apiKeySource: GeminiImport['apiKeySource'];
+  /** Absolute path of the `.env` that supplied the key, if any. */
+  keyPath: string | null;
+  baseUrl: string;
+  defaultModel: string;
+  warnings: string[];
+  /** Vertex AI users land here: provider=null, hasApiKey=false, warning set.
+   *  Banner should render a "Vertex detected — manual config required" note
+   *  rather than an import button. */
+  blocked: boolean;
 }
 
 async function detectChatgptSubscription(): Promise<boolean> {
@@ -884,6 +900,56 @@ async function runImportClaudeCode(imported: ClaudeCodeImport): Promise<Onboardi
   return toState(cachedConfig);
 }
 
+async function runImportGemini(imported: GeminiImport): Promise<OnboardingState> {
+  // Vertex AI and malformed shells land here with provider=null. The renderer
+  // catches CONFIG_MISSING and surfaces the warning in a toast — we do not
+  // want to create an empty provider entry that would then fail validation.
+  if (imported.provider === null) {
+    throw new CodesignError(
+      imported.warnings[0] ?? 'Gemini CLI config produced no provider',
+      ERROR_CODES.CONFIG_MISSING,
+    );
+  }
+
+  const nextProviders: Record<string, ProviderEntry> = { ...(cachedConfig?.providers ?? {}) };
+  const nextSecrets = { ...(cachedConfig?.secrets ?? {}) };
+  if (cachedConfig === null) {
+    for (const [id, entry] of Object.entries(BUILTIN_PROVIDERS)) {
+      if (nextProviders[id] === undefined) nextProviders[id] = { ...entry };
+    }
+  }
+  nextProviders[imported.provider.id] = imported.provider;
+  const importedApiKey = imported.apiKey?.trim();
+  const keySaved = importedApiKey !== undefined && importedApiKey.length > 0;
+  if (keySaved) {
+    const ref = tryBuildSecretRef(importedApiKey);
+    if (ref !== null) nextSecrets[imported.provider.id] = ref;
+  }
+
+  const shouldActivate = keySaved || cachedConfig === null;
+  const nextActiveProvider = shouldActivate
+    ? imported.provider.id
+    : (cachedConfig?.activeProvider ?? '');
+  const nextActiveModel = shouldActivate
+    ? imported.provider.defaultModel
+    : (cachedConfig?.activeModel ?? '');
+
+  const next = hydrateConfig({
+    version: 3,
+    activeProvider: nextActiveProvider,
+    activeModel: nextActiveModel,
+    secrets: nextSecrets,
+    providers: nextProviders,
+    ...(cachedConfig?.designSystem !== undefined
+      ? { designSystem: cachedConfig.designSystem }
+      : {}),
+  });
+  await writeConfig(next);
+  cachedConfig = next;
+  configLoaded = true;
+  return toState(cachedConfig);
+}
+
 interface ListEndpointModelsResponse {
   ok: boolean;
   models?: string[];
@@ -995,13 +1061,15 @@ export function registerOnboardingIpc(): void {
   ipcMain.handle(
     'config:v1:detect-external-configs',
     async (): Promise<ExternalConfigsDetection> => {
-      const [codex, claudeCode] = await Promise.all([
+      const [codex, claudeCode, gemini] = await Promise.all([
         readCodexConfig().catch(() => null),
         readClaudeCodeSettings().catch(() => null),
+        readGeminiCliConfig().catch(() => null),
       ]);
       const providerIds = Object.keys(cachedConfig?.providers ?? {});
       const alreadyHasCodex = providerIds.some((id) => id.startsWith('codex-'));
       const alreadyHasClaudeCode = providerIds.includes('claude-code-imported');
+      const alreadyHasGemini = providerIds.includes('gemini-import');
       const out: ExternalConfigsDetection = {};
       if (codex !== null && codex.providers.length > 0 && !alreadyHasCodex) out.codex = codex;
       // Surface Claude Code unless we already imported it. We still surface
@@ -1019,6 +1087,26 @@ export function registerOnboardingIpc(): void {
           settingsPath: claudeCode.settingsPath,
           warnings: claudeCode.warnings,
         };
+      }
+      // Gemini: surface whenever we found either a usable key OR a Vertex AI
+      // signal (provider=null with warning). `alreadyHasGemini` gates the
+      // regular import path; Vertex users see the banner regardless since
+      // their config was already imported by a previous Gemini session — the
+      // banner tells them what they need to do manually.
+      if (gemini !== null) {
+        const blocked = gemini.provider === null;
+        if (!alreadyHasGemini || blocked) {
+          out.gemini = {
+            hasApiKey: gemini.apiKey !== null,
+            apiKeySource: gemini.apiKeySource,
+            keyPath: gemini.keyPath,
+            baseUrl:
+              gemini.provider?.baseUrl ?? 'https://generativelanguage.googleapis.com/v1beta/openai',
+            defaultModel: gemini.provider?.defaultModel ?? 'gemini-2.5-flash',
+            warnings: gemini.warnings,
+            blocked,
+          };
+        }
       }
       return out;
     },
@@ -1054,6 +1142,17 @@ export function registerOnboardingIpc(): void {
       );
     }
     return runImportClaudeCode(imported);
+  });
+
+  ipcMain.handle('config:v1:import-gemini-config', async (): Promise<OnboardingState> => {
+    const imported = await readGeminiCliConfig();
+    if (imported === null) {
+      throw new CodesignError(
+        'No GEMINI_API_KEY found in ~/.gemini/.env, ~/.env, or the shell environment.',
+        ERROR_CODES.CONFIG_MISSING,
+      );
+    }
+    return runImportGemini(imported);
   });
 
   ipcMain.handle('config:v1:list-endpoint-models', async (_e, raw: unknown) => {

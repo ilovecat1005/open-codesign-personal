@@ -92,6 +92,18 @@ export interface ExternalConfigsDetection {
      * data, etc.). Rendered as muted one-liners under the banner. */
     warnings: string[];
   };
+  gemini?: {
+    hasApiKey: boolean;
+    apiKeySource: 'gemini-env' | 'home-env' | 'shell-env' | 'none';
+    /** Absolute path of the `.env` that supplied the key, if any. */
+    keyPath: string | null;
+    baseUrl: string;
+    defaultModel: string;
+    warnings: string[];
+    /** True when we detected Gemini config but can't import (e.g. Vertex AI).
+     *  UI should show a warning-style banner with no import button. */
+    blocked: boolean;
+  };
 }
 
 export interface AppPaths {
@@ -340,6 +352,8 @@ const api = {
       ipcRenderer.invoke('config:v1:import-codex-config') as Promise<OnboardingState>,
     importClaudeCodeConfig: () =>
       ipcRenderer.invoke('config:v1:import-claude-code-config') as Promise<OnboardingState>,
+    importGeminiConfig: () =>
+      ipcRenderer.invoke('config:v1:import-gemini-config') as Promise<OnboardingState>,
   },
   preferences: {
     get: () => ipcRenderer.invoke('preferences:v1:get') as Promise<Preferences>,

@@ -570,14 +570,14 @@ function maskBaseUrlCreds(raw: string): string {
   }
 }
 
-function readDismissed(kind: 'codex' | 'claudeCode'): boolean {
+function readDismissed(kind: 'codex' | 'claudeCode' | 'gemini'): boolean {
   try {
     return window.localStorage.getItem(DISMISSED_BANNER_PREFIX + kind) === '1';
   } catch {
     return false;
   }
 }
-function writeDismissed(kind: 'codex' | 'claudeCode'): void {
+function writeDismissed(kind: 'codex' | 'claudeCode' | 'gemini'): void {
   try {
     window.localStorage.setItem(DISMISSED_BANNER_PREFIX + kind, '1');
   } catch {
@@ -593,7 +593,9 @@ function ImportBanner({
   tone = 'accent',
 }: {
   label: string;
-  onImport: () => void;
+  /** Omit to render a warning-only banner with no import button (Vertex AI
+   *  / Gemini-without-key cases that just need a dismissable note). */
+  onImport?: () => void;
   onDismiss: () => void;
   actionLabel?: string;
   tone?: 'accent' | 'info';
@@ -609,13 +611,15 @@ function ImportBanner({
       className={`rounded-[var(--radius-md)] border ${toneClasses} px-3 py-2 flex items-center gap-2`}
     >
       <span className="flex-1 text-[var(--text-xs)] text-[var(--color-text-primary)]">{label}</span>
-      <button
-        type="button"
-        onClick={onImport}
-        className="h-7 px-2.5 rounded-[var(--radius-sm)] text-[var(--text-xs)] text-[var(--color-on-accent)] bg-[var(--color-accent)] hover:opacity-90 transition-opacity whitespace-nowrap"
-      >
-        {actionLabel ?? t('settings.providers.import.action')}
-      </button>
+      {onImport !== undefined && (
+        <button
+          type="button"
+          onClick={onImport}
+          className="h-7 px-2.5 rounded-[var(--radius-sm)] text-[var(--text-xs)] text-[var(--color-on-accent)] bg-[var(--color-accent)] hover:opacity-90 transition-opacity whitespace-nowrap"
+        >
+          {actionLabel ?? t('settings.providers.import.action')}
+        </button>
+      )}
       <button
         type="button"
         onClick={onDismiss}
@@ -799,6 +803,15 @@ function ModelsTab() {
           warnings: string[];
         }
       | undefined;
+    gemini?:
+      | {
+          hasApiKey: boolean;
+          apiKeySource: 'gemini-env' | 'home-env' | 'shell-env' | 'none';
+          keyPath: string | null;
+          warnings: string[];
+          blocked: boolean;
+        }
+      | undefined;
   } | null>(null);
   /**
    * When set, `AddCustomProviderModal` mounts with these fields pre-filled.
@@ -835,6 +848,7 @@ function ModelsTab() {
       .then((detected) => {
         const dismissedCodex = readDismissed('codex');
         const dismissedClaudeCode = readDismissed('claudeCode');
+        const dismissedGemini = readDismissed('gemini');
         const surface =
           detected.claudeCode !== undefined &&
           detected.claudeCode.userType !== 'no-config' &&
@@ -858,6 +872,17 @@ function ModelsTab() {
                   hasApiKey: detected.claudeCode.hasApiKey,
                   settingsPath: detected.claudeCode.settingsPath,
                   warnings: detected.claudeCode.warnings ?? [],
+                },
+              }
+            : {}),
+          ...(detected.gemini !== undefined && !dismissedGemini
+            ? {
+                gemini: {
+                  hasApiKey: detected.gemini.hasApiKey,
+                  apiKeySource: detected.gemini.apiKeySource,
+                  keyPath: detected.gemini.keyPath,
+                  warnings: detected.gemini.warnings ?? [],
+                  blocked: detected.gemini.blocked,
                 },
               }
             : {}),
@@ -885,6 +910,22 @@ function ModelsTab() {
       setExternalConfigs((prev) => (prev === null ? null : { ...prev, codex: undefined }));
       await reloadRows();
       pushToast({ variant: 'success', title: t('settings.providers.import.codexDone') });
+    } catch (err) {
+      pushToast({
+        variant: 'error',
+        title: t('settings.providers.import.failed'),
+        description: err instanceof Error ? err.message : t('settings.common.unknownError'),
+      });
+    }
+  }
+
+  async function handleImportGemini() {
+    if (!window.codesign) return;
+    try {
+      await window.codesign.config.importGeminiConfig();
+      setExternalConfigs((prev) => (prev === null ? null : { ...prev, gemini: undefined }));
+      await reloadRows();
+      pushToast({ variant: 'success', title: t('settings.providers.import.geminiDone') });
     } catch (err) {
       pushToast({
         variant: 'error',
@@ -1073,7 +1114,9 @@ function ModelsTab() {
       <div className="space-y-[var(--space-3)]">
         <ChatgptLoginCard onStatusChange={reloadRows} />
         {externalConfigs !== null &&
-          (externalConfigs.codex !== undefined || externalConfigs.claudeCode !== undefined) && (
+          (externalConfigs.codex !== undefined ||
+            externalConfigs.claudeCode !== undefined ||
+            externalConfigs.gemini !== undefined) && (
             <div className="space-y-2">
               {externalConfigs.codex !== undefined && (
                 <ImportBanner
@@ -1089,6 +1132,36 @@ function ModelsTab() {
                   }}
                 />
               )}
+              {externalConfigs.gemini !== undefined &&
+                (() => {
+                  const g = externalConfigs.gemini;
+                  const dismiss = () => {
+                    writeDismissed('gemini');
+                    setExternalConfigs((prev) =>
+                      prev === null ? null : { ...prev, gemini: undefined },
+                    );
+                  };
+                  if (g.blocked) {
+                    // Vertex AI (or other non-importable Gemini setup).
+                    // Render a warning-only banner — no import button.
+                    return (
+                      <ImportBanner
+                        label={g.warnings[0] ?? t('settings.providers.import.geminiBlocked')}
+                        onDismiss={dismiss}
+                      />
+                    );
+                  }
+                  const label = g.hasApiKey
+                    ? t('settings.providers.import.geminiFound')
+                    : t('settings.providers.import.geminiNoKey');
+                  return (
+                    <ImportBanner
+                      label={label}
+                      {...(g.hasApiKey ? { onImport: handleImportGemini } : {})}
+                      onDismiss={dismiss}
+                    />
+                  );
+                })()}
               {externalConfigs.claudeCode !== undefined &&
                 (() => {
                   const cc = externalConfigs.claudeCode;
