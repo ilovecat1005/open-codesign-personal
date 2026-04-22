@@ -361,6 +361,55 @@ export interface DiagnosticEventRow {
   count: number;
 }
 
+/**
+ * Ring-buffered record of a recent renderer-side user action, used to help
+ * triage a bug report. The schema forbids prompt text, file paths, and URLs
+ * so the timeline can be shared without a redaction pass.
+ */
+export interface ActionTimelineEntry {
+  ts: number;
+  type:
+    | 'prompt.submit'
+    | 'prompt.cancel'
+    | 'prompt.retry'
+    | 'provider.switch'
+    | 'skill.toggle'
+    | 'design.open'
+    | 'design.export'
+    | 'connection.test'
+    | 'onboarding.complete';
+  data?: Record<string, unknown>;
+}
+
+export interface ListEventsInput {
+  schemaVersion: 1;
+  limit?: number;
+  includeTransient?: boolean;
+}
+
+export interface ListEventsResult {
+  schemaVersion: 1;
+  events: DiagnosticEventRow[];
+}
+
+export interface ReportEventInput {
+  schemaVersion: 1;
+  eventId: number;
+  includePromptText: boolean;
+  includePaths: boolean;
+  includeUrls: boolean;
+  includeTimeline: boolean;
+  notes: string;
+  timeline: ActionTimelineEntry[];
+}
+
+export interface ReportEventResult {
+  schemaVersion: 1;
+  issueUrl: string;
+  bundlePath: string;
+  summaryMarkdown: string;
+}
+
 export {
   ensureEditmodeMarkers,
   parseEditmodeBlock,
