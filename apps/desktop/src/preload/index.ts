@@ -530,6 +530,19 @@ const api = {
       data?: Record<string, unknown>;
       stack?: string;
     }) => ipcRenderer.invoke('diagnostics:v1:log', entry) as Promise<void>,
+    recordRendererError: (input: {
+      schemaVersion: 1;
+      code: string;
+      scope: string;
+      message: string;
+      stack?: string;
+      runId?: string;
+      context?: Record<string, unknown>;
+    }) =>
+      ipcRenderer.invoke('diagnostics:v1:recordRendererError', input) as Promise<{
+        schemaVersion: 1;
+        eventId: number | null;
+      }>,
     openLogFolder: () => ipcRenderer.invoke('diagnostics:v1:openLogFolder') as Promise<void>,
     exportDiagnostics: () =>
       ipcRenderer.invoke('diagnostics:v1:exportDiagnostics') as Promise<string>,

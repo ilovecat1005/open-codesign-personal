@@ -67,6 +67,80 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
+describe('diagnostics:v1:recordRendererError', () => {
+  it('returns the new row id', () => {
+    const db = initInMemoryDb();
+    registerDiagnosticsIpc(db);
+
+    const result = invoke('diagnostics:v1:recordRendererError', {
+      schemaVersion: 1,
+      code: 'IMPORT_OPENCODE_FAILED',
+      scope: 'onboarding',
+      message: 'config:v1:import-opencode-config failed',
+      stack: 'Error: boom\n    at foo',
+    }) as { schemaVersion: 1; eventId: number | null };
+
+    expect(result.schemaVersion).toBe(1);
+    expect(typeof result.eventId).toBe('number');
+    expect(result.eventId).toBeGreaterThan(0);
+
+    const rows = listDiagnosticEvents(db, { includeTransient: true });
+    expect(rows).toHaveLength(1);
+    expect(rows[0]?.id).toBe(result.eventId);
+    expect(rows[0]?.code).toBe('IMPORT_OPENCODE_FAILED');
+    expect(rows[0]?.scope).toBe('onboarding');
+  });
+
+  it('returns null when db is null', () => {
+    registerDiagnosticsIpc(null);
+    const result = invoke('diagnostics:v1:recordRendererError', {
+      schemaVersion: 1,
+      code: 'X',
+      scope: 'y',
+      message: 'z',
+    }) as { schemaVersion: 1; eventId: number | null };
+    expect(result).toEqual({ schemaVersion: 1, eventId: null });
+  });
+
+  it('dedups fingerprint within 200ms and returns the existing id', () => {
+    const db = initInMemoryDb();
+    registerDiagnosticsIpc(db);
+
+    const first = invoke('diagnostics:v1:recordRendererError', {
+      schemaVersion: 1,
+      code: 'SAME_CODE',
+      scope: 'toast',
+      message: 'first',
+      stack: 'same-stack',
+    }) as { eventId: number | null };
+
+    const second = invoke('diagnostics:v1:recordRendererError', {
+      schemaVersion: 1,
+      code: 'SAME_CODE',
+      scope: 'toast',
+      message: 'second',
+      stack: 'same-stack',
+    }) as { eventId: number | null };
+
+    expect(first.eventId).not.toBeNull();
+    expect(second.eventId).toBe(first.eventId);
+    const rows = listDiagnosticEvents(db, { includeTransient: true });
+    expect(rows).toHaveLength(1);
+  });
+
+  it('rejects bad input (missing code)', () => {
+    const db = initInMemoryDb();
+    registerDiagnosticsIpc(db);
+    expect(() =>
+      invoke('diagnostics:v1:recordRendererError', {
+        schemaVersion: 1,
+        scope: 'y',
+        message: 'z',
+      }),
+    ).toThrow(/code/);
+  });
+});
+
 describe('diagnostics:v1:log persistence', () => {
   it('persists error-level entries into diagnostic_events', () => {
     const db = initInMemoryDb();

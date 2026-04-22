@@ -18,6 +18,7 @@ import { join } from 'node:path';
 import {
   type ActionTimelineEntry,
   CodesignError,
+  type DiagnosticEventInput,
   type DiagnosticEventRow,
   type ListEventsInput,
   type ListEventsResult,
@@ -186,6 +187,63 @@ function parseIsFingerprintRecentInput(raw: unknown): string {
     throw new CodesignError('fingerprint must be a non-empty string', 'IPC_BAD_INPUT');
   }
   return r['fingerprint'] as string;
+}
+
+function parseRecordRendererErrorInput(raw: unknown): {
+  code: string;
+  scope: string;
+  message: string;
+  stack?: string;
+  runId?: string;
+  context?: Record<string, unknown>;
+} {
+  if (typeof raw !== 'object' || raw === null) {
+    throw new CodesignError(
+      'diagnostics:v1:recordRendererError expects an object payload',
+      'IPC_BAD_INPUT',
+    );
+  }
+  const r = raw as Record<string, unknown>;
+  if (r['schemaVersion'] !== 1) {
+    throw new CodesignError(
+      'diagnostics:v1:recordRendererError requires schemaVersion: 1',
+      'IPC_BAD_INPUT',
+    );
+  }
+  if (typeof r['code'] !== 'string' || (r['code'] as string).length === 0) {
+    throw new CodesignError('code must be a non-empty string', 'IPC_BAD_INPUT');
+  }
+  if (typeof r['scope'] !== 'string' || (r['scope'] as string).length === 0) {
+    throw new CodesignError('scope must be a non-empty string', 'IPC_BAD_INPUT');
+  }
+  if (typeof r['message'] !== 'string') {
+    throw new CodesignError('message must be a string', 'IPC_BAD_INPUT');
+  }
+  if (r['stack'] !== undefined && typeof r['stack'] !== 'string') {
+    throw new CodesignError('stack must be a string if provided', 'IPC_BAD_INPUT');
+  }
+  if (r['runId'] !== undefined && typeof r['runId'] !== 'string') {
+    throw new CodesignError('runId must be a string if provided', 'IPC_BAD_INPUT');
+  }
+  if (r['context'] !== undefined && (typeof r['context'] !== 'object' || r['context'] === null)) {
+    throw new CodesignError('context must be an object if provided', 'IPC_BAD_INPUT');
+  }
+  const out: {
+    code: string;
+    scope: string;
+    message: string;
+    stack?: string;
+    runId?: string;
+    context?: Record<string, unknown>;
+  } = {
+    code: r['code'] as string,
+    scope: r['scope'] as string,
+    message: r['message'] as string,
+  };
+  if (r['stack'] !== undefined) out.stack = r['stack'] as string;
+  if (r['runId'] !== undefined) out.runId = r['runId'] as string;
+  if (r['context'] !== undefined) out.context = r['context'] as Record<string, unknown>;
+  return out;
 }
 
 /** Regex that matches common API key shapes; used as a secondary pass so keys
@@ -420,6 +478,30 @@ export function registerDiagnosticsIpc(db: Database | null): void {
       });
     }
   });
+
+  ipcMain.handle(
+    'diagnostics:v1:recordRendererError',
+    (_e: unknown, raw: unknown): { schemaVersion: 1; eventId: number | null } => {
+      const input = parseRecordRendererErrorInput(raw);
+      if (db === null) {
+        return { schemaVersion: 1, eventId: null };
+      }
+      const fingerprint = computeFingerprint({ errorCode: input.code, stack: input.stack });
+      const recordInput: DiagnosticEventInput = {
+        level: 'error',
+        code: input.code,
+        scope: input.scope,
+        fingerprint,
+        message: input.message,
+        transient: false,
+      };
+      if (input.runId !== undefined) recordInput.runId = input.runId;
+      if (input.stack !== undefined) recordInput.stack = input.stack;
+      if (input.context !== undefined) recordInput.context = input.context;
+      const eventId = recordDiagnosticEvent(db, recordInput);
+      return { schemaVersion: 1, eventId };
+    },
+  );
 
   ipcMain.handle('diagnostics:v1:openLogFolder', async (): Promise<void> => {
     await shell.openPath(logsDir());
