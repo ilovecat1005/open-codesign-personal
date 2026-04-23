@@ -56,8 +56,9 @@ import {
   toGenerateImageOptions,
 } from './image-generation-settings';
 import { maybeAbortIfRunningFromDmg } from './install-check';
-import { registerLocaleIpc } from './locale-ipc';
+import { readCurrentLocale, registerLocaleIpc } from './locale-ipc';
 import { getLogPath, getLogger, initLogger } from './logger';
+import { mt, setMainLocale } from './main-i18n';
 import {
   getApiKeyForProvider,
   getCachedConfig,
@@ -1240,6 +1241,7 @@ void app.whenReady().then(async () => {
     // Show a blocking dialog if the user launched from the DMG mount. If
     // they accept the remedy, we quit here before touching safeStorage / the
     // snapshots DB so nothing half-initialises against a bad install.
+    setMainLocale(await readCurrentLocale());
     const aborted = await maybeAbortIfRunningFromDmg();
     if (aborted) return;
     await loadConfigOnBoot();
@@ -1284,12 +1286,12 @@ void app.whenReady().then(async () => {
       registerChatMessagesUnavailableIpc(dbResult.error.message);
       registerCommentsUnavailableIpc(dbResult.error.message);
       dialog.showErrorBox(
-        'Design history unavailable',
-        `Could not open the local snapshots database. Version history will be disabled for this session.\n\n${dbResult.error.message}`,
+        mt('main.designHistoryUnavailable.title'),
+        mt('main.designHistoryUnavailable.message', { message: dbResult.error.message }),
       );
     }
     registerIpcHandlers(diagnosticsDb);
-    registerLocaleIpc();
+    registerLocaleIpc(registerAppMenu);
     registerConnectionIpc();
     registerOnboardingIpc();
     registerCodexOAuthIpc();

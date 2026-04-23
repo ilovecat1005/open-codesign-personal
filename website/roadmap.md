@@ -19,7 +19,7 @@ First public release, installers for macOS (DMG), Windows (EXE), and Linux (AppI
 - AI-generated sliders and inline comment mode (pin + AI region-rewrite)
 - Instant design switching via preview pool
 - Five export formats — HTML, PDF, PPTX, ZIP, Markdown
-- Bilingual UI (English + 简体中文)
+- Multilingual UI (English + 简体中文 + 繁體中文 + Português do Brasil)
 - Built-in anti-AI-slop design Skill
 
 ## v0.2 — Cost + versions (next)
@@ -49,4 +49,3 @@ Real-time collaboration, MCP server interface, Claude Artifacts `<artifact>` imp
 ## Anti-goals
 
 Built-in payment, user accounts, cloud sync, stock asset library, custom model fine-tuning, team admin console.
-

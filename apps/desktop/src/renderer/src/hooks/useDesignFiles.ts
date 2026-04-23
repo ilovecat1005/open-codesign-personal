@@ -74,30 +74,11 @@ export function useDesignFiles(designId: string | null): UseDesignFilesResult {
   };
 }
 
-// Format an ISO timestamp as "22h ago" / "3d ago". Pure for testability.
-export function formatRelativeTime(isoTime: string, now: Date = new Date()): string {
-  const then = new Date(isoTime).getTime();
-  if (Number.isNaN(then)) return '';
-  const diffMs = Math.max(0, now.getTime() - then);
-  const seconds = Math.round(diffMs / 1000);
-  if (seconds < 60) return `${seconds}s ago`;
-  const minutes = Math.round(seconds / 60);
-  if (minutes < 60) return `${minutes}m ago`;
-  const hours = Math.round(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
-  const days = Math.round(hours / 24);
-  if (days < 30) return `${days}d ago`;
-  const months = Math.round(days / 30);
-  if (months < 12) return `${months}mo ago`;
-  const years = Math.round(months / 12);
-  return `${years}y ago`;
-}
-
 // Precise tooltip form: "Modified Apr 20, 2026, 14:32".
-export function formatAbsoluteTime(isoTime: string): string {
+export function formatAbsoluteTime(isoTime: string, locale?: string): string {
   const date = new Date(isoTime);
   if (Number.isNaN(date.getTime())) return '';
-  return date.toLocaleString(undefined, {
+  return date.toLocaleString(locale, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',

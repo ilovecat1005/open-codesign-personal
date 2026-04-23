@@ -2,6 +2,7 @@ import { type ExporterFormat, exportArtifact } from '@open-codesign/exporters';
 import { CodesignError, ERROR_CODES } from '@open-codesign/shared';
 import type { BrowserWindow } from 'electron';
 import { dialog, ipcMain } from './electron-runtime';
+import { mt } from './main-i18n';
 
 const FORMAT_FILTERS: Record<ExporterFormat, Electron.FileFilter[]> = {
   html: [{ name: 'HTML', extensions: ['html'] }],
@@ -59,7 +60,7 @@ export function registerExporterIpc(getWindow: () => BrowserWindow | null): void
     const win = getWindow();
     const defaultExt = req.format === 'markdown' ? 'md' : req.format;
     const opts: Electron.SaveDialogOptions = {
-      title: `Export design as ${req.format.toUpperCase()}`,
+      title: mt('main.exportDialog.title', { format: req.format.toUpperCase() }),
       defaultPath: req.defaultFilename ?? `design.${defaultExt}`,
       filters: FORMAT_FILTERS[req.format],
     };

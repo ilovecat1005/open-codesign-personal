@@ -121,6 +121,18 @@ describe('pickRecentReport', () => {
     expect(result?.relative).not.toBe('5m');
     expect(result?.relative).not.toBe('5 minutes ago');
   });
+
+  it('localizes the relative time into zh-TW', () => {
+    const now = 1_000_000;
+    const result = pickRecentReport(
+      { reported: true, ts: now - 5 * 60_000, issueUrl: 'https://x/1' },
+      now,
+      'zh-TW',
+    );
+    expect(result?.relative).toContain('5');
+    expect(result?.relative).not.toBe('5m');
+    expect(result?.relative).not.toBe('5 minutes ago');
+  });
 });
 
 describe('parseIssueNumber', () => {
@@ -139,12 +151,16 @@ describe('parseIssueNumber', () => {
 });
 
 describe('confirm-step translation', () => {
-  it('interpolates the seconds placeholder in both locales', async () => {
+  it('interpolates the seconds placeholder in all locales', async () => {
     const en = (await import('@open-codesign/i18n/locales/en')).default as unknown as Record<
       string,
       Record<string, unknown>
     >;
     const zh = (await import('@open-codesign/i18n/locales/zh-CN')).default as unknown as Record<
+      string,
+      Record<string, unknown>
+    >;
+    const zhTW = (await import('@open-codesign/i18n/locales/zh-TW')).default as unknown as Record<
       string,
       Record<string, unknown>
     >;
@@ -154,10 +170,15 @@ describe('confirm-step translation', () => {
     const zhValue = (zh['diagnostics'] as Record<string, Record<string, unknown>>)['report']?.[
       'confirmOpenAnyway'
     ];
+    const zhTWValue = (zhTW['diagnostics'] as Record<string, Record<string, unknown>>)['report']?.[
+      'confirmOpenAnyway'
+    ];
     expect(typeof enValue).toBe('string');
     expect(typeof zhValue).toBe('string');
+    expect(typeof zhTWValue).toBe('string');
     expect(String(enValue)).toContain('{{seconds}}');
     expect(String(zhValue)).toContain('{{seconds}}');
+    expect(String(zhTWValue)).toContain('{{seconds}}');
   });
 });
 

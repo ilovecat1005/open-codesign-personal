@@ -127,7 +127,11 @@
       "youLabel": "Você",
       "claudeLabel": "Claude",
       "noModel": "Nenhum modelo selecionado",
+      "addMenu": {
+        "trigger": "Adicionar contexto"
+      },
       "thinking": "Pensando",
+      "streamingLabel": "O assistente está digitando",
       "tokensLine": "~{{count}} tokens",
       "artifactDelivered": "entregue",
       "artifactDefaultLabel": "design.html",
@@ -136,11 +140,7 @@
       },
       "working": {
         "title": "Trabalhando"
-      },
-      "addMenu": {
-        "trigger": "Adicionar contexto"
-      },
-      "streamingLabel": "O assistente está digitando"
+      }
     },
     "comments": {
       "title": "Modo de comentário",
@@ -151,10 +151,38 @@
     "title": "Configurações",
     "tabs": {
       "models": "Modelos",
+      "images": "Image API",
       "appearance": "Aparência",
       "storage": "Armazenamento",
       "diagnostics": "Diagnóstico",
       "advanced": "Avançado"
+    },
+    "imageGen": {
+      "tabTitle": "Image generation",
+      "tabHint": "Let the design agent call an image model (e.g. gpt-image-2) for heroes, posters, and background bitmaps. Credentials stay local.",
+      "title": "Image generation assist",
+      "hint": "When enabled, the agent can invoke generate_image_asset during a run.",
+      "enabled": "Enable image generation assist",
+      "provider": "Provider",
+      "credentials": "Credentials",
+      "inherit": "Inherit from model provider",
+      "customKey": "Use a separate key",
+      "keyPlaceholder": "Leave empty to keep {{mask}}",
+      "newKeyPlaceholder": "Paste API key",
+      "model": "Image model",
+      "baseUrl": "Base URL",
+      "quality": "Quality",
+      "size": "Size",
+      "status": {
+        "ready": "Ready",
+        "needsKey": "Needs API key",
+        "disabled": "Disabled"
+      },
+      "toast": {
+        "loadFailed": "Failed to load image generation settings",
+        "saved": "Image generation settings saved",
+        "saveFailed": "Failed to save image generation settings"
+      }
     },
     "shell": {
       "back": "Área de trabalho",
@@ -187,9 +215,12 @@
       "addCustom": "Adicionar personalizado",
       "empty": "Nenhum provedor configurado ainda. Adicione um para começar a gerar.",
       "active": "Ativo",
+      "activeNotInList": "(active, not in provider list)",
       "decryptionFailed": "Falha na descriptografia",
       "setActive": "Definir como ativo",
       "reEnterKey": "Redigitar chave",
+      "missingKey": "Chave ausente",
+      "addKey": "Adicionar chave",
       "confirm": "Confirmar",
       "delete": "Excluir",
       "edit": "Editar",
@@ -215,12 +246,15 @@
         "defaultModel": "Modelo padrão",
         "compatibilityHintTitle": "Aviso de compatibilidade",
         "compatibilityHintBody": "Alguns coding plans, relays e gateways compatíveis com OpenAI só permitem clientes específicos, como Claude Code, openclaw ou Hermes. Mesmo que a API pareça compatível, o Open CoDesign ainda pode ser bloqueado por uma lista de apps permitidos.",
+        "switchToManual": "Digitar manualmente",
+        "switchToDropdown": "Escolher da lista",
+        "discoveringModels": "Discovering models...",
+        "discoveredModels": "Found {{count}} models",
+        "discoveryFailed": "Could not auto-discover models",
         "test": "Testar conexão",
         "testOk": "OK — {{count}} modelos disponíveis",
         "save": "Salvar e continuar",
-        "saveEdit": "Salvar alterações",
-        "switchToDropdown": "Escolher da lista",
-        "switchToManual": "Digitar manualmente"
+        "saveEdit": "Salvar alterações"
       },
       "import": {
         "action": "Importar",
@@ -243,6 +277,7 @@
         "geminiNoKey": "Configuração da Gemini CLI encontrada, mas sem chave em ~/.gemini/.env ou ~/.env. Cole uma chave manualmente para usar o Gemini aqui.",
         "geminiBlocked": "Projetos do Google Vertex AI ainda não são suportados — cole uma chave da Gemini Developer API (começa com AIzaSy…) para usar o Gemini aqui.",
         "geminiDone": "Provedor do Gemini importado",
+        "opencodeBlocked": "Configuração do OpenCode detectada, mas nada pode ser importado. Veja o aviso acima, corrija o auth.json e tente novamente.",
         "opencodeFound": "OpenCode detectado — importar {{count}} provedores ({{providers}})?",
         "opencodeDone": "Provedores do OpenCode importados",
         "claudeCodeImportedActivated": "Claude Code importado e definido como provedor ativo",
@@ -263,13 +298,12 @@
         "codexMenuDesc": "Ler ~/.codex/config.toml",
         "claudeCodeMenu": "Importar do Claude Code",
         "claudeCodeMenuDesc": "Ler a sessão autenticada do Claude Code",
-        "customMenu": "Provedor personalizado",
-        "customMenuDesc": "Inserir chave de API e URL manualmente",
-        "alreadyImported": "Já importado",
-        "opencodeBlocked": "Configuração do OpenCode detectada, mas nada pode ser importado. Veja o aviso acima, corrija o auth.json e tente novamente.",
         "ollamaMenu": "Ollama (local)",
         "ollamaMenuDesc": "Adicionar o provedor local em localhost:11434",
-        "ollamaDone": "Provedor Ollama adicionado"
+        "ollamaDone": "Provedor Ollama adicionado",
+        "customMenu": "Provedor personalizado",
+        "customMenuDesc": "Inserir chave de API e URL manualmente",
+        "alreadyImported": "Já importado"
       },
       "modal": {
         "title": "Adicionar provedor",
@@ -296,12 +330,24 @@
         "switchedTo": "Trocado para {{label}}",
         "switchFailed": "Falha ao trocar",
         "saved": "Provedor salvo",
+        "saveFailed": "Falha ao salvar o provedor",
         "modelSaveFailed": "Falha ao salvar a seleção de modelo",
         "reasoningSaved": "Profundidade de raciocínio salva",
         "reasoningSaveFailed": "Falha ao salvar a profundidade de raciocínio",
         "connectionOk": "Conexão OK",
-        "connectionFailed": "Falha na conexão",
-        "saveFailed": "Falha ao salvar o provedor"
+        "connectionFailed": "Falha na conexão"
+      },
+      "cliProxyApi": {
+        "presetName": "CLIProxyAPI",
+        "presetDescription": "Proxy local que encapsula assinaturas OAuth do Claude/Codex/Gemini",
+        "apiKeyOptional": "Chave de API só é necessária se você configurou `api-keys` no config.yaml do CPA",
+        "thinkingHint": "Dica: acrescente `(high)` / `(xhigh)` / `(8192)` ao nome do modelo para controlar o orçamento de raciocínio"
+      },
+      "cpaDetection": {
+        "title": "CLIProxyAPI detected on your machine",
+        "body": "Import it as a provider to use your OAuth-authenticated Claude / Codex / Gemini accounts.",
+        "importAction": "Import",
+        "dismissAction": "Dismiss"
       },
       "reasoning": {
         "label": "Profundidade de raciocínio",
@@ -311,17 +357,6 @@
         "medium": "Média",
         "high": "Alta",
         "xhigh": "Muito alta"
-      },
-      "addKey": "Adicionar chave",
-      "missingKey": "Chave ausente",
-      "cliProxyApi": {
-        "presetName": "CLIProxyAPI",
-        "presetDescription": "Proxy local que encapsula assinaturas OAuth do Claude/Codex/Gemini",
-        "apiKeyOptional": "Chave de API só é necessária se você configurou `api-keys` no config.yaml do CPA",
-        "thinkingHint": "Dica: acrescente `(high)` / `(xhigh)` / `(8192)` ao nome do modelo para controlar o orçamento de raciocínio",
-        "discoveringModels": "Descobrindo modelos...",
-        "discoveredModels": "{{count}} modelos encontrados",
-        "discoveryFailed": "Não foi possível conectar ao CPA"
       }
     },
     "appearance": {
@@ -336,7 +371,8 @@
       "languageLoadFailed": "Falha ao carregar o idioma",
       "langEn": "English",
       "langZhCN": "中文 (简体)",
-      "langPtBR": "Português (BR)"
+      "langPtBR": "Português (BR)",
+      "langZhTW": "中文 (繁體)"
     },
     "language": {
       "label": "Idioma",
@@ -380,6 +416,7 @@
       "showTransient": "Mostrar erros corrigidos após nova tentativa",
       "empty": "Nenhum evento de diagnóstico registrado ainda.",
       "dbUnavailable": "Armazenamento de diagnóstico indisponível. Os erros continuam sendo gravados em main.log, mas só aparecem aqui após reiniciar o app. Verifique espaço em disco e permissões.",
+      "inMemoryFallback": "Mostrando registros em memória — banco indisponível; eles não serão preservados após reiniciar.",
       "report": "Reportar",
       "column": {
         "time": "Hora",
@@ -387,8 +424,7 @@
         "scope": "Escopo",
         "runId": "ID da execução",
         "message": "Mensagem"
-      },
-      "inMemoryFallback": "Mostrando registros em memória — banco indisponível; eles não serão preservados após reiniciar."
+      }
     },
     "advanced": {
       "updateChannel": "Canal de atualização",
@@ -570,6 +606,11 @@
     "designSystemCleared": "Design system removido",
     "clearDesignSystemFailed": "Não foi possível remover o design system",
     "generationFailed": "Falha na geração",
+    "generationFailedApplyFix": "Apply fix",
+    "generationFailedBaseUrlUpdated": "Base URL updated. Try the request again.",
+    "generationFailedFixUnavailable": "Auto-fix unavailable",
+    "generationFailedFixUnavailableDescription": "This app version can't apply the fix automatically. Please edit the Base URL manually in Settings.",
+    "generationFailedFixApplyFailed": "Could not apply fix",
     "cancellationFailed": "Falha no cancelamento",
     "inlineCommentFailed": "Falha no comentário inline",
     "commentNeedsSnapshot": "Gere um design antes de deixar um comentário",
@@ -790,6 +831,10 @@
       "timedOut": "Tempo da requisição esgotado — verifique firewall ou VPN.",
       "corsError": "Erro de CORS (não deveria acontecer no processo principal). Isso é um bug.",
       "sslError": "Erro de SSL / certificado (certificado autoassinado no relay?).",
+      "gatewayIncompatible": "The gateway accepted the connection but does not implement this provider's API. Try switching wire (e.g. openai-chat).",
+      "openaiResponsesMisconfigured": "The endpoint rejected the request shape. The wire may be wrong — try switching to openai-chat.",
+      "relayStreamingBug": "The gateway may mishandle OpenAI Responses API SSE events (older sub2api / claude2api / anyrouter builds cut the stream short).",
+      "serverError": "Upstream server error. May be transient — try again.",
       "unknown": "Erro desconhecido — veja o log completo para detalhes."
     },
     "fix": {
@@ -801,7 +846,9 @@
       "checkNetwork": "Verificar rede / VPN",
       "checkVpn": "Verificar VPN / firewall",
       "reportBug": "Reportar este bug",
-      "disableTls": "Desativar verificação TLS"
+      "disableTls": "Desativar verificação TLS",
+      "switchWire": "Switch wire in Settings",
+      "relayStreamingBug": "Upgrade the relay, switch wire to openai-chat, or use api.openai.com directly"
     },
     "applyFix": "Aplicar esta correção",
     "setBaseUrlFirst": "Defina uma URL base primeiro",
@@ -836,11 +883,22 @@
       "fingerprint": "Fingerprint",
       "message": "Mensagem",
       "recentlyReported": "Você reportou isso {{relative}} como issue #{{issueNumber}}.",
+      "recentlyReportedNoNumber": "Você reportou isso {{relative}}.",
       "viewPrevious": "Ver issue anterior",
       "continueAnyway": "Continuar assim mesmo",
+      "confirmOpenAnyway": "Sim, abrir mesmo assim ({{seconds}}s)",
+      "error": {
+        "notesTooLong": "As notas excedem o limite de 2000 caracteres.",
+        "generic": "Não foi possível abrir a issue. Verifique a pasta de logs para detalhes."
+      },
       "bundleSavedTitle": "Pacote salvo",
       "bundleSavedDescription": "Salvo em",
       "revealBundle": "Mostrar na pasta",
+      "openFailedTitle": "Não foi possível abrir o navegador",
+      "openFailedCopyHint": "Copie a URL da issue e abra manualmente.",
+      "copyIssueUrl": "Copiar URL",
+      "clipboardFailedTitle": "Não foi possível copiar para a área de transferência",
+      "clipboardFailedHint": "O pacote está no disco — abra manualmente e cole o resumo lá.",
       "preview": {
         "code": "Código",
         "scope": "Escopo",
@@ -853,18 +911,7 @@
         "upstreamRequestId": "ID da requisição",
         "upstreamRetry": "Nova tentativa",
         "upstreamBodyHead": "Início do corpo"
-      },
-      "clipboardFailedHint": "O pacote está no disco — abra manualmente e cole o resumo lá.",
-      "clipboardFailedTitle": "Não foi possível copiar para a área de transferência",
-      "confirmOpenAnyway": "Sim, abrir mesmo assim ({{seconds}}s)",
-      "copyIssueUrl": "Copiar URL",
-      "error": {
-        "generic": "Não foi possível abrir a issue. Verifique a pasta de logs para detalhes.",
-        "notesTooLong": "As notas excedem o limite de 2000 caracteres."
-      },
-      "openFailedCopyHint": "Copie a URL da issue e abra manualmente.",
-      "openFailedTitle": "Não foi possível abrir o navegador",
-      "recentlyReportedNoNumber": "Você reportou isso {{relative}}."
+      }
     }
   },
   "demos": {
@@ -1035,9 +1082,12 @@
     "PROVIDER_ERROR": "O provedor retornou um erro. Verifique sua chave de API e tente novamente.",
     "PROVIDER_HTTP_4XX": "O provedor rejeitou a requisição. Verifique sua chave de API e o faturamento.",
     "PROVIDER_UPSTREAM_ERROR": "O provedor retornou um erro inesperado. Detalhes estão no log.",
+    "PROVIDER_GATEWAY_INCOMPATIBLE": "Your gateway returned 'not implemented' for the Messages API. Try switching wire to openai-chat in Settings, or use a gateway that supports the Anthropic Messages API.",
     "PROVIDER_ABORTED": "Geração cancelada.",
     "PROVIDER_RETRY_EXHAUSTED": "O provedor falhou após várias tentativas. Verifique sua conexão e tente novamente.",
     "CLAUDE_CODE_OAUTH_ONLY": "Seu login no Claude Code usa uma assinatura Anthropic (Pro/Max). Apps de terceiros não podem reutilizar a cota da assinatura — gere uma chave de API em console.anthropic.com e use aqui.",
+    "CODEX_TOKEN_PARSE_FAILED": "O login local do ChatGPT está corrompido. Faça login novamente em Configurações.",
+    "CODEX_TOKEN_NOT_LOGGED_IN": "Você não fez login na assinatura do ChatGPT. Faça login em Configurações.",
     "INPUT_EMPTY_PROMPT": "O prompt não pode estar vazio.",
     "INPUT_EMPTY_COMMENT": "O comentário não pode estar vazio.",
     "INPUT_EMPTY_HTML": "Um HTML existente é obrigatório para esta operação.",
@@ -1071,8 +1121,54 @@
     "EXPORTER_ZIP_UNSAFE_PATH": "A exportação foi bloqueada: um caminho de asset escaparia dos limites do arquivo ZIP.",
     "EXPORTER_ZIP_FAILED": "A exportação em ZIP falhou.",
     "OPEN_PATH_FAILED": "Não foi possível abrir a pasta ou arquivo solicitado.",
-    "RENDERER_ERROR": "Ocorreu um erro no renderer. Detalhes estão no log.",
-    "CODEX_TOKEN_NOT_LOGGED_IN": "Você não fez login na assinatura do ChatGPT. Faça login em Configurações.",
-    "CODEX_TOKEN_PARSE_FAILED": "O login local do ChatGPT está corrompido. Faça login novamente em Configurações."
+    "RENDERER_ERROR": "Ocorreu um erro no renderer. Detalhes estão no log."
+  },
+  "main": {
+    "appMenu": {
+      "help": "Ajuda",
+      "checkForUpdates": "Verificar atualizações…",
+      "updateCheckDisabledTitle": "Verificação desativada",
+      "updateCheckDisabledMessage": "A verificação de atualizações fica desativada em builds de desenvolvimento.",
+      "updateCheckTitle": "Verificação de atualização",
+      "updateCheckUnknownMessage": "Não foi possível determinar a versão mais recente. Tente novamente mais tarde.",
+      "upToDateTitle": "Atualizado",
+      "upToDateMessage": "Você está na versão mais recente ({{version}}).",
+      "updateCheckFailedTitle": "Falha ao verificar atualizações"
+    },
+    "exportDialog": {
+      "title": "Exportar design como {{format}}"
+    },
+    "installCheck": {
+      "title": "Open CoDesign ainda não foi instalado",
+      "message": "Arraste o Open CoDesign para a pasta Aplicativos primeiro",
+      "detail": "Você está executando o Open CoDesign diretamente do DMG. Assim, o macOS não consegue criar um item estável no chaveiro para o app, então as API keys não serão salvas com segurança e importações de configuração podem falhar.\n\nPassos corretos:\n1. Clique em “Abrir pasta Aplicativos e sair” abaixo.\n2. Arraste Open CoDesign.app para a pasta no Finder.\n3. Abra o app a partir de Aplicativos.\n\nNa primeira abertura, o macOS pode pedir confirmação para um app baixado da internet. Clique em Abrir.",
+      "openApplicationsAndQuit": "Abrir pasta Aplicativos e sair",
+      "continueFromDmg": "Continuar do DMG (não recomendado)"
+    },
+    "designHistoryUnavailable": {
+      "title": "Histórico de designs indisponível",
+      "message": "Não foi possível abrir o banco local de snapshots. O histórico de versões ficará desativado nesta sessão.\n\n{{message}}"
+    },
+    "connection": {
+      "apiKeyAuth": "API key inválida ou sem permissão",
+      "badBaseUrl": "O caminho de baseUrl parece incorreto. Proxies compatíveis com OpenAI geralmente precisam do sufixo /v1 (tente https://your-host/v1)",
+      "serverHttp": "Servidor retornou HTTP {{status}}",
+      "timeout": "A requisição excedeu o tempo limite (> {{seconds}}s). Verifique baseUrl e rede.",
+      "unreachable": "Não foi possível conectar ao baseUrl. Verifique domínio / porta / rede.",
+      "cors": "Erro de CORS (fetch no processo principal não deveria chegar aqui; confira os logs).",
+      "network": "Erro de rede: {{message}}. Confira os logs: {{logPath}}",
+      "chatgptTokenReadFailed": "Falha ao ler credenciais da assinatura ChatGPT. Entre novamente nas Configurações.",
+      "chatgptNotLoggedIn": "Assinatura ChatGPT não está conectada. Entre pelas Configurações.",
+      "chatgptExpired": "Login da assinatura ChatGPT expirou. Entre novamente."
+    },
+    "importErrors": {
+      "codexChatgptUnsupported": "Detectado login de assinatura ChatGPT no Codex (auth_mode: chatgpt). Ele ainda não pode ser importado como provider de API key. O recurso “Entrar com assinatura ChatGPT” ainda está sendo polido e chegará no próximo release. Por enquanto, configure [model_providers] manualmente em ~/.codex/config.toml ou mude o Codex para modo API key.",
+      "codexMissingProvider": "Nenhum provider de API importável encontrado no config do Codex (~/.codex/config.toml não tem uma seção [model_providers]).",
+      "opencodeMissingProvider": "Nenhum provider de API importável encontrado em OpenCode auth.json (~/.local/share/opencode/auth.json). Entre primeiro em um provider com API key no OpenCode."
+    },
+    "codexOAuth": {
+      "providerName": "Assinatura ChatGPT",
+      "missingAccountId": "Login do Codex concluído, mas não foi possível ler o ID da conta ChatGPT. Entre novamente."
+    }
   }
 }

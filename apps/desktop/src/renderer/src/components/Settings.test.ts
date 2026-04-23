@@ -38,6 +38,19 @@ describe('applyLocaleChange', () => {
     expect(mockSetLocale).toHaveBeenCalledWith('zh-CN');
     expect(result).toBe('zh-CN');
   });
+
+  it('supports applying Traditional Chinese from the IPC bridge', async () => {
+    const { setLocale: mockSetLocale } = await import('@open-codesign/i18n');
+    const mockLocaleApi = {
+      set: vi.fn((_locale: string) => Promise.resolve('zh-TW')),
+    };
+
+    const result = await applyLocaleChange('zh-Hant-TW', mockLocaleApi);
+
+    expect(mockLocaleApi.set).toHaveBeenCalledWith('zh-Hant-TW');
+    expect(mockSetLocale).toHaveBeenCalledWith('zh-TW');
+    expect(result).toBe('zh-TW');
+  });
 });
 
 describe('CPA detection regex', () => {

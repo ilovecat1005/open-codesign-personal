@@ -55,9 +55,9 @@ open-codesign uses a monorepo managed with pnpm workspaces and Turborepo:
 - `packages/ui` — shared design system (warm beige Claude-style palette, Radix primitives, light + dark themes)
 - `packages/artifacts` — typed artifact schemas (HTML, React/JSX, SVG, PPTX) and streaming parser
 - `packages/exporters` — PDF / PPTX / ZIP exporters (lazy-loaded; PDF uses user's local Chrome via puppeteer-core)
-- `packages/templates` — 15 built-in demo prompts with bilingual metadata
+- `packages/templates` — 15 built-in demo prompts with multilingual metadata
 - `packages/shared` — TypeScript types, utilities, Zod schemas
-- `packages/i18n` — i18next locales (English + 简体中文)
+- `packages/i18n` — i18next locales (English + 简体中文 + 繁體中文 + Português do Brasil)
 - `website` — VitePress marketing + docs site
 
 Storage: better-sqlite3 for design history and snapshots; TOML files (encrypted via Electron safeStorage) for configuration. No electron-store blob. All paths respect XDG base dirs and Electron `app.getPath()`.
@@ -83,7 +83,7 @@ The agent picks the skill that matches the brief, or combines multiple.
 
 ## Built-in demo prompts
 
-Fifteen ready-to-edit prompts, each localized to EN + 简体中文:
+Fifteen ready-to-edit prompts, each localized to EN + 简体中文 + 繁體中文:
 
 `cosmic-animation`, `organic-loaders`, `landing-page`, `case-study`, `dashboard`, `pitch-slide`, `email`, `mobile-app`, `pricing-page`, `blog-article`, `event-calendar`, `chat-interface`, `portfolio-gallery`, `receipt-invoice`, `settings-panel`.
 
@@ -92,7 +92,7 @@ Fifteen ready-to-edit prompts, each localized to EN + 简体中文:
 Four tabs in the desktop Settings:
 
 - **Models** — add providers, manage API keys, pick primary + fast models, import from Claude Code or Codex configs, connection diagnostic panel
-- **Appearance** — light / dark theme, UI language (EN / 简体中文)
+- **Appearance** — light / dark theme, UI language (EN / 简体中文 / 繁體中文 / PT-BR)
 - **Storage** — copy + open config, data, logs, and snapshot directories; factory reset
 - **Advanced** — update channel (stable / beta) and diagnostic toggles
 

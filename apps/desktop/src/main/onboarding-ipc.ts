@@ -37,6 +37,7 @@ import { type GeminiImport, readGeminiCliConfig } from './imports/gemini-cli-con
 import { type OpencodeImport, readOpencodeConfig } from './imports/opencode-config';
 import { buildSecretRef, decryptSecret, migrateSecrets } from './keychain';
 import { defaultLogsDir, getLogger } from './logger';
+import { mt } from './main-i18n';
 import {
   type ProviderRow,
   assertProviderHasStoredSecret,
@@ -824,8 +825,8 @@ async function runImportCodex(imported: CodexImport): Promise<OnboardingState> {
   if (imported.providers.length === 0) {
     throw new CodesignError(
       (await detectChatgptSubscription())
-        ? 'Detected Codex ChatGPT subscription login (auth_mode: chatgpt). It cannot be imported as an API-key provider yet — the "Sign in with ChatGPT subscription" feature is still being polished and will ship in the next release. For now, configure [model_providers] in ~/.codex/config.toml manually, or switch to API-key mode in Codex. / 检测到 Codex 使用 ChatGPT 订阅登录，无法自动导入为 API key provider。"用 ChatGPT 订阅登录"功能仍在打磨中，下个版本开放 —— 目前请在 ~/.codex/config.toml 里手动配置 [model_providers]，或改用 API key 登录 Codex。'
-        : 'No importable API provider found in Codex config (~/.codex/config.toml is missing a [model_providers] section). / Codex 配置里没有可导入的 API provider（~/.codex/config.toml 里缺少 [model_providers] 段）。',
+        ? mt('main.importErrors.codexChatgptUnsupported')
+        : mt('main.importErrors.codexMissingProvider'),
       ERROR_CODES.CONFIG_MISSING,
     );
   }
@@ -994,7 +995,7 @@ async function runImportGemini(imported: GeminiImport): Promise<OnboardingState>
 async function runImportOpencode(imported: OpencodeImport): Promise<OnboardingState> {
   if (imported.providers.length === 0) {
     throw new CodesignError(
-      'No importable API provider found in OpenCode auth.json (~/.local/share/opencode/auth.json). Log in to a provider with an API key in OpenCode first. / OpenCode 配置里没有可导入的 API provider，请先在 OpenCode 里用 API key 登录。',
+      mt('main.importErrors.opencodeMissingProvider'),
       ERROR_CODES.CONFIG_MISSING,
     );
   }

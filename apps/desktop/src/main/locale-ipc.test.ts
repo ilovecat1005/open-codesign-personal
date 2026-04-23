@@ -81,6 +81,31 @@ describe('locale-ipc input validation', () => {
     expect(persisted.schemaVersion).toBe(1);
   });
 
+  it('canonicalizes Traditional Chinese aliases before persisting', async () => {
+    writeFileMock.mockClear();
+    const set = getSetHandler();
+    const result = await set({}, 'zh-Hant-TW');
+    expect(result).toBe('zh-TW');
+    const firstCall = writeFileMock.mock.calls.at(-1);
+    const persisted = JSON.parse(String(firstCall?.[1] ?? '{}'));
+    expect(persisted.locale).toBe('zh-TW');
+  });
+
+  it('notifies the app shell after a locale change so native menus can refresh', async () => {
+    writeFileMock.mockClear();
+    const handlers = new Map<string, (...args: unknown[]) => unknown>();
+    const handleMock = ipcMain.handle as unknown as ReturnType<typeof vi.fn>;
+    handleMock.mockImplementation((channel: unknown, fn: unknown) => {
+      handlers.set(channel as string, fn as (...args: unknown[]) => unknown);
+    });
+    const onLocaleChanged = vi.fn();
+    registerLocaleIpc(onLocaleChanged);
+    const set = handlers.get('locale:set');
+    if (!set) throw new Error('locale:set not registered');
+    await set({}, 'zh-TW');
+    expect(onLocaleChanged).toHaveBeenCalledTimes(1);
+  });
+
   it('rejects empty / non-string input', async () => {
     const set = getSetHandler();
     await expect(set({}, '')).rejects.toThrow();

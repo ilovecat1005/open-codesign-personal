@@ -1,5 +1,6 @@
 import { Menu, app, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
+import { mt } from './main-i18n';
 
 export function registerAppMenu(): void {
   const template: Electron.MenuItemConstructorOptions[] = [
@@ -19,17 +20,17 @@ export function registerAppMenu(): void {
       role: 'windowMenu' as const,
     },
     {
-      label: 'Help',
+      label: mt('main.appMenu.help'),
       role: 'help' as const,
       submenu: [
         {
-          label: 'Check for Updates\u2026',
+          label: mt('main.appMenu.checkForUpdates'),
           click: async () => {
             if (!app.isPackaged) {
               dialog.showMessageBox({
                 type: 'info',
-                title: 'Update Check Disabled',
-                message: 'Update checks are disabled in dev builds.',
+                title: mt('main.appMenu.updateCheckDisabledTitle'),
+                message: mt('main.appMenu.updateCheckDisabledMessage'),
               });
               return;
             }
@@ -38,23 +39,23 @@ export function registerAppMenu(): void {
               if (!result || !result.updateInfo) {
                 dialog.showMessageBox({
                   type: 'info',
-                  title: 'Update Check',
-                  message: 'Could not determine the latest version. Try again later.',
+                  title: mt('main.appMenu.updateCheckTitle'),
+                  message: mt('main.appMenu.updateCheckUnknownMessage'),
                 });
                 return;
               }
               if (result.updateInfo.version === app.getVersion()) {
                 dialog.showMessageBox({
                   type: 'info',
-                  title: 'Up to Date',
-                  message: `You're on the latest version (${app.getVersion()}).`,
+                  title: mt('main.appMenu.upToDateTitle'),
+                  message: mt('main.appMenu.upToDateMessage', { version: app.getVersion() }),
                 });
               }
               // If a newer version is available, the update-available event fires
               // and the renderer banner handles it — no dialog needed here.
             } catch (err) {
               dialog.showErrorBox(
-                'Update Check Failed',
+                mt('main.appMenu.updateCheckFailedTitle'),
                 err instanceof Error ? err.message : String(err),
               );
             }

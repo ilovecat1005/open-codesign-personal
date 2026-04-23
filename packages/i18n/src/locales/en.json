@@ -371,7 +371,8 @@
       "languageLoadFailed": "Failed to load language",
       "langEn": "English",
       "langZhCN": "中文 (简体)",
-      "langPtBR": "Português (BR)"
+      "langPtBR": "Português (BR)",
+      "langZhTW": "中文 (繁體)"
     },
     "language": {
       "label": "Language",
@@ -1121,5 +1122,53 @@
     "EXPORTER_ZIP_FAILED": "ZIP export failed.",
     "OPEN_PATH_FAILED": "Could not open the requested folder or file.",
     "RENDERER_ERROR": "An error occurred in the renderer. Details are in the log."
+  },
+  "main": {
+    "appMenu": {
+      "help": "Help",
+      "checkForUpdates": "Check for Updates…",
+      "updateCheckDisabledTitle": "Update Check Disabled",
+      "updateCheckDisabledMessage": "Update checks are disabled in dev builds.",
+      "updateCheckTitle": "Update Check",
+      "updateCheckUnknownMessage": "Could not determine the latest version. Try again later.",
+      "upToDateTitle": "Up to Date",
+      "upToDateMessage": "You're on the latest version ({{version}}).",
+      "updateCheckFailedTitle": "Update Check Failed"
+    },
+    "exportDialog": {
+      "title": "Export design as {{format}}"
+    },
+    "installCheck": {
+      "title": "Open CoDesign is not installed yet",
+      "message": "Drag Open CoDesign to the Applications folder first",
+      "detail": "You are currently running Open CoDesign directly from the DMG. In that state macOS cannot create a stable keychain item for the app, so API keys cannot be saved securely and config imports may fail.\n\nCorrect steps:\n1. Click “Open Applications folder and quit” below.\n2. Drag Open CoDesign.app into Finder.\n3. Launch it from Applications.\n\nThe first time you launch from Applications, macOS may ask you to confirm an app downloaded from the internet. Click Open.",
+      "openApplicationsAndQuit": "Open Applications folder and quit",
+      "continueFromDmg": "Continue from DMG (not recommended)"
+    },
+    "designHistoryUnavailable": {
+      "title": "Design history unavailable",
+      "message": "Could not open the local snapshots database. Version history will be disabled for this session.\n\n{{message}}"
+    },
+    "connection": {
+      "apiKeyAuth": "API key is invalid or lacks permission",
+      "badBaseUrl": "baseUrl path looks wrong. OpenAI-compatible proxies usually need a /v1 suffix (try https://your-host/v1)",
+      "serverHttp": "Server returned HTTP {{status}}",
+      "timeout": "Request timed out (> {{seconds}}s). Check baseUrl and network reachability.",
+      "unreachable": "Could not connect to baseUrl. Check domain / port / network.",
+      "cors": "Cross-origin error (main-process fetch should not hit this; check logs).",
+      "network": "Network error: {{message}}. Check logs: {{logPath}}",
+      "chatgptTokenReadFailed": "Could not read ChatGPT subscription credentials. Sign in again from Settings.",
+      "chatgptNotLoggedIn": "ChatGPT subscription is not signed in. Sign in from Settings.",
+      "chatgptExpired": "ChatGPT subscription login expired. Sign in again."
+    },
+    "importErrors": {
+      "codexChatgptUnsupported": "Detected Codex ChatGPT subscription login (auth_mode: chatgpt). It cannot be imported as an API-key provider yet — the \"Sign in with ChatGPT subscription\" feature is still being polished and will ship in the next release. For now, configure [model_providers] in ~/.codex/config.toml manually, or switch to API-key mode in Codex.",
+      "codexMissingProvider": "No importable API provider found in Codex config (~/.codex/config.toml is missing a [model_providers] section).",
+      "opencodeMissingProvider": "No importable API provider found in OpenCode auth.json (~/.local/share/opencode/auth.json). Log in to a provider with an API key in OpenCode first."
+    },
+    "codexOAuth": {
+      "providerName": "ChatGPT subscription",
+      "missingAccountId": "Codex login succeeded but could not read the ChatGPT account ID. Sign in again."
+    }
   }
 }

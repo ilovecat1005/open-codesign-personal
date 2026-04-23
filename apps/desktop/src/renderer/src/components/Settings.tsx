@@ -616,8 +616,8 @@ const DISMISSED_BANNER_PREFIX = 'open-codesign:settings:dismissed-import-banner:
 /**
  * Electron IPC wraps thrown errors as
  * `Error invoking remote method '<channel>': <ErrorName>: <message>`.
- * Strip the wrapper and, for bilingual messages formatted as `en / zh`,
- * pick the side matching the active locale so toast descriptions read
+ * Strip the wrapper and, for localized messages formatted as
+ * `en / zh-CN / zh-TW`, pick the side matching the active locale so toasts read
  * like natural sentences instead of framework tracebacks.
  */
 function cleanIpcError(err: unknown): string {
@@ -626,7 +626,10 @@ function cleanIpcError(err: unknown): string {
   const stripped = raw.replace(/^Error invoking remote method '[^']*':\s*[A-Za-z]*Error:\s*/, '');
   const parts = stripped.split(' / ');
   if (parts.length >= 2) {
-    return getCurrentLocale() === 'zh-CN' ? (parts[1] ?? stripped) : (parts[0] ?? stripped);
+    const locale = getCurrentLocale();
+    if (locale === 'zh-TW') return parts[2] ?? parts[1] ?? stripped;
+    if (locale === 'zh-CN') return parts[1] ?? stripped;
+    return parts[0] ?? stripped;
   }
   return stripped;
 }
@@ -1347,7 +1350,7 @@ function ModelsTab() {
         });
         setCpaDetection('unavailable');
       });
-  }, [cpaDetection, loading, rows, pushToast, reportableErrorToast, t]);
+  }, [cpaDetection, loading, reportableErrorToast, rows, t]);
 
   async function reloadRows() {
     if (!window.codesign) return;
@@ -2154,6 +2157,7 @@ function AppearanceTab() {
             options={[
               { value: 'en', label: t('settings.appearance.langEn') },
               { value: 'zh-CN', label: t('settings.appearance.langZhCN') },
+              { value: 'zh-TW', label: t('settings.appearance.langZhTW') },
               { value: 'pt-BR', label: t('settings.appearance.langPtBR') },
             ]}
           />

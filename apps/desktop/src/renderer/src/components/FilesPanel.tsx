@@ -1,6 +1,7 @@
-import { useT } from '@open-codesign/i18n';
+import { getCurrentLocale, useT } from '@open-codesign/i18n';
 import { FileCode2 } from 'lucide-react';
-import { formatAbsoluteTime, formatRelativeTime, useDesignFiles } from '../hooks/useDesignFiles';
+import { formatAbsoluteTime, useDesignFiles } from '../hooks/useDesignFiles';
+import { relativeTime } from '../lib/relativeTime';
 import { useCodesignStore } from '../store';
 
 function formatBytes(n: number | undefined): string {
@@ -12,6 +13,7 @@ function formatBytes(n: number | undefined): string {
 
 export function FilesPanel() {
   const t = useT();
+  const locale = getCurrentLocale();
   const currentDesignId = useCodesignStore((s) => s.currentDesignId);
   const openFileTab = useCodesignStore((s) => s.openCanvasFileTab);
   const { files, loading } = useDesignFiles(currentDesignId);
@@ -78,10 +80,10 @@ export function FilesPanel() {
                   </span>
                   <span
                     className="text-[11px] text-[var(--color-text-muted)] leading-[var(--leading-ui)]"
-                    title={formatAbsoluteTime(f.updatedAt)}
+                    title={formatAbsoluteTime(f.updatedAt, locale)}
                     style={{ fontFamily: 'var(--font-mono)', fontFeatureSettings: "'tnum'" }}
                   >
-                    {formatBytes(f.size)} · {formatRelativeTime(f.updatedAt)}
+                    {formatBytes(f.size)} · {relativeTime(f.updatedAt)}
                   </span>
                 </div>
               </button>

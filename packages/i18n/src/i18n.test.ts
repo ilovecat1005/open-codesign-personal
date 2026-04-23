@@ -6,12 +6,14 @@ import {
   isSupportedLocale,
   normalizeLocale,
   setLocale,
+  translate,
 } from './index';
 
 describe('normalizeLocale', () => {
   it('returns the value unchanged when it is supported', () => {
     expect(normalizeLocale('en')).toBe('en');
     expect(normalizeLocale('zh-CN')).toBe('zh-CN');
+    expect(normalizeLocale('zh-TW')).toBe('zh-TW');
   });
 
   it('coalesces common Chinese variants to zh-CN', () => {
@@ -19,6 +21,14 @@ describe('normalizeLocale', () => {
     expect(normalizeLocale('zh-Hans')).toBe('zh-CN');
     expect(normalizeLocale('zh-Hans-CN')).toBe('zh-CN');
     expect(normalizeLocale('zh_CN')).toBe('zh-CN');
+  });
+
+  it('coalesces Traditional Chinese variants to zh-TW', () => {
+    expect(normalizeLocale('zh-Hant')).toBe('zh-TW');
+    expect(normalizeLocale('zh-Hant-TW')).toBe('zh-TW');
+    expect(normalizeLocale('zh_TW')).toBe('zh-TW');
+    expect(normalizeLocale('zh-HK')).toBe('zh-TW');
+    expect(normalizeLocale('zh-MO')).toBe('zh-TW');
   });
 
   it('maps en-US / en-GB to en', () => {
@@ -51,8 +61,16 @@ describe('isSupportedLocale', () => {
   });
 });
 
+describe('translate', () => {
+  it('serves synchronous translations with interpolation for non-React callers', () => {
+    expect(translate('zh-TW', 'main.appMenu.upToDateMessage', { version: '1.2.3' })).toBe(
+      '你正在使用最新版本（1.2.3）。',
+    );
+  });
+});
+
 describe('initI18n + setLocale (live switching)', () => {
-  it('boots and serves translated strings for both locales', async () => {
+  it('boots and serves translated strings for supported locales', async () => {
     const { i18n } = await import('./index');
     await initI18n('en');
     expect(i18n.t('chat.placeholder')).toBe('Describe what to design…');
@@ -61,6 +79,10 @@ describe('initI18n + setLocale (live switching)', () => {
     await setLocale('zh-CN');
     expect(i18n.t('chat.placeholder')).toBe('想设计什么？');
     expect(i18n.t('common.preAlpha')).toBe('预览版');
+
+    await setLocale('zh-TW');
+    expect(i18n.t('chat.placeholder')).toBe('想設計什麼？');
+    expect(i18n.t('common.preAlpha')).toBe('預覽版');
 
     await setLocale('en');
     expect(i18n.t('common.send')).toBe('Send');
@@ -86,6 +108,10 @@ describe('initI18n + setLocale (live switching)', () => {
     await setLocale('zh-CN');
     expect(getCurrentLocale()).toBe('zh-CN');
     expect(i18n.t('common.send')).toBe('发送');
+
+    await setLocale('zh-TW');
+    expect(getCurrentLocale()).toBe('zh-TW');
+    expect(i18n.t('common.send')).toBe('傳送');
 
     await setLocale('en');
     expect(getCurrentLocale()).toBe('en');
@@ -138,6 +164,33 @@ describe('onboarding i18n keys (Welcome / PasteKey / ChooseModel)', () => {
     // ChooseModel
     expect(i18n.t('onboarding.choose.title')).toBe('选择默认模型');
     expect(i18n.t('onboarding.choose.finish')).toBe('完成设置');
+    expect(i18n.t('onboarding.choose.back')).toBe('返回');
+
+    // Reset to en for other tests
+    await setLocale('en');
+  });
+
+  it('switches all onboarding strings to Traditional Chinese when locale is zh-TW', async () => {
+    const { i18n } = await import('./index');
+    await initI18n('en');
+    await setLocale('zh-TW');
+
+    // Welcome
+    expect(i18n.t('onboarding.welcome.title')).toBe('選擇你的設計模型。');
+    expect(i18n.t('onboarding.welcome.tryFree')).toBe('免費試用');
+    expect(i18n.t('onboarding.welcome.useKey')).toBe('使用我的 API Key');
+    expect(i18n.t('onboarding.welcome.whereToGetKey')).toBe('在哪裡取得 Key');
+
+    // PasteKey
+    expect(i18n.t('onboarding.paste.title')).toBe('貼上你的 API Key');
+    expect(i18n.t('onboarding.paste.back')).toBe('返回');
+    expect(i18n.t('onboarding.paste.continue')).toBe('繼續');
+    expect(i18n.t('onboarding.paste.connectionTest.button')).toBe('測試連線');
+    expect(i18n.t('onboarding.paste.connectionTest.ok')).toBe('連線成功');
+
+    // ChooseModel
+    expect(i18n.t('onboarding.choose.title')).toBe('選擇預設模型');
+    expect(i18n.t('onboarding.choose.finish')).toBe('完成設定');
     expect(i18n.t('onboarding.choose.back')).toBe('返回');
 
     // Reset to en for other tests

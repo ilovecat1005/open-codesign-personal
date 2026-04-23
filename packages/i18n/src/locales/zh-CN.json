@@ -244,8 +244,8 @@
         "apiKey": "API Key",
         "apiKeyEditPlaceholder": "留空则保留 {{mask}}",
         "defaultModel": "默认模型",
-        "compatibilityHintTitle": "\u517c\u5bb9\u6027\u63d0\u793a",
-        "compatibilityHintBody": "\u90e8\u5206 coding plan\uff0c\u534f\u8bae\u8f6c\u6362\u670d\u52a1\u6216 OpenAI \u517c\u5bb9\u7f51\u5173\u53ea\u5141\u8bb8\u7279\u5b9a\u5ba2\u6237\u7aef\uff08\u5982 Claude Code\uff0copenclaw\uff0cHermes\uff09\u8bbf\u95ee\u3002\u5373\u4f7f API \u770b\u8d77\u6765\u517c\u5bb9\uff0cOpen CoDesign \u4e5f\u53ef\u80fd\u56e0\u4e3a\u5e94\u7528\u767d\u540d\u5355\u800c\u65e0\u6cd5\u4f7f\u7528\u3002",
+        "compatibilityHintTitle": "兼容性提示",
+        "compatibilityHintBody": "部分 coding plan，协议转换服务或 OpenAI 兼容网关只允许特定客户端（如 Claude Code，openclaw，Hermes）访问。即使 API 看起来兼容，Open CoDesign 也可能因为应用白名单而无法使用。",
         "switchToManual": "手动输入",
         "switchToDropdown": "从列表选择",
         "discoveringModels": "正在发现模型…",
@@ -371,7 +371,8 @@
       "languageLoadFailed": "加载语言设置失败",
       "langEn": "English",
       "langZhCN": "中文 (简体)",
-      "langPtBR": "Português (BR)"
+      "langPtBR": "Português (BR)",
+      "langZhTW": "中文 (繁體)"
     },
     "language": {
       "label": "语言",
@@ -772,6 +773,7 @@
       "duplicate": "复制",
       "delete": "删除",
       "edited": "{{when}} 编辑",
+      "snapshotCount_one": "{{count}} 个版本",
       "snapshotCount_other": "{{count}} 个版本",
       "close": "关闭设计列表"
     },
@@ -790,9 +792,12 @@
     },
     "time": {
       "justNow": "刚刚",
+      "minutesAgo_one": "{{count}} 分钟前",
       "minutesAgo_other": "{{count}} 分钟前",
+      "hoursAgo_one": "{{count}} 小时前",
       "hoursAgo_other": "{{count}} 小时前",
       "yesterday": "昨天",
+      "daysAgo_one": "{{count}} 天前",
       "daysAgo_other": "{{count}} 天前"
     },
     "notifications": {
@@ -850,8 +855,8 @@
     "testAgain": "再次测试",
     "showLog": "查看完整日志",
     "showLogFailed": "无法打开日志文件夹",
-    "gatewayAllowlistHintTitle": "\u8fd9\u4e2a\u7aef\u70b9\u53ef\u80fd\u9650\u5236\u53ef\u63a5\u5165\u7684\u5e94\u7528",
-    "gatewayAllowlistHintBody": "\u90e8\u5206 coding plan \u548c\u534f\u8bae\u8f6c\u6362\u7f51\u5173\u4f1a\u914d\u7f6e\u5e94\u7528\u767d\u540d\u5355\u3002\u5b83\u4eec\u5373\u4f7f\u58f0\u79f0\u63d0\u4f9b OpenAI \u517c\u5bb9 API\uff0c\u4e5f\u53ef\u80fd\u5728\u6ca1\u6709\u663e\u5f0f\u5141\u8bb8 Open CoDesign \u7684\u60c5\u51b5\u4e0b\u62d2\u7edd\u8bf7\u6c42\u3002",
+    "gatewayAllowlistHintTitle": "这个端点可能限制可接入的应用",
+    "gatewayAllowlistHintBody": "部分 coding plan 和协议转换网关会配置应用白名单。它们即使声称提供 OpenAI 兼容 API，也可能在没有显式允许 Open CoDesign 的情况下拒绝请求。",
     "dismiss": "关闭",
     "report": {
       "title": "上报问题",
@@ -1117,5 +1122,53 @@
     "EXPORTER_ZIP_FAILED": "ZIP 导出失败。",
     "OPEN_PATH_FAILED": "无法打开目标文件夹或文件。",
     "RENDERER_ERROR": "渲染进程出现错误，详情见日志。"
+  },
+  "main": {
+    "appMenu": {
+      "help": "帮助",
+      "checkForUpdates": "检查更新…",
+      "updateCheckDisabledTitle": "更新检查已停用",
+      "updateCheckDisabledMessage": "开发构建中已停用更新检查。",
+      "updateCheckTitle": "更新检查",
+      "updateCheckUnknownMessage": "无法判断最新版本，请稍后再试。",
+      "upToDateTitle": "已是最新版本",
+      "upToDateMessage": "你正在使用最新版本（{{version}}）。",
+      "updateCheckFailedTitle": "更新检查失败"
+    },
+    "exportDialog": {
+      "title": "导出设计为 {{format}}"
+    },
+    "installCheck": {
+      "title": "Open CoDesign 还没安装完成",
+      "message": "请先把 Open CoDesign 拖到「应用程序」文件夹",
+      "detail": "当前是从 DMG 直接运行的。这样 macOS 无法为 Open CoDesign 建立钥匙串条目，你的 API key 会无法加密保存，导入配置也会失败。\n\n正确步骤：\n1. 点下面的「打开「应用程序」文件夹」\n2. 把 Finder 里的 Open CoDesign.app 拖进去\n3. 从「应用程序」文件夹双击启动\n\n首次从「应用程序」启动时 macOS 会弹「来自网络的 app」确认框，点「打开」即可。",
+      "openApplicationsAndQuit": "打开「应用程序」文件夹并退出",
+      "continueFromDmg": "仍要从 DMG 运行（不推荐）"
+    },
+    "designHistoryUnavailable": {
+      "title": "设计历史不可用",
+      "message": "无法打开本地快照数据库。本次会话将停用版本历史。\n\n{{message}}"
+    },
+    "connection": {
+      "apiKeyAuth": "API key 错误或权限不足",
+      "badBaseUrl": "baseUrl 路径错误。OpenAI 兼容代理通常需要 /v1 后缀（试试 https://your-host/v1）",
+      "serverHttp": "服务器返回 HTTP {{status}}",
+      "timeout": "请求超时（>{{seconds}}s），检查 baseUrl 与网络可达性",
+      "unreachable": "无法连接到 baseUrl，检查域名 / 端口 / 网络",
+      "cors": "跨域错误（理论上 main 端 fetch 不该有，看日志）",
+      "network": "网络错误：{{message}}。查看日志：{{logPath}}",
+      "chatgptTokenReadFailed": "ChatGPT 订阅凭证读取失败，请到 Settings 重新登录",
+      "chatgptNotLoggedIn": "ChatGPT 订阅未登录，请到 Settings 登录",
+      "chatgptExpired": "ChatGPT 订阅登录已过期，请重新登录"
+    },
+    "importErrors": {
+      "codexChatgptUnsupported": "检测到 Codex 使用 ChatGPT 订阅登录，无法自动导入为 API key provider。“用 ChatGPT 订阅登录”功能仍在打磨中，下个版本开放 —— 目前请在 ~/.codex/config.toml 里手动配置 [model_providers]，或改用 API key 登录 Codex。",
+      "codexMissingProvider": "Codex 配置里没有可导入的 API provider（~/.codex/config.toml 里缺少 [model_providers] 段）。",
+      "opencodeMissingProvider": "OpenCode 配置里没有可导入的 API provider，请先在 OpenCode 里用 API key 登录。"
+    },
+    "codexOAuth": {
+      "providerName": "ChatGPT 订阅",
+      "missingAccountId": "Codex 登录成功但无法读取 ChatGPT 账户 ID，请重试登录。"
+    }
   }
 }

@@ -1,0 +1,1174 @@
+{
+  "common": {
+    "appName": "open-codesign",
+    "send": "傳送",
+    "cancel": "取消",
+    "retry": "重試",
+    "save": "儲存",
+    "close": "關閉",
+    "dismissNotification": "關閉通知",
+    "settings": "設定",
+    "advanced": "高級",
+    "about": "關於",
+    "learnMore": "了解更多",
+    "copy": "複製",
+    "copied": "已複製",
+    "comingSoon": "即將推出",
+    "loading": "載入中…",
+    "preAlpha": "預覽版",
+    "tagline": "自帶金鑰 · 本機優先 · 多模型",
+    "done": "完成。",
+    "applied": "已應用。",
+    "working": "處理中"
+  },
+  "toast": {
+    "error": {
+      "report": "上報"
+    }
+  },
+  "loading": {
+    "stage": {
+      "sending": "正在連線模型…",
+      "thinking": "模型思考中…",
+      "streaming": "產生中…",
+      "parsing": "整理結果…",
+      "rendering": "渲染預覽…",
+      "done": "完成"
+    },
+    "tokens": "{{count}} 個 token"
+  },
+  "canvas": {
+    "filesTab": "檔案",
+    "filesTabEmpty": "還沒有檔案",
+    "openInTab": "在新分頁開啟",
+    "previewHint": "縮圖預覽 · 雙擊檔案名或點擊「在新分頁開啟」可在獨立分頁檢視",
+    "tabsAriaLabel": "已開啟檔案",
+    "closeTab": "關閉 {{name}}",
+    "files": {
+      "sectionTitle": "設計檔案",
+      "sectionSubtitle": "共 {{count}} 個檔案",
+      "empty": "還沒有檔案。傳送一個 prompt 讓 AI 產生設計後，檔案會出現在這裡。"
+    },
+    "rail": {
+      "title": "檔案",
+      "collapse": "折疊檔案",
+      "expand": "展開檔案",
+      "empty": "還沒有檔案"
+    }
+  },
+  "preview": {
+    "empty": {
+      "title": "用 AI 設計",
+      "body": "從左側選一個示例，或直接描述你想做的設計。結果會渲染在右側的沙箱預覽裡。",
+      "starterChip": "試試這些示例提示詞："
+    },
+    "loading": {
+      "title": "正在產生你的設計…"
+    },
+    "error": {
+      "title": "產生失敗",
+      "body": "產生過程中出錯了。",
+      "copyError": "複製錯誤詳細資訊",
+      "brokenJsx": "此設計的程式碼有語法錯誤，可能是早期版本儲存的不完整內容。重新產生或編輯修正即可。",
+      "undefinedRef": "設計引用了未定義的變數或元件。可能是產生途中中斷，請嘗試重新產生。"
+    },
+    "ready": "預覽",
+    "noDesign": "還沒有設計",
+    "clickToComment": "點擊預覽中的任意元素即可留下局部留言。",
+    "commentMode": "留言模式",
+    "commentModeHint": "點擊任意元素留言",
+    "runtimeError": "預覽執行時錯誤",
+    "dismissErrors": "關閉預覽錯誤",
+    "zoom": "縮放"
+  },
+  "tweaks": {
+    "title": "微調",
+    "openLabel": "開啟微調面板",
+    "close": "關閉",
+    "reset": "恢復預設",
+    "pickColor": "選擇顏色",
+    "swatchAria": "{{key}} 顏色",
+    "emptyTitle": "暫無可調 token",
+    "emptyHint": "Agent 還沒有聲明 EDITMODE 區塊。下次產生時會自動暴露設計 token。"
+  },
+  "chat": {
+    "placeholder": "想設計什麼？",
+    "sendShortcut": "傳送（Enter）",
+    "emptyHint": "可以從示例開始，也可以直接說出你的想法。",
+    "sendAction": "傳送",
+    "sendAnywhere": "任意位置傳送",
+    "send": "傳送提示詞",
+    "stop": "停止產生",
+    "placeholderRich": "描述你想要的設計… 試試「AI 創業公司的登陸頁」"
+  },
+  "sidebar": {
+    "localContext": "本機上下文",
+    "attachLocalFiles": "新增本機檔案",
+    "linkDesignSystemRepo": "關聯設計系統 repo",
+    "refreshDesignSystemRepo": "重新整理設計系統 repo",
+    "referenceUrl": "參考連結",
+    "attachedFiles": "已附加檔案",
+    "removeFile": "移除 {{name}}",
+    "activeDesignSystem": "目前設計系統",
+    "clear": "清除",
+    "designSystemHint": "關聯一個 repo，擷取顏色、排版、間距等樣式線索，用於後續產生。",
+    "startHint": "先寫一段簡要需求，再補充檔案、連結或本機 repo，讓產生結果更貼近你的上下文。",
+    "empty": {
+      "title": "想設計點什麼？",
+      "subtitle": "在下方描述你的想法，或從這些示例開始。",
+      "eyebrow": "試試"
+    },
+    "ariaLabel": "對話面板",
+    "noDesign": "暫無設計",
+    "newChat": "新對話",
+    "collapse": "收起側邊欄",
+    "expand": "展開側邊欄",
+    "chat": {
+      "youLabel": "你",
+      "claudeLabel": "Claude",
+      "noModel": "未選擇模型",
+      "addMenu": {
+        "trigger": "新增上下文"
+      },
+      "thinking": "正在思考",
+      "streamingLabel": "助手正在回覆",
+      "tokensLine": "約 {{count}} tokens",
+      "artifactDelivered": "已產生",
+      "artifactDefaultLabel": "design.html",
+      "tool": {
+        "done": "完成"
+      },
+      "working": {
+        "title": "處理中"
+      }
+    },
+    "comments": {
+      "title": "批注模式",
+      "body": "畫布內批注將在 v0.2.1 支援。屆時你可以點選預覽中的任意元素，寫下註解或編輯指令。"
+    }
+  },
+  "settings": {
+    "title": "設定",
+    "tabs": {
+      "models": "模型",
+      "images": "圖片 API",
+      "appearance": "外觀",
+      "storage": "儲存",
+      "diagnostics": "診斷",
+      "advanced": "高級"
+    },
+    "imageGen": {
+      "tabTitle": "圖片產生",
+      "tabHint": "允許設計 Agent 調用圖片模型（如 gpt-image-2）產生 hero、海報或背景位圖。憑據僅儲存在本機。",
+      "title": "圖片產生輔助",
+      "hint": "開啟後，Agent 在產生設計時可以調用 generate_image_asset 工具。",
+      "enabled": "啟用圖片產生輔助",
+      "provider": "服務商",
+      "credentials": "憑據方式",
+      "inherit": "沿用模型服務商",
+      "customKey": "單獨設定 Key",
+      "keyPlaceholder": "留空則保留 {{mask}}",
+      "newKeyPlaceholder": "貼上 API Key",
+      "model": "圖片模型",
+      "baseUrl": "接入位址",
+      "quality": "畫質",
+      "size": "尺寸",
+      "status": {
+        "ready": "可用",
+        "needsKey": "缺少 API Key",
+        "disabled": "未啟用"
+      },
+      "toast": {
+        "loadFailed": "載入圖片產生設定失敗",
+        "saved": "圖片產生設定已儲存",
+        "saveFailed": "儲存圖片產生設定失敗"
+      }
+    },
+    "shell": {
+      "back": "工作區",
+      "backAria": "返回工作區"
+    },
+    "common": {
+      "loading": "載入中…",
+      "cancel": "取消",
+      "copy": "複製",
+      "copied": "已複製",
+      "open": "開啟",
+      "unknownError": "未知錯誤"
+    },
+    "providers": {
+      "sectionTitle": "API 服務",
+      "chatgptLogin": {
+        "title": "用 ChatGPT 訂閱登入",
+        "description": "直接用你的 ChatGPT Plus / Pro / Team 訂閱額度調用 Codex 模型（gpt-5.3-codex 等），無需 API key。",
+        "signIn": "用 ChatGPT 訂閱登入",
+        "inProgress": "已開啟瀏覽器，完成授權後自動返回…",
+        "loggedInBadge": "已登入 ChatGPT",
+        "logout": "登出",
+        "confirmLogout": "固定登出 ChatGPT 訂閱嗎？",
+        "loginFailedTitle": "ChatGPT 登入失敗",
+        "logoutFailedTitle": "ChatGPT 登出失敗",
+        "statusFailedTitle": "ChatGPT 登入狀態讀取失敗",
+        "unknownError": "未知錯誤"
+      },
+      "addProvider": "新增服務",
+      "addCustom": "新增自訂",
+      "empty": "還沒有設定任何服務，新增一個即可開始產生。",
+      "active": "目前",
+      "activeNotInList": "（目前，不在服務返回的清單中）",
+      "decryptionFailed": "解密失敗",
+      "setActive": "設為目前",
+      "reEnterKey": "重新輸入 Key",
+      "missingKey": "缺少 Key",
+      "addKey": "新增 Key",
+      "confirm": "確認",
+      "delete": "刪除",
+      "edit": "編輯",
+      "testConnection": "測試連線",
+      "moreActions": "更多操作",
+      "editModel": "變更模型",
+      "deleteAria": "刪除 {{label}} 服務",
+      "primary": "主力",
+      "fast": "快速",
+      "custom": {
+        "title": "新增自訂接入點",
+        "editTitle": "編輯接入點",
+        "wire": "授權類型",
+        "wires": {
+          "openai-chat": "OpenAI Chat",
+          "openai-responses": "OpenAI Responses",
+          "anthropic": "Anthropic Messages"
+        },
+        "name": "名稱",
+        "baseUrl": "接入位址",
+        "apiKey": "API Key",
+        "apiKeyEditPlaceholder": "留空則保留 {{mask}}",
+        "defaultModel": "預設模型",
+        "compatibilityHintTitle": "相容性提示",
+        "compatibilityHintBody": "部分 coding plan、授權轉換服務或 OpenAI 相容網關只允許特定客戶端（如 Claude Code、openclaw、Hermes）訪問。即使 API 看起來相容，Open CoDesign 也可能因為應用程式白名單而無法使用。",
+        "switchToManual": "手動輸入",
+        "switchToDropdown": "從清單選擇",
+        "discoveringModels": "正在發現模型…",
+        "discoveredModels": "發現 {{count}} 個模型",
+        "discoveryFailed": "無法自動發現模型",
+        "test": "測試連線",
+        "testOk": "正常 — 共 {{count}} 個模型",
+        "save": "儲存並繼續",
+        "saveEdit": "儲存修改"
+      },
+      "import": {
+        "action": "匯入",
+        "dismiss": "忽略",
+        "codexFound": "發現 Codex 設定 — 匯入 {{count}} 個服務？",
+        "claudeCodeOAuthTitle": "檢測到 Claude Code 訂閱用戶",
+        "claudeCodeOAuthBody": "Pro/Max 訂閱只能透過 Claude Code 客戶端本身使用，第三方 app 無法共用訂閱額度。去 Anthropic 控制台用同一帳號產生一個 API key（按 token 計費），就能在這裡用 Claude 了。",
+        "claudeCodeOAuthCtaConsole": "去 Anthropic 控制台產生 API key ↗",
+        "claudeCodeHasKeyBody": "在 {{source}} 裡找到 {{baseUrl}} 對應的 key — 點匯入即可用。",
+        "claudeCodeHasKeySourceSettings": "~/.claude/settings.json",
+        "claudeCodeHasKeySourceEnv": "shell 環境變數",
+        "claudeCodeLocalProxyBody": "看起來你在 {{baseUrl}} 跑了一個本機代理。這種設定通常用於把 OAuth 訂閱額度轉成標準 API（例如 Claude Code Proxy 一類工具）。",
+        "claudeCodeLocalProxyAction": "貼上 key 使用代理",
+        "claudeCodeRemoteGatewayBody": "Claude Code 設定裡指向 {{baseUrl}}，但沒帶 API key。可以先匯入網關，再到 Settings 填 key。",
+        "claudeCodeRemoteGatewayAction": "貼上 key 使用網關",
+        "oauthErrorToast": "Claude Code 訂閱無法在第三方 app 共用。去 Anthropic 控制台產生一個 API key 即可在這裡用。",
+        "oauthErrorToastCta": "取得 API key ↗",
+        "codexDone": "已匯入 Codex 服務",
+        "geminiFound": "檢測到 Gemini CLI key —— 要匯入嗎？",
+        "geminiNoKey": "發現 Gemini CLI 設定，但 ~/.gemini/.env 和 ~/.env 裡都沒有 API key。請手動貼上 key 以使用 Gemini。",
+        "geminiBlocked": "暫不支援 Google Vertex AI — 請貼上 Gemini Developer API key（AIzaSy… 開頭）在這裡使用 Gemini。",
+        "geminiDone": "已匯入 Gemini 服務",
+        "opencodeBlocked": "發現 OpenCode 設定但沒有可匯入內容。檢視上方 warning，修復 auth.json 後重試。",
+        "opencodeFound": "發現 OpenCode 設定 — 匯入 {{count}} 個服務（{{providers}}）？",
+        "opencodeDone": "已匯入 OpenCode 服務",
+        "claudeCodeImportedActivated": "已匯入 Claude Code 並設為目前模型服務",
+        "claudeCodeOpenSettings": "開啟 Settings",
+        "claudeCodeIHaveKey": "我已經有 API key，去貼上",
+        "claudeCodeShellEnvHint": "或：在 shell 裡 export ANTHROPIC_API_KEY，然後從 Terminal 啟動 app — 我們會自動辨識。",
+        "claudeCodeParseErrorTitle": "Claude Code 設定解析失敗",
+        "claudeCodeParseErrorBody": "~/.claude/settings.json 無法解析：{{reason}}。",
+        "claudeCodeParseErrorReasonNotObject": "最外層不是 JSON 對象",
+        "claudeCodeWarningsMore": "還有 {{count}} 條",
+        "claudeCodeParseErrorCopyPath": "複製檔案路徑",
+        "claudeCodeParseErrorPathCopied": "路徑已複製到剪貼簿",
+        "claudeCodeAnthropicPresetName": "Anthropic",
+        "claudeCodeLocalProxyPresetName": "Claude Code 代理（本機）",
+        "claudeCodeRemoteGatewayPresetName": "Claude Code 網關",
+        "failed": "匯入失敗",
+        "codexMenu": "從 Codex 匯入",
+        "codexMenuDesc": "讀取 ~/.codex/config.toml",
+        "claudeCodeMenu": "從 Claude Code 匯入",
+        "claudeCodeMenuDesc": "讀取已登入的 Claude Code 工作階段",
+        "ollamaMenu": "Ollama（本機）",
+        "ollamaMenuDesc": "新增 localhost:11434 本機模型服務",
+        "ollamaDone": "已新增 Ollama 服務",
+        "customMenu": "自訂服務",
+        "customMenuDesc": "手動填寫 API key 和 URL",
+        "alreadyImported": "已匯入"
+      },
+      "modal": {
+        "title": "新增服務",
+        "provider": "服務商",
+        "apiKey": "API Key",
+        "getKey": "取得 Key ↗",
+        "apiKeyPlaceholder": "sk-...",
+        "validate": "驗證",
+        "validating": "驗證中…",
+        "valid": "已透過",
+        "baseUrl": "接入位址",
+        "baseUrlOptional": "（可選）",
+        "baseUrlPlaceholder": "https://your-proxy.example.com",
+        "primaryModel": "主力模型",
+        "fastModel": "快速模型",
+        "save": "儲存"
+      },
+      "toast": {
+        "loadFailed": "載入服務清單失敗",
+        "removed": "服務已刪除",
+        "deleteFailed": "刪除失敗",
+        "activateFailed": "無法啟用此服務",
+        "missingModel": "該服務沒有預設模型，請先新增。",
+        "switchedTo": "已切換到 {{label}}",
+        "switchFailed": "切換失敗",
+        "saved": "服務已儲存",
+        "saveFailed": "儲存服務失敗",
+        "modelSaveFailed": "儲存模型選擇失敗",
+        "reasoningSaved": "已儲存推理深度",
+        "reasoningSaveFailed": "儲存推理深度失敗",
+        "connectionOk": "連線正常",
+        "connectionFailed": "連線失敗"
+      },
+      "cliProxyApi": {
+        "presetName": "CLIProxyAPI",
+        "presetDescription": "本機反代，將 Claude/Codex/Gemini 的訂閱帳號包裝成統一 API",
+        "apiKeyOptional": "僅當你在 CPA config.yaml 裡設定了 api-keys 才需要填",
+        "thinkingHint": "提示：在 model 名後加 `(high)` / `(xhigh)` / `(8192)` 可控制思考力度"
+      },
+      "cpaDetection": {
+        "title": "檢測到本機執行的 CLIProxyAPI",
+        "body": "一鍵匯入即可使用你已登入的 Claude / Codex / Gemini 訂閱帳號。",
+        "importAction": "匯入",
+        "dismissAction": "忽略"
+      },
+      "reasoning": {
+        "label": "推理深度",
+        "default": "預設（自動）",
+        "minimal": "極低",
+        "low": "低",
+        "medium": "中",
+        "high": "高",
+        "xhigh": "最高"
+      }
+    },
+    "appearance": {
+      "themeTitle": "主題",
+      "themeHint": "選擇會在重新啟動後保留。",
+      "lightLabel": "淺色",
+      "lightDesc": "暖米色，柔和陰影",
+      "darkLabel": "深色",
+      "darkDesc": "深沉中性，低反光",
+      "languageLabel": "語言",
+      "languageHint": "切換語言會立即生效。",
+      "languageLoadFailed": "載入語言設定失敗",
+      "langEn": "English",
+      "langZhCN": "中文 (簡體)",
+      "langPtBR": "Português (BR)",
+      "langZhTW": "中文 (繁體)"
+    },
+    "language": {
+      "label": "語言",
+      "system": "跟隨系統"
+    },
+    "theme": {
+      "label": "主題",
+      "light": "淺色",
+      "dark": "深色",
+      "system": "跟隨系統"
+    },
+    "storage": {
+      "pathsTitle": "目錄",
+      "config": "設定",
+      "logs": "日誌",
+      "data": "資料目錄",
+      "change": "變更",
+      "restartHint": "選擇 open-codesign 儲存設定、日誌和本機設計資料的位置。變更會永久儲存，重新啟動應用程式後生效。",
+      "locationSavedToast": "儲存位置已儲存。重新啟動應用程式後生效。",
+      "locationSaveFailed": "無法儲存儲存位置",
+      "onboardingTitle": "首次引導",
+      "onboardingHint": "清除引導完成標記，下次啟動時會再次執行設定向導。",
+      "resetConfirm": "此操作會刪除已儲存的 Key，是否繼續？",
+      "reset": "重置",
+      "resetButton": "重置引導",
+      "pathsLoadFailed": "載入應用程式路徑失敗",
+      "openFolderFailed": "無法開啟資料夾",
+      "onboardingResetToast": "引導已重置，重新啟動應用程式即可重新執行設定。",
+      "diagnosticsTitle": "診斷",
+      "diagnosticsHint": "開啟日誌資料夾檢視日誌，或匯出脱敏包用於提交 bug 報告。",
+      "openLogFolder": "開啟日誌資料夾",
+      "exportDiagnostics": "匯出診斷包",
+      "diagnosticsExported": "已匯出至 {{path}}",
+      "diagnosticsExportFailed": "無法匯出診斷包"
+    },
+    "diagnostics": {
+      "title": "診斷",
+      "description": "檢視最近的錯誤，附上帶完整上下文上報。",
+      "openLogFolder": "開啟日誌資料夾",
+      "exportBundle": "匯出診斷包",
+      "showTransient": "顯示重試後成功的錯誤",
+      "empty": "暫無診斷事件。",
+      "dbUnavailable": "診斷儲存無法使用。錯誤仍會寫入 main.log，但需要重新啟動應用程式後才會在此顯示。請檢查磁碟空間和權限。",
+      "inMemoryFallback": "僅顯示記憶體中的錯誤紀錄 — DB 無法使用，重新啟動後會遺失。",
+      "report": "上報",
+      "column": {
+        "time": "時間",
+        "code": "錯誤碼",
+        "scope": "範圍",
+        "runId": "執行 id",
+        "message": "訊息"
+      }
+    },
+    "advanced": {
+      "updateChannel": "更新頻道",
+      "updateChannelHint": "Stable：穩定版；Beta：搶先體驗（可能有 bug）。",
+      "stable": "穩定版",
+      "beta": "測試版",
+      "checkForUpdatesOnStartup": "啟動時檢查更新",
+      "checkForUpdatesOnStartupHint": "啟動 30 秒後自動檢查新版本。",
+      "timeout": "產生超時",
+      "timeoutHint": "超過該秒數後會中止產生請求。",
+      "timeoutSeconds": "{{value}} 秒",
+      "devtools": "開發者工具",
+      "devtoolsHint": "開啟渲染程序的 Chromium DevTools 面板。",
+      "toggleDevtools": "切換 DevTools",
+      "prefsLoadFailed": "載入偏好設定失敗",
+      "prefsSaveFailed": "儲存偏好失敗",
+      "devtoolsFailed": "無法切換 DevTools"
+    }
+  },
+  "updates": {
+    "bannerAvailable": "{{appName}} {{version}} 可用。",
+    "bannerViewRelease": "檢視版本",
+    "bannerDismissAria": "關閉更新提示"
+  },
+  "onboarding": {
+    "stepperLabel": "第 {{current}} 步，共 {{total}} 步",
+    "welcome": {
+      "title": "選擇你的設計模型。",
+      "subtitle": "選一種方式來驅動你的設計。之後可以在設定裡隨時變更。",
+      "tryFree": "免費試用",
+      "tryFreeSubtitle": "使用 OpenRouter 免費額度 — 貼上一個 OpenRouter Key，然後選 openrouter/free 或輸入任意模型 ID。",
+      "useKey": "使用我的 API Key",
+      "useKeySubtitle": "支援 Anthropic、OpenAI 或 OpenRouter，自動辨識 Key 前綴。",
+      "useOllama": "使用本機模型（Ollama）",
+      "useOllamaSubtitle": "完全本機執行，零 API 費用。需要已安裝並啟動 Ollama。",
+      "useOllamaDetected": "已檢測到 Ollama — 本機共 {{count}} 個模型可用。",
+      "useOllamaNotRunning": "未在 localhost:11434 檢測到 Ollama，請先安裝或啟動後重試。",
+      "useOllamaProbing": "正在檢測本機 Ollama 實例…",
+      "useOllamaRetry": "重新檢測",
+      "useOllamaInstall": "安裝 Ollama ↗",
+      "whereToGetKey": "在哪裡取得 Key"
+    },
+    "paste": {
+      "title": "貼上你的 API Key",
+      "description": "自動辨識服務商。點擊\"測試連線\"驗證 Key 與端點後再繼續。你的 Key 僅儲存在本機 ~/.config/open-codesign/config.toml（檔案權限 0600）。",
+      "placeholder": "sk-…",
+      "recognized": "已辨識服務商：{{provider}}",
+      "connected_one": "已連線 {{count}} 個模型",
+      "connected_other": "已連線 {{count}} 個模型",
+      "howToGet": "怎麼取得 API Key？",
+      "getKey": "取得 Key",
+      "statusIdle": "在上方貼上 Key — 系統會根據前綴自動辨識服務商。",
+      "statusDetecting": "正在辨識服務商...",
+      "statusValidating": "已辨識：{{provider}} — 驗證中...",
+      "statusDetected": "已辨識：{{provider}} — 點擊\"測試連線\"驗證",
+      "statusOk": "已辨識：{{provider}} — 連線成功（{{count}} 個模型）",
+      "errors": {
+        "401": "Key 被拒絕了。去服務商後台核對一下。",
+        "402": "帳戶餘額不足，儲值後重試。",
+        "429": "請求被限流，稍等片刻再試。",
+        "network": "無法連線到 Base URL，檢查網域 / 連接埠 / 網路。",
+        "unsupported": "無法辨識的 Key 前綴。支援：sk-ant-（Anthropic）、sk-（OpenAI）、sk-or-（OpenRouter）。",
+        "notSupportedProvider": "{{provider}} 在 v0.1 中暫不支援，請使用 Anthropic、OpenAI 或 OpenRouter。",
+        "rendererDisconnected": "渲染程序未連線到主程序。",
+        "detectIpc": "服務商辨識失敗（無法連線主程序）：{{message}}。請重新啟動應用程式後重試。",
+        "detectNetwork": "服務商辨識失敗（網路錯誤）：{{message}}。請檢查網路後重試。"
+      },
+      "advanced": {
+        "toggle": "高級 — 自訂 Base URL（代理 / 中繼）",
+        "title": "高級 — 自訂 Base URL",
+        "description": "覆蓋服務商的預設端點。適用於中繼服務和自托管代理。留空則使用官方端點。"
+      },
+      "preset": {
+        "label": "預設",
+        "placeholder": "-- 選擇一個預設 --",
+        "hint": "不知道選哪個？官方端點選 OpenAI Official，用中繼代理選對應名字。",
+        "custom": "自訂"
+      },
+      "apiKey": {
+        "label": "API Key"
+      },
+      "baseUrl": {
+        "label": "Base URL"
+      },
+      "connectionTest": {
+        "button": "測試連線",
+        "testing": "測試中...",
+        "ok": "連線成功",
+        "okVerified": "連線成功 — Key 與端點已驗證",
+        "idleHint": "繼續之前請點擊\"測試連線\"驗證 Key 與連線。",
+        "runFirst": "請先點擊\"測試連線\"驗證連線",
+        "errors": {
+          "401": "API key 錯誤或權限不足。",
+          "404": "Base URL 路徑錯誤。試試加 /v1 後綴（如 https://your-host/v1）。",
+          "ECONNREFUSED": "無法連線到 Base URL，檢查網域 / 連接埠 / 網路。",
+          "NETWORK": "網路錯誤，檢查你的網路連線。",
+          "PARSE": "回應格式異常。請檢視日誌 ~/Library/Logs/open-codesign/main.log",
+          "IPC_BAD_INPUT": "傳給連線測試的參數不合法，請檢查服務商 / API Key / Base URL。"
+        }
+      },
+      "back": "返回",
+      "continue": "繼續"
+    },
+    "choose": {
+      "title": "選擇預設模型",
+      "description": "從建議清單選一個，或直接輸入服務商的模型 ID。之後可以按設計切換。",
+      "primary": "主力設計模型",
+      "fast": "快速補全模型",
+      "primaryHint": "用於完整設計產生。",
+      "fastHint": "用於快速編輯和局部調整。",
+      "primaryHintFree": "免費路徑從 openrouter/free 開始，你也可以輸入任意 OpenRouter 模型 ID。",
+      "fastHintFree": "保留 openrouter/free 以控制成本，或換成更快的自選模型。",
+      "customBaseUrl": "自訂 Base URL：{{url}}",
+      "costNote": "預計費用因服務商、模型和提示詞長度而異。",
+      "costNoteFree": "OpenRouter 免費路由隨時可能變動，如果免費路由無法使用，請在此輸入其他模型 ID。",
+      "estimatedCost": "預計費用：{{amount}}",
+      "back": "返回",
+      "saving": "儲存中...",
+      "finish": "完成設定"
+    }
+  },
+  "topbar": {
+    "modelSwitcher": {
+      "fromProvider": "服務",
+      "searchPlaceholder": "搜尋模型…",
+      "searchAriaLabel": "按名稱篩選模型",
+      "clearSearch": "清除搜尋",
+      "noMatches": "沒有匹配 \"{{query}}\" 的模型"
+    },
+    "status": {
+      "connected": "已連線",
+      "untested": "未測試",
+      "error": "連線錯誤",
+      "noProvider": "未設定服務商",
+      "lastTested": "上次測試：{{time}}",
+      "tooltip": {
+        "click": "點擊重新測試"
+      }
+    },
+    "openMyDesigns": "檢視全部設計",
+    "hubLabel": "我的設計",
+    "settingsLabel": "設定",
+    "closeSettings": "關閉設定",
+    "unreadErrors": "{{count}} 個未讀錯誤"
+  },
+  "theme": {
+    "toggleAria": "切換主題",
+    "switchToLight": "切換到淺色",
+    "switchToDark": "切換到深色"
+  },
+  "export": {
+    "button": "匯出",
+    "items": {
+      "html": {
+        "label": "HTML",
+        "hint": "匯出為單個自包含 .html 檔案"
+      },
+      "pdf": {
+        "label": "PDF",
+        "hint": "透過你本機已安裝的 Chrome 渲染"
+      },
+      "pptx": {
+        "label": "PPTX",
+        "hint": "可編輯投影片；每個 <section> 一頁"
+      },
+      "zip": {
+        "label": "ZIP 包",
+        "hint": "index.html + 資源檔案 + README.md"
+      },
+      "markdown": {
+        "label": "Markdown",
+        "hint": "純文字 .md（含 YAML frontmatter）"
+      }
+    }
+  },
+  "notifications": {
+    "designSystemLinked": "設計系統已關聯",
+    "designSystemScanFailed": "設計系統掃描失敗",
+    "designSystemCleared": "設計系統已清除",
+    "clearDesignSystemFailed": "無法清除設計系統",
+    "generationFailed": "產生失敗",
+    "generationFailedApplyFix": "套用修復",
+    "generationFailedBaseUrlUpdated": "Base URL 已更新，請重試。",
+    "generationFailedFixUnavailable": "自動修復無法使用",
+    "generationFailedFixUnavailableDescription": "目前 app 版本無法自動套用此修復，請到設定中手動編輯 Base URL。",
+    "generationFailedFixApplyFailed": "套用修復失敗",
+    "cancellationFailed": "取消失敗",
+    "inlineCommentFailed": "局部修改失敗",
+    "commentNeedsSnapshot": "請先產生一個設計，再新增批注",
+    "commentCreateFailed": "儲存批注失敗",
+    "commentUpdateFailed": "更新批注失敗",
+    "commentDeleteFailed": "刪除批注失敗",
+    "noDesignToExport": "目前還沒有可匯出的設計。",
+    "exportedTo": "已匯出到 {{path}}"
+  },
+  "inlineComment": {
+    "title": "留言",
+    "closeComposer": "關閉局部留言面板",
+    "description": "被點擊的元素會在畫布中保持選中。描述你想調整的視覺或內容變化，open-codesign 會圍繞該目標重寫產物。",
+    "placeholder": "讓這個區塊更緊湊、標題更有衝擊力，並與已關聯的設計系統對齊…",
+    "applying": "套用中…",
+    "applyChange": "套用修改"
+  },
+  "commentBubble": {
+    "title": "批注元素",
+    "close": "關閉批注氣泡",
+    "placeholder": "描述想要的改動，或留一條筆記給自己…",
+    "saveNote": "僅標注",
+    "sendToClaude": "交給 Claude",
+    "saving": "儲存中…",
+    "sending": "傳送中…",
+    "scope": {
+      "legend": "本條留言的作用範圍",
+      "element": "僅此元素",
+      "global": "整個設計"
+    }
+  },
+  "pinOverlay": {
+    "note": "標注 {{n}}",
+    "edit": "編輯 {{n}}"
+  },
+  "commentChip": {
+    "dismiss": "移除待執行編輯",
+    "empty": "暫無待執行編輯",
+    "apply": "套用 ({{count}})",
+    "applyAll": "套用全部待執行編輯"
+  },
+  "commentsTab": {
+    "empty": "開啟批注模式後，點擊預覽中的任意元素即可留下筆記或編輯指令。",
+    "pendingEdits": "待執行的編輯",
+    "notes": "筆記",
+    "appliedEdits": "已執行的編輯",
+    "delete": "刪除批注",
+    "atSnapshot": "@ 版本 {{n}}"
+  },
+  "comments": {
+    "panel": {
+      "title": "留言",
+      "close": "關閉留言面板",
+      "empty": "還沒有留言。在畫布上點擊元素留下留言。",
+      "delete": "刪除留言",
+      "untitled": "（無內容）",
+      "status": {
+        "pending": "待處理",
+        "applied": "已應用"
+      },
+      "scope": {
+        "element": "元素",
+        "global": "全局",
+        "tooltip": "標註是只針對該元素，還是覆蓋整個設計"
+      }
+    },
+    "quickActions": {
+      "label": "快捷動作",
+      "spacing": {
+        "more": "+ 間距",
+        "less": "− 間距"
+      },
+      "contrast": {
+        "more": "+ 對比",
+        "less": "− 對比"
+      },
+      "font": {
+        "bigger": "+ 字級",
+        "smaller": "− 字級"
+      },
+      "radius": {
+        "more": "+ 圓角",
+        "less": "− 圓角"
+      },
+      "text": {
+        "spacing-more": "increase spacing on this element",
+        "spacing-less": "tighten spacing on this element",
+        "contrast-more": "increase color contrast",
+        "contrast-less": "soften the color contrast",
+        "font-bigger": "increase font size on this element",
+        "font-smaller": "decrease font size on this element",
+        "radius-more": "make corners more rounded",
+        "radius-less": "make corners sharper"
+      }
+    }
+  },
+  "disabledReason": {
+    "typePromptToSend": "輸入提示詞以開始",
+    "generatingInProgress": "產生中，請稍候",
+    "typeDraftToApply": "輸入留言內容後才能應用程式",
+    "noDesignToExport": "先產生一個設計再匯出",
+    "enterApiKeyToValidate": "請輸入 API Key 進行驗證",
+    "validateKeyFirst": "請先驗證 API Key",
+    "enterKeyToTest": "貼上 API Key 以測試連線",
+    "detectingProvider": "正在辨識服務商，請稍候",
+    "unsupportedKeyForTest": "無法辨識該 Key 格式，無法測試",
+    "providerDetectIpcForTest": "辨識服務商失敗（IPC），無法測試",
+    "providerDetectNetworkForTest": "辨識服務商失敗（網路），無法測試",
+    "testingConnection": "正在測試連線…",
+    "validateKeyToContinue": "驗證 API Key 後才能繼續",
+    "savingInProgress": "正在儲存",
+    "enterBothModels": "兩個模型字段均為必填",
+    "ollamaComingSoon": "Ollama 集成將在 v0.2 中支援"
+  },
+  "errorBoundary": {
+    "scopeFallback": "這個視圖",
+    "crashedSuffix": "{{scope}}崩潰了",
+    "body": "應用程式其餘部分仍在執行。可以重新載入該視圖，或複製堆疊用於回報問題。",
+    "noStack": "（無堆疊資訊）",
+    "copyStack": "複製堆疊",
+    "reportOnGitHub": "在 GitHub 回報",
+    "reportViaDiagnostics": "透過診斷面板上報",
+    "reload": "重新載入"
+  },
+  "errors": {
+    "generic": "出錯了。",
+    "providerAuthMissing": "還沒設定 API Key。開啟設定去新增一個。",
+    "providerError": "服務商錯誤：{{message}}",
+    "ipcBadInput": "傳給主程序的參數不合法。",
+    "exporterNotReady": "匯出器還在載入，稍等片刻再試。",
+    "rendererDisconnected": "渲染程序未連線到主程序。",
+    "onboardingIncomplete": "引導流程尚未完成。",
+    "providerMissingKey": "目前 provider「{{provider}}」沒有 API key，請開啟 Settings 填入。",
+    "modelListFailed": "無法載入模型清單。",
+    "unknown": "未知錯誤",
+    "localePersistFailed": "無法儲存語言偏好"
+  },
+  "projects": {
+    "untitled": "未命名設計",
+    "untitledNumbered": "未命名設計 {{n}}",
+    "duplicateNameTemplate": "{{name}} 副本",
+    "switcher": {
+      "currentLabel": "目前設計",
+      "menuLabel": "切換設計",
+      "newDesign": "新增設計",
+      "renameCurrent": "重新命名",
+      "viewAll": "檢視全部設計…",
+      "recent": "最近",
+      "noOthers": "暫無其他設計"
+    },
+    "view": {
+      "title": "設計清單",
+      "subtitle": "你儲存的全部設計。可以切換、重新命名、複製或刪除。",
+      "newDesign": "新增設計",
+      "search": "搜尋設計",
+      "empty": "還沒有任何設計 — 建立第一個吧。",
+      "noMatches": "沒有名字匹配“{{query}}”的設計。",
+      "open": "開啟",
+      "rename": "重新命名",
+      "duplicate": "複製",
+      "delete": "刪除",
+      "edited": "{{when}} 編輯",
+      "snapshotCount_one": "{{count}} 個版本",
+      "snapshotCount_other": "{{count}} 個版本",
+      "close": "關閉設計清單"
+    },
+    "rename": {
+      "title": "重新命名設計",
+      "label": "設計名",
+      "placeholder": "比如：登陸頁 hero 區",
+      "save": "儲存",
+      "cancel": "取消"
+    },
+    "delete": {
+      "title": "刪除該設計？",
+      "body": "“{{name}}”及其所有歷史會從設計清單移除。在 v0 版本中無法撤銷。",
+      "confirm": "刪除設計",
+      "cancel": "保留"
+    },
+    "time": {
+      "justNow": "剛剛",
+      "minutesAgo_one": "{{count}} 分鐘前",
+      "minutesAgo_other": "{{count}} 分鐘前",
+      "hoursAgo_one": "{{count}} 小時前",
+      "hoursAgo_other": "{{count}} 小時前",
+      "yesterday": "昨天",
+      "daysAgo_one": "{{count}} 天前",
+      "daysAgo_other": "{{count}} 天前"
+    },
+    "notifications": {
+      "createFailed": "無法建立新設計",
+      "switchFailed": "無法切換設計",
+      "switchBlockedGenerating": "等目前產生完成後再切換",
+      "busyGenerating": "目前產生還沒完成，稍等一下再試",
+      "renameFailed": "無法重新命名設計",
+      "duplicated": "已複製為“{{name}}”",
+      "duplicateFailed": "無法複製設計",
+      "deleted": "設計已從活動清單中移除",
+      "deleteFailed": "無法刪除設計",
+      "deleteBlockedGenerating": "等目前產生完成後再刪除",
+      "saveFailed": "無法儲存最新變更",
+      "snapshotSkipped": "此輪輸出不完整",
+      "snapshotSkippedBody": "Agent 輸出的 JSX 殘缺（缺 ReactDOM.createRoot 或括號不配對），已保留上一個完整版本。再傳送一次 prompt 重試。",
+      "loadFailed": "無法載入設計清單"
+    }
+  },
+  "diagnostics": {
+    "title": "連線失敗",
+    "status": "狀態：{{status}}",
+    "attempted": "我們嘗試了：{{url}}",
+    "mostLikelyCause": "最可能的原因：",
+    "cause": {
+      "keyInvalid": "API Key 無效或已被撤銷。",
+      "balanceEmpty": "帳戶餘額不足。",
+      "missingV1": "Base URL 路徑可能缺少 /v1 後綴。",
+      "rateLimit": "請求被限流，超過了速率限制。",
+      "hostUnreachable": "無法連線到主機——檢查網域、連接埠或 VPN。",
+      "timedOut": "請求超時——檢查防火牆或 VPN。",
+      "corsError": "CORS 跨域錯誤（主程序中不應出現此錯誤，這是一個 Bug）。",
+      "sslError": "SSL / 憑證錯誤（中繼服務使用了自簽憑證？）。",
+      "gatewayIncompatible": "網關接受了連線但沒有實現該 Provider 的 API。嘗試切換 wire（例如改為 openai-chat）。",
+      "openaiResponsesMisconfigured": "端點拒絕了請求格式。wire 可能配錯了——嘗試切換到 openai-chat。",
+      "relayStreamingBug": "網關可能錯誤處理了 OpenAI Responses API 的 SSE 事件（老版本 sub2api / claude2api / anyrouter 會把流提前截斷）。",
+      "serverError": "上游服務錯誤。可能是暫時性的，稍後重試。",
+      "unknown": "未知錯誤——請檢視完整日誌以取得詳細資訊。"
+    },
+    "fix": {
+      "updateKey": "更新 Key",
+      "addCredits": "儲值 →",
+      "addCreditsGeneric": "請前往你的 Provider 儲值頁面",
+      "addV1": "新增 /v1",
+      "waitAndRetry": "等待後重試",
+      "checkNetwork": "檢查網路 / VPN",
+      "checkVpn": "檢查 VPN / 防火牆",
+      "reportBug": "回報此 Bug",
+      "disableTls": "停用 TLS 驗證",
+      "switchWire": "到設定頁切換 wire",
+      "relayStreamingBug": "升級中繼服務；或把 wire 切到 openai-chat；或改用 api.openai.com"
+    },
+    "applyFix": "套用此修復",
+    "setBaseUrlFirst": "請先填寫 Base URL",
+    "testAgain": "再次測試",
+    "showLog": "檢視完整日誌",
+    "showLogFailed": "無法開啟日誌資料夾",
+    "gatewayAllowlistHintTitle": "這個端點可能限制可接入的應用程式",
+    "gatewayAllowlistHintBody": "部分 coding plan 和授權轉換網關會設定應用程式白名單。它們即使聲稱提供 OpenAI 相容 API，也可能在沒有顯式允許 Open CoDesign 的情況下拒絕請求。",
+    "dismiss": "關閉",
+    "report": {
+      "title": "上報問題",
+      "notes": "重現步驟（可選）",
+      "include": {
+        "prompt": "包含 prompt 正文",
+        "paths": "包含檔案路徑",
+        "urls": "包含 URL",
+        "timeline": "包含最近 60 秒操作紀錄",
+        "promptHint": "包含你在工作階段中提交的 prompt 正文。",
+        "pathsHint": "包含本機檔案路徑（可能暴露用戶名和目錄結構）。",
+        "urlsHint": "包含你貼上過的參考 URL。",
+        "timelineHint": "最近 60 秒的操作時間軸 — 只含動作名，不含內容。"
+      },
+      "disclaimer": "不會自動上傳。診斷包已儲存到下載資料夾，請手動附加到 GitHub issue。",
+      "openIssue": "開啟 issue",
+      "copySummary": "複製摘要",
+      "cancel": "取消",
+      "copied": "已複製",
+      "generating": "正在產生診斷包…",
+      "close": "關閉",
+      "scope": "範圍",
+      "runId": "Run ID",
+      "fingerprint": "指紋",
+      "message": "訊息",
+      "recentlyReported": "你在 {{relative}} 上報過同樣的問題（issue #{{issueNumber}}）。",
+      "recentlyReportedNoNumber": "你在 {{relative}} 上報過同樣的問題。",
+      "viewPrevious": "檢視之前的 issue",
+      "continueAnyway": "仍然繼續",
+      "confirmOpenAnyway": "確認，仍然繼續 ({{seconds}} 秒)",
+      "error": {
+        "notesTooLong": "備註超過 2000 字元上限。",
+        "generic": "無法開啟 issue，請檢視日誌資料夾。"
+      },
+      "bundleSavedTitle": "診斷包已儲存",
+      "bundleSavedDescription": "已儲存至",
+      "revealBundle": "開啟所在位置",
+      "openFailedTitle": "瀏覽器開啟失敗",
+      "openFailedCopyHint": "請複製 issue 連結，手動在瀏覽器開啟。",
+      "copyIssueUrl": "複製連結",
+      "clipboardFailedTitle": "複製到剪貼簿失敗",
+      "clipboardFailedHint": "診斷包已儲存到磁碟 — 請手動開啟並在 GitHub issue 裡貼上摘要。",
+      "preview": {
+        "code": "錯誤碼",
+        "scope": "範圍",
+        "runId": "執行 id",
+        "fingerprint": "指紋",
+        "message": "訊息",
+        "upstream": "上游上下文",
+        "upstreamProvider": "服務商",
+        "upstreamStatus": "狀態碼",
+        "upstreamRequestId": "請求 id",
+        "upstreamRetry": "重試次數",
+        "upstreamBodyHead": "回應體開頭"
+      }
+    }
+  },
+  "demos": {
+    "meditationApp": {
+      "title": "Calm Spaces 冥想 App",
+      "description": "帶手機外框的行動版原型，柔和配色，可點擊導覽。",
+      "prompt": "為一個名叫 Calm Spaces 的冥想 App 設計行動版原型。展示一個帶手機外框的主畫面，包含冥想課程清單、播放按鈕和進度追蹤。字型安靜、配色以柔和的綠色和藍色為主，留白充足。"
+    },
+    "caseStudy": {
+      "title": "客戶案例單頁",
+      "description": "深色主題、可直接匯出 PDF 的單頁版面，含核心指標。",
+      "prompt": "做一個一頁式的客戶案例。客戶使用我們的平台後，合格線索增長了 40%。包含前後對比指標、CEO 引言和 Logo 佔位。簡潔極簡，深色主題。"
+    },
+    "pitchDeck": {
+      "title": "B2B SaaS 募資簡報",
+      "description": "面向醫療中型市場的 8 到 12 頁 SaaS 簡報稿。",
+      "prompt": "為一家面向中型醫療市場的 B2B SaaS 公司設計募資簡報。8 到 10 頁，涵蓋問題、市場、產品、增長、團隊和募資金額。"
+    },
+    "marketingLanding": {
+      "title": "行銷登陸頁",
+      "description": "Hero + 特色 + 行動呼籲，主色可調。",
+      "prompt": "為一款 AI 效率工具設計現代風格的行銷登陸頁。包含 Hero 區、三個特色卡片、社會證明和行動呼籲。整體使用暖色調中性配色。"
+    }
+  },
+  "examples": {
+    "tab": "示例",
+    "title": "示例",
+    "subtitle": "精選的起點。懸停預覽，再把提示詞帶回輸入框。",
+    "empty": "沒有匹配該分類的示例。",
+    "useThisPrompt": "使用此提示",
+    "categories": {
+      "all": "全部",
+      "animation": "動畫",
+      "ui": "UI",
+      "marketing": "行銷",
+      "document": "文件",
+      "dashboard": "看板",
+      "presentation": "演示",
+      "email": "電子郵件",
+      "mobile": "行動版"
+    },
+    "thumbnailAlt": "{{title}} 預覽",
+    "promptUsedToast": "提示詞已載入——編輯後即可傳送。"
+  },
+  "emptyState": {
+    "heading": "想設計點什麼？",
+    "subline": "在左側輸入你的想法，AI 幫你實現。也可以從下方的模板快速開始。",
+    "tryThese": "快速開始",
+    "starters": {
+      "landing": "AI 創業公司登陸頁",
+      "pitch": "募資簡報",
+      "mobile": "行動版引導流程",
+      "dashboard": "數據分析看板",
+      "email": "產品歡迎電子郵件",
+      "portfolio": "攝影作品集",
+      "casestudy": "客戶案例頁",
+      "animation": "CSS 動畫展示"
+    },
+    "starterDesc": {
+      "landing": "Hero + 特色卡片 + 社會證明 + CTA",
+      "pitch": "標題頁 + 問題 + 解決方案，16:9",
+      "mobile": "3 屏引導流程，手機外框展示",
+      "dashboard": "趨勢圖 + 長條圖 + 表格，深色主題",
+      "email": "600px 單列電子郵件，含引導步驟",
+      "portfolio": "瀑布流 + 分類篩選 + 懸浮效果",
+      "casestudy": "核心指標 + 引言 + 實施步驟",
+      "animation": "純 CSS/SVG 動畫，60fps 流暢"
+    }
+  },
+  "starterPrompts": {
+    "landing": "為一家 AI 創業公司做一個登陸頁。Hero 區一句有力的 slogan，3 個特色卡片，社會證明區，CTA。編輯風排版，大氣留白。",
+    "pitch": "為一家金融科技創業公司產生簡報稿前 3 頁：標題頁、問題頁、解決方案頁。16:9 比例，深藍色調，一個橙色強調色。",
+    "mobile": "設計一個 3 屏的行動版引導流程：歡迎、權限請求、第一個動作。在手機外框裡展示，薄荷綠配色。",
+    "dashboard": "做一個數據看板，含 3 張圖：條形圖（月度銷量）、折線圖（用戶留存）、圓餅圖（渠道細分）。深色主題，真實數據。",
+    "email": "設計一封 SaaS 產品的歡迎電子郵件。單列 600px 寬，表格佈局。含 logo 頁首、問候語、三步引導、主 CTA 按鈕和頁腳。",
+    "portfolio": "設計一個攝影師作品集頁面。瀑布流網格佈局，用 CSS 漸變做圖片佔位。深色背景，分類篩選標籤，懸浮時顯示標題和相機參數。",
+    "casestudy": "做一個 B2B 金融科技的客戶案例單頁。含客戶名 Hero 區、三個大指標（帶變化值）、CFO 引言、三步實施流程、合作夥伴 Logo 條。深色主題，襯線標題，等寬數字。",
+    "animation": "做一個展示頁，含六個有機風格的 CSS 載入動畫。每個在獨立卡片裡：水滴變形、葉片搖擺、墨滴擴散、呼吸圓環、脈衝波紋、絲帶編織。暖奶油色背景，柔和色彩，純 CSS/SVG。"
+  },
+  "hub": {
+    "newDesign": "新增設計",
+    "newDesignCardTitle": "新增設計",
+    "newDesignCardSub": "從空白開始 · 由 AI 產生",
+    "backToHub": "全部設計",
+    "tabs": {
+      "recent": "最近",
+      "your": "我的設計",
+      "examples": "示例",
+      "designSystems": "設計系統"
+    },
+    "recent": {
+      "title": "最近",
+      "empty": "還沒有最近項目——新增一個設計後會出現在這裡。"
+    },
+    "your": {
+      "title": "我的設計",
+      "empty": "還沒有儲存的設計。點擊「新增設計」開始第一個項目。",
+      "openAria": "開啟 {{name}}"
+    },
+    "examples": {
+      "title": "示例",
+      "comingSoon": "策劃中的示例提示詞畫廊即將上線。"
+    },
+    "designSystems": {
+      "title": "設計系統",
+      "comingSoon": "可重複使用的品牌系統與模板正在路上。"
+    },
+    "card": {
+      "type": {
+        "prototype": "原型",
+        "slideDeck": "簡報",
+        "template": "模板",
+        "other": "其他"
+      },
+      "createdAt": "建立於 {{date}}",
+      "moreActions": "更多操作：{{name}}",
+      "rename": "重新命名",
+      "delete": "刪除"
+    }
+  },
+  "create": {
+    "title": "新增設計",
+    "subtitle": "選擇類型後，我們會按需調整第一則提示詞。",
+    "close": "關閉",
+    "types": {
+      "prototype": "原型",
+      "slideDeck": "簡報",
+      "template": "套用模板",
+      "other": "其他"
+    },
+    "typeDescriptions": {
+      "prototype": "帶手機或瀏覽器外框的可點擊 UI 原型。",
+      "slideDeck": "用於簡報、總結或提案的多頁簡報。",
+      "template": "從內建示例提示詞出發。",
+      "other": "空白畫布 — 任何其他想法都可以。"
+    },
+    "fields": {
+      "name": "項目名稱",
+      "namePlaceholder": "未命名設計",
+      "fidelity": "保真度",
+      "fidelityWireframe": "線框圖",
+      "fidelityWireframeHint": "灰階方塊、無圖片 — 適合快速探索。",
+      "fidelityHigh": "高保真",
+      "fidelityHighHint": "完整配色與真實感內容。",
+      "fidelityComingSoon": "線框 / 高保真選擇將在後續版本上線。",
+      "speakerNotes": "包含簡報備註",
+      "speakerNotesHint": "為每頁投影片附上備註，便於現場講解。",
+      "template": "模板",
+      "templateHint": "選一個起點 — 第一則提示詞會自動填入。"
+    },
+    "cta": "建立",
+    "disabledHint": "請先填寫項目名稱。",
+    "help": {
+      "share": "設計僅儲存在本機。需要分享時透過打包匯出，無需雲端帳號。",
+      "templates": "更多模板會陸續加入，清單會持續擴展。"
+    }
+  },
+  "err": {
+    "IPC_BAD_INPUT": "請求參數無效，請重試。",
+    "IPC_DB_ERROR": "本機資料庫出錯，重新啟動應用程式可能有助於恢復。",
+    "IPC_NOT_FOUND": "未找到請求的內容。",
+    "PROVIDER_AUTH_MISSING": "該 provider 未設定 API key，請到設定中新增。",
+    "PROVIDER_KEY_MISSING": "尚未為該 provider 儲存 API key，請到設定中新增。",
+    "PROVIDER_ACTIVE_MISSING_KEY": "目前激活的 provider 未設定 API key，請到設定中新增。",
+    "PROVIDER_NOT_SUPPORTED": "暫不支援該 provider，請檢查 provider 設定。",
+    "PROVIDER_MODEL_UNKNOWN": "所選模型在該 provider 下無法使用。",
+    "PROVIDER_BASE_URL_MISSING": "該 provider 需要 base URL，請到設定中設定。",
+    "PROVIDER_ERROR": "provider 返回錯誤，請檢查 API key 後重試。",
+    "PROVIDER_HTTP_4XX": "provider 拒絕請求，請檢查 API key 和帳戶餘額。",
+    "PROVIDER_UPSTREAM_ERROR": "provider 返回未知錯誤，詳細資訊請查看日誌。",
+    "PROVIDER_GATEWAY_INCOMPATIBLE": "網關對 Messages API 返回 “not implemented”。請到設定中把 wire 切換為 openai-chat，或更換支援 Anthropic Messages API 的網關。",
+    "PROVIDER_ABORTED": "產生已取消。",
+    "PROVIDER_RETRY_EXHAUSTED": "多次重試後 provider 仍然失敗，請檢查網路後重試。",
+    "CLAUDE_CODE_OAUTH_ONLY": "你的 Claude Code 使用的是 Anthropic 訂閱（Pro/Max），第三方應用程式無法重複使用訂閱額度——請到 console.anthropic.com 產生 API key 後填入。",
+    "CODEX_TOKEN_PARSE_FAILED": "本機 ChatGPT 登入憑證已損毀，請到設定中重新登入。",
+    "CODEX_TOKEN_NOT_LOGGED_IN": "ChatGPT 訂閱未登入，請到設定中登入。",
+    "INPUT_EMPTY_PROMPT": "prompt 不能為空。",
+    "INPUT_EMPTY_COMMENT": "留言內容不能為空。",
+    "INPUT_EMPTY_HTML": "此操作需要既有的 HTML 內容。",
+    "INPUT_UNSUPPORTED_MODE": "不支援該產生模式。",
+    "GENERATION_TIMEOUT": "產生超時，請縮短 prompt 或在設定中增加超時時間。",
+    "CONFIG_READ_FAILED": "讀取設定檔案失敗，請檢查檔案權限。",
+    "CONFIG_PARSE_FAILED": "設定檔案解析失敗，可能已損毀。",
+    "CONFIG_SCHEMA_INVALID": "設定檔案格式不辨識，請重新設定。",
+    "CONFIG_NOT_LOADED": "設定尚未載入，請重新啟動應用程式。",
+    "CONFIG_MISSING": "未找到設定，請先完成引導流程。",
+    "SNAPSHOTS_UNAVAILABLE": "本機設計資料庫無法使用，重新啟動應用程式可能有助於恢復。",
+    "BOOT_ORDER": "啟動過程出現內部錯誤，請重新啟動應用程式。",
+    "STORAGE_SETTINGS_READ_FAILED": "讀取儲存位置設定失敗。",
+    "STORAGE_SETTINGS_PARSE_FAILED": "儲存位置設定解析失敗。",
+    "STORAGE_SETTINGS_INVALID": "儲存位置設定包含無效數據。",
+    "KEYCHAIN_UNAVAILABLE": "系統金鑰鏈（安全儲存）無法使用，無法儲存 API key。",
+    "KEYCHAIN_EMPTY_INPUT": "無法對空值進行加密或解密。",
+    "ATTACHMENT_TOO_LARGE": "附上件大小超過限制。",
+    "ATTACHMENT_READ_FAILED": "讀取附上件失敗，請確認檔案仍然存在。",
+    "REFERENCE_URL_TOO_LARGE": "參考 URL 內容過大，無法附上帶。",
+    "REFERENCE_URL_FETCH_FAILED": "抓取參考 URL 失敗，請檢查連結和網路連線。",
+    "REFERENCE_URL_FETCH_TIMEOUT": "抓取參考 URL 超時，請重試或更換連結。",
+    "REFERENCE_URL_UNSUPPORTED": "暫不支援該類型的參考 URL。",
+    "PREFERENCES_READ_FAIL": "讀取偏好設定失敗，將使用預設設定。",
+    "PREFERENCES_INVALID_TIMEOUT": "產生超時時長的設定無效。",
+    "SKILL_LOAD_FAILED": "有 skill 載入失敗，請檢查 skill 檔案是否有誤。",
+    "EXPORTER_UNKNOWN": "未知的匯出格式。",
+    "EXPORTER_NO_CHROME": "未檢測到 Chrome 或 Chromium，請安裝後再進行 PDF 匯出。",
+    "EXPORTER_PDF_FAILED": "PDF 匯出失敗，請確認已安裝 Chrome 後重試。",
+    "EXPORTER_PPTX_FAILED": "PowerPoint 匯出失敗。",
+    "EXPORTER_ZIP_UNSAFE_PATH": "匯出被阻止：有資源路徑會越出 ZIP 包邊界。",
+    "EXPORTER_ZIP_FAILED": "ZIP 匯出失敗。",
+    "OPEN_PATH_FAILED": "無法開啟目標資料夾或檔案。",
+    "RENDERER_ERROR": "渲染程序出現錯誤，詳細資訊請查看日誌。"
+  },
+  "main": {
+    "appMenu": {
+      "help": "說明",
+      "checkForUpdates": "檢查更新…",
+      "updateCheckDisabledTitle": "更新檢查已停用",
+      "updateCheckDisabledMessage": "開發建置中已停用更新檢查。",
+      "updateCheckTitle": "更新檢查",
+      "updateCheckUnknownMessage": "無法判斷最新版本，請稍後再試。",
+      "upToDateTitle": "已是最新版本",
+      "upToDateMessage": "你正在使用最新版本（{{version}}）。",
+      "updateCheckFailedTitle": "更新檢查失敗"
+    },
+    "exportDialog": {
+      "title": "匯出設計為 {{format}}"
+    },
+    "installCheck": {
+      "title": "Open CoDesign 尚未完成安裝",
+      "message": "請先將 Open CoDesign 拖到「應用程式」資料夾",
+      "detail": "目前是直接從 DMG 執行。這會讓 macOS 無法替 Open CoDesign 建立鑰匙圈項目，你的 API key 會無法加密儲存，匯入設定也會失敗。\n\n正確步驟：\n1. 點下方的「開啟「應用程式」資料夾」\n2. 將 Finder 裡的 Open CoDesign.app 拖進去\n3. 從「應用程式」資料夾雙擊啟動\n\n第一次從「應用程式」啟動時，macOS 會跳出「來自網路的 app」確認框，按「打開」即可。",
+      "openApplicationsAndQuit": "開啟「應用程式」資料夾並結束",
+      "continueFromDmg": "仍要從 DMG 執行（不建議）"
+    },
+    "designHistoryUnavailable": {
+      "title": "設計歷史無法使用",
+      "message": "無法開啟本機快照資料庫。本次工作階段將停用版本歷史。\n\n{{message}}"
+    },
+    "connection": {
+      "apiKeyAuth": "API key 錯誤或權限不足",
+      "badBaseUrl": "baseUrl 路徑錯誤。OpenAI 相容代理通常需要 /v1 後綴（試試 https://your-host/v1）",
+      "serverHttp": "伺服器回傳 HTTP {{status}}",
+      "timeout": "請求逾時（>{{seconds}}s），請檢查 baseUrl 與網路是否可連線",
+      "unreachable": "無法連線到 baseUrl，請檢查網域 / 連接埠 / 網路",
+      "cors": "跨來源錯誤（理論上 main 端 fetch 不應發生，請檢視日誌）",
+      "network": "網路錯誤：{{message}}。檢視日誌：{{logPath}}",
+      "chatgptTokenReadFailed": "ChatGPT 訂閱憑證讀取失敗，請到「設定」重新登入",
+      "chatgptNotLoggedIn": "ChatGPT 訂閱尚未登入，請到「設定」登入",
+      "chatgptExpired": "ChatGPT 訂閱登入已過期，請重新登入"
+    },
+    "importErrors": {
+      "codexChatgptUnsupported": "偵測到 Codex 使用 ChatGPT 訂閱登入，無法自動匯入為 API key provider。「使用 ChatGPT 訂閱登入」功能仍在打磨中，下一個版本開放 —— 目前請先在 ~/.codex/config.toml 手動設定 [model_providers]，或改用 API key 登入 Codex。",
+      "codexMissingProvider": "Codex 設定中沒有可匯入的 API provider（~/.codex/config.toml 缺少 [model_providers] 區段）。",
+      "opencodeMissingProvider": "OpenCode 設定中沒有可匯入的 API provider，請先在 OpenCode 以 API key 登入。"
+    },
+    "codexOAuth": {
+      "providerName": "ChatGPT 訂閱",
+      "missingAccountId": "Codex 登入成功，但無法讀取 ChatGPT 帳戶 ID，請重新登入。"
+    }
+  }
+}

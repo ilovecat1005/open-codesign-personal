@@ -1,5 +1,6 @@
 import { app, dialog, shell } from './electron-runtime';
 import { getLogger } from './logger';
+import { mt } from './main-i18n';
 
 /**
  * Installation sanity checks that run before anything else at boot.
@@ -42,20 +43,13 @@ export async function maybeAbortIfRunningFromDmg(): Promise<boolean> {
 
   const { response } = await dialog.showMessageBox({
     type: 'warning',
-    title: 'Open CoDesign 还没安装完成',
-    message: '请先把 Open CoDesign 拖到「应用程序」文件夹',
-    detail: [
-      '当前是从 DMG 直接运行的。这样 macOS 无法为 Open CoDesign 建立钥匙串条目，',
-      '你的 API key 会无法加密保存，导入配置也会失败。',
-      '',
-      '正确步骤：',
-      '1. 点下面的「打开「应用程序」文件夹」',
-      '2. 把 Finder 里的 Open CoDesign.app 拖进去',
-      '3. 从「应用程序」文件夹双击启动',
-      '',
-      '首次从「应用程序」启动时 macOS 会弹「来自网络的 app」确认框，点「打开」即可。',
-    ].join('\n'),
-    buttons: ['打开「应用程序」文件夹并退出', '仍要从 DMG 运行（不推荐）'],
+    title: mt('main.installCheck.title'),
+    message: mt('main.installCheck.message'),
+    detail: mt('main.installCheck.detail'),
+    buttons: [
+      mt('main.installCheck.openApplicationsAndQuit'),
+      mt('main.installCheck.continueFromDmg'),
+    ],
     defaultId: 0,
     cancelId: 1,
   });

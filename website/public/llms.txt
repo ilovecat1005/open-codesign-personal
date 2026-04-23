@@ -57,7 +57,7 @@
 - Files panel for inspecting multi-file artifacts before export
 - Instant design switching via preview-iframe pool (last five designs stay hot)
 - Connection diagnostic panel — one-click test for any provider, with actionable hints for third-party relay quirks (SSE truncation, missing Messages API, missing `/models`, etc.)
-- Light + dark themes; English, 简体中文, and Português do Brasil UI with live toggle
+- Light + dark themes; English, 简体中文, 繁體中文, and Português do Brasil UI with live toggle
 - Five export formats: HTML (inlined CSS), PDF (local Chrome), PPTX, ZIP, Markdown
 - Generation cancellation mid-stream with meaningful timeout reasons
 - Per-generation token counter in the sidebar

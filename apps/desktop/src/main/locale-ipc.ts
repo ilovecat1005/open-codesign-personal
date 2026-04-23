@@ -17,6 +17,7 @@ import { availableLocales, isSupportedLocale, normalizeLocale } from '@open-code
 import { configDir } from './config';
 import { app, ipcMain } from './electron-runtime';
 import { getLogger } from './logger';
+import { setMainLocale } from './main-i18n';
 
 const SCHEMA_VERSION = 1;
 const logger = getLogger('locale-ipc');
@@ -57,12 +58,16 @@ async function writePersisted(locale: string): Promise<void> {
   await writeFile(file, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
 }
 
-export function registerLocaleIpc(): void {
+export async function readCurrentLocale(): Promise<string> {
+  const persisted = await readPersisted();
+  return persisted ?? app.getLocale();
+}
+
+export function registerLocaleIpc(onLocaleChanged?: () => void): void {
   ipcMain.handle('locale:get-system', () => app.getLocale());
 
   ipcMain.handle('locale:get-current', async () => {
-    const persisted = await readPersisted();
-    return persisted ?? app.getLocale();
+    return readCurrentLocale();
   });
 
   ipcMain.handle('locale:set', async (_e, raw: unknown) => {
@@ -80,6 +85,17 @@ export function registerLocaleIpc(): void {
       lower.startsWith('zh-hans') ||
       lower === 'zh-cn' ||
       lower === 'zh_cn' ||
+      lower.startsWith('zh-hant') ||
+      lower === 'zh-tw' ||
+      lower === 'zh_tw' ||
+      lower === 'zh-hk' ||
+      lower === 'zh_hk' ||
+      lower === 'zh-mo' ||
+      lower === 'zh_mo' ||
+      lower === 'pt' ||
+      lower === 'pt-br' ||
+      lower === 'pt_br' ||
+      lower.startsWith('pt-') ||
       lower.startsWith('en');
     if (!recognized) {
       throw new Error(
@@ -88,6 +104,8 @@ export function registerLocaleIpc(): void {
     }
     const canonical = normalizeLocale(raw);
     await writePersisted(canonical);
+    setMainLocale(canonical);
+    onLocaleChanged?.();
     return canonical;
   });
 }

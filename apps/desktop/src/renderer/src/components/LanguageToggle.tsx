@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 const noDragStyle = { WebkitAppRegion: 'no-drag' } as CSSProperties;
 
-const LOCALE_CYCLE: Locale[] = ['en', 'zh-CN', 'pt-BR'];
+const LOCALE_CYCLE: Locale[] = ['en', 'zh-CN', 'zh-TW', 'pt-BR'];
 
 function nextLocale(locale: Locale): Locale {
   const i = LOCALE_CYCLE.indexOf(locale);
@@ -14,7 +14,8 @@ function nextLocale(locale: Locale): Locale {
 }
 
 function localeLabel(locale: Locale): string {
-  if (locale === 'zh-CN') return 'ZH';
+  if (locale === 'zh-CN') return '简';
+  if (locale === 'zh-TW') return '繁';
   if (locale === 'pt-BR') return 'PT';
   return 'EN';
 }

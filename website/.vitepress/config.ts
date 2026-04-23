@@ -80,6 +80,7 @@ export default defineConfig({
     ['meta', { name: 'author', content: 'OpenCoworkAI' }],
     ['link', { rel: 'alternate', hreflang: 'en', href: SITE_URL }],
     ['link', { rel: 'alternate', hreflang: 'zh-CN', href: `${SITE_URL}zh/` }],
+    ['link', { rel: 'alternate', hreflang: 'zh-TW', href: `${SITE_URL}zh-tw/` }],
     ['link', { rel: 'alternate', hreflang: 'x-default', href: SITE_URL }],
     // JSON-LD — SoftwareApplication
     [
@@ -285,7 +286,7 @@ export default defineConfig({
       lang: 'en',
     },
     zh: {
-      label: '中文',
+      label: '简体中文',
       lang: 'zh-CN',
       title: 'Open CoDesign',
       description:
@@ -311,6 +312,37 @@ export default defineConfig({
         ],
         footer: {
           message: '基于 MIT 协议开源。',
+          copyright: '© 2026-present OpenCoworkAI',
+        },
+      },
+    },
+    'zh-tw': {
+      label: '繁體中文',
+      lang: 'zh-TW',
+      title: 'Open CoDesign',
+      description:
+        '開源桌面 AI 設計工具——Claude Design 的自架替代方案。自帶 API Key（Anthropic、OpenAI、Gemini、DeepSeek、Ollama），100% 本機執行，MIT。',
+      themeConfig: {
+        nav: [
+          { text: '首頁', link: '/zh-tw/' },
+          { text: '快速開始', link: '/zh-tw/quickstart' },
+          { text: '比較 Claude Design', link: '/zh-tw/claude-design-alternative' },
+          { text: '常見問題', link: '/zh-tw/faq' },
+          { text: 'GitHub', link: 'https://github.com/OpenCoworkAI/open-codesign' },
+        ],
+        sidebar: [
+          {
+            text: '入門',
+            items: [
+              { text: '簡介', link: '/zh-tw/' },
+              { text: '快速開始', link: '/zh-tw/quickstart' },
+              { text: '比較 Claude Design', link: '/zh-tw/claude-design-alternative' },
+              { text: '常見問題', link: '/zh-tw/faq' },
+            ],
+          },
+        ],
+        footer: {
+          message: '基於 MIT 授權開源。',
           copyright: '© 2026-present OpenCoworkAI',
         },
       },

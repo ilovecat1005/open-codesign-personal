@@ -13,6 +13,7 @@ import {
 import { buildAuthHeaders, buildAuthHeadersForWire } from './auth-headers';
 import { getCodexTokenStore } from './codex-oauth-ipc';
 import { ipcMain } from './electron-runtime';
+import { mt } from './main-i18n';
 import { getApiKeyForProvider, getCachedConfig } from './onboarding-ipc';
 import { isKeylessProviderAllowed } from './provider-settings';
 
@@ -199,15 +200,15 @@ export function classifyHttpError(status: number): {
   hint: string;
 } {
   if (status === 401 || status === 403) {
-    return { code: '401', hint: 'API key 错误或权限不足' };
+    return { code: '401', hint: mt('main.connection.apiKeyAuth') };
   }
   if (status === 404) {
     return {
       code: '404',
-      hint: 'baseUrl 路径错误。OpenAI 兼容代理通常需要 /v1 后缀（试试 https://your-host/v1）',
+      hint: mt('main.connection.badBaseUrl'),
     };
   }
-  return { code: 'NETWORK', hint: `服务器返回 HTTP ${status}` };
+  return { code: 'NETWORK', hint: mt('main.connection.serverHttp', { status }) };
 }
 
 function classifyNetworkError(err: unknown): { code: ConnectionTestError['code']; hint: string } {
@@ -215,24 +216,27 @@ function classifyNetworkError(err: unknown): { code: ConnectionTestError['code']
   if (err instanceof Error && err.name === 'AbortError') {
     return {
       code: 'NETWORK',
-      hint: `请求超时（>${CONNECTION_FETCH_TIMEOUT_MS / 1000}s），检查 baseUrl 与网络可达性`,
+      hint: mt('main.connection.timeout', { seconds: CONNECTION_FETCH_TIMEOUT_MS / 1000 }),
     };
   }
   if (message.includes('ECONNREFUSED') || message.includes('ENOTFOUND')) {
     return {
       code: 'ECONNREFUSED',
-      hint: '无法连接到 baseUrl，检查域名 / 端口 / 网络',
+      hint: mt('main.connection.unreachable'),
     };
   }
   if (message.includes('CORS') || message.includes('cross-origin')) {
     return {
       code: 'NETWORK',
-      hint: '跨域错误（理论上 main 端 fetch 不该有，看日志）',
+      hint: mt('main.connection.cors'),
     };
   }
   return {
     code: 'NETWORK',
-    hint: `网络错误：${message}。查看日志：~/Library/Logs/open-codesign/main.log`,
+    hint: mt('main.connection.network', {
+      message,
+      logPath: '~/Library/Logs/open-codesign/main.log',
+    }),
   };
 }
 
@@ -434,7 +438,7 @@ async function testChatGPTCodexOAuth(): Promise<ConnectionTestResponse> {
       ok: false,
       code: '401',
       message: err instanceof Error ? err.message : String(err),
-      hint: 'ChatGPT 订阅凭证读取失败，请到 Settings 重新登录',
+      hint: mt('main.connection.chatgptTokenReadFailed'),
     };
   }
   if (stored === null) {
@@ -442,7 +446,7 @@ async function testChatGPTCodexOAuth(): Promise<ConnectionTestResponse> {
       ok: false,
       code: '401',
       message: 'No ChatGPT OAuth token stored',
-      hint: 'ChatGPT 订阅未登录，请到 Settings 登录',
+      hint: mt('main.connection.chatgptNotLoggedIn'),
     };
   }
   if (stored.expiresAt < Date.now()) {
@@ -450,7 +454,7 @@ async function testChatGPTCodexOAuth(): Promise<ConnectionTestResponse> {
       ok: false,
       code: '401',
       message: 'ChatGPT OAuth token expired',
-      hint: 'ChatGPT 订阅登录已过期，请重新登录',
+      hint: mt('main.connection.chatgptExpired'),
     };
   }
   return { ok: true };

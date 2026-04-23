@@ -2,6 +2,7 @@ import { useT } from '@open-codesign/i18n';
 import type { Design } from '@open-codesign/shared';
 import { FileText, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import { type MouseEvent, useEffect, useState } from 'react';
+import { relativeTime } from '../../lib/relativeTime';
 import { useCodesignStore } from '../../store';
 import { DesignCardPreview } from './DesignCardPreview';
 
@@ -10,22 +11,6 @@ export interface DesignGridProps {
   emptyLabel: string;
   /** Optional tile rendered as the first cell of the grid (e.g. "+ New design"). */
   prefixTile?: React.ReactNode;
-}
-
-function formatRelativeTime(iso: string): string {
-  const then = new Date(iso).getTime();
-  if (Number.isNaN(then)) return '';
-  const diffSec = Math.round((Date.now() - then) / 1000);
-  if (diffSec < 60) return `${diffSec}s`;
-  const diffMin = Math.round(diffSec / 60);
-  if (diffMin < 60) return `${diffMin}m`;
-  const diffH = Math.round(diffMin / 60);
-  if (diffH < 24) return `${diffH}h`;
-  const diffD = Math.round(diffH / 24);
-  if (diffD < 30) return `${diffD}d`;
-  const diffMo = Math.round(diffD / 30);
-  if (diffMo < 12) return `${diffMo}mo`;
-  return `${Math.round(diffMo / 12)}y`;
 }
 
 interface MenuPos {
@@ -88,7 +73,7 @@ export function DesignGrid({ designs, emptyLabel, prefixTile }: DesignGridProps)
       <ul className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-[var(--space-6)] list-none p-0 m-0">
         {prefixTile ? <li>{prefixTile}</li> : null}
         {designs.map((d) => {
-          const updated = formatRelativeTime(d.updatedAt);
+          const updated = relativeTime(d.updatedAt);
           return (
             <li key={d.id}>
               <div
@@ -137,7 +122,7 @@ export function DesignGrid({ designs, emptyLabel, prefixTile }: DesignGridProps)
                       className="text-[10px] uppercase tracking-[var(--tracking-label)] text-[var(--color-text-muted)]"
                       style={{ fontFamily: 'var(--font-mono)', fontFeatureSettings: "'tnum'" }}
                     >
-                      {updated} ago
+                      {t('projects.view.edited', { when: updated })}
                     </span>
                   ) : null}
                 </div>

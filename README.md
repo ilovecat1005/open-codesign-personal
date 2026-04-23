@@ -1,6 +1,6 @@
 # Open CoDesign
 
-**简体中文**: [README.zh-CN.md](./README.zh-CN.md)
+**简体中文**: [README.zh-CN.md](./README.zh-CN.md) · **繁體中文**: [README.zh-TW.md](./README.zh-TW.md)
 
 > Your prompts. Your model. Your laptop.
 >
@@ -237,7 +237,7 @@ Add a `SKILL.md` to any project to teach the model your own taste.
 - **Connection diagnostic panel** — one-click test for any provider, with actionable errors
 - **Per-generation token counter** — see exactly how many tokens each run cost in the sidebar
 - **Settings with four tabs** — Models, Appearance, Storage, and Advanced
-- **Light + dark themes**, **EN + 简体中文 UI** with live toggle
+- **Light + dark themes**, **EN + 简体中文 + 繁體中文 UI** with live toggle
 
 ### Export and packaging
 - **Five export formats** — HTML (inlined CSS), PDF (local Chrome), PPTX, ZIP, Markdown
@@ -328,7 +328,7 @@ For Chinese-speaking users, we also keep a WeChat group for product updates, usa
 > ⚠️ The WeChat QR code rotates every 7 days and is currently valid until **April 28**.  
 > If the code has expired, please leave a message in [GitHub Issues](https://github.com/OpenCoworkAI/open-codesign/issues) and we will refresh the image in-repo.
 
-See also the Chinese README: [README.zh-CN.md#社群](./README.zh-CN.md#%E7%A4%BE%E7%BE%A4).
+See also the Chinese READMEs: [README.zh-CN.md#社群](./README.zh-CN.md#%E7%A4%BE%E7%BE%A4) · [README.zh-TW.md#社群](./README.zh-TW.md#%E7%A4%BE%E7%BE%A4).
 
 ## Contributing
 

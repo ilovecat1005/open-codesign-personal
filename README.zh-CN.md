@@ -1,6 +1,6 @@
 # Open CoDesign
 
-**English**: [README.md](./README.md)
+**English**: [README.md](./README.md) · **繁體中文**: [README.zh-TW.md](./README.zh-TW.md)
 
 > 你的提示词，你的模型，你的电脑。
 >

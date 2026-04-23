@@ -137,6 +137,15 @@ describe('formatting helpers', () => {
     expect(out).toContain('分');
     expect(out).not.toBe('3m');
   });
+
+  it('localizes relative time into zh-TW', () => {
+    const now = 1_000_000_000_000;
+    const out = formatRelativeTime(now - 3 * 60_000, now, 'zh-TW');
+    expect(out).toContain('3');
+    expect(out).toContain('分');
+    expect(out).not.toBe('3m');
+    expect(out).not.toBe('3 minutes ago');
+  });
 });
 
 describe('reportableToRow', () => {

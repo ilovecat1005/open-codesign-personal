@@ -2,11 +2,13 @@ import { ERROR_CODES } from '@open-codesign/shared';
 import { describe, expect, it } from 'vitest';
 import en from './locales/en.json';
 import zhCN from './locales/zh-CN.json';
+import zhTW from './locales/zh-TW.json';
 
 describe('error-code i18n coverage', () => {
   const locales = [
     { name: 'en', data: en as unknown as { err?: Record<string, string> } },
     { name: 'zh-CN', data: zhCN as unknown as { err?: Record<string, string> } },
+    { name: 'zh-TW', data: zhTW as unknown as { err?: Record<string, string> } },
   ];
 
   for (const locale of locales) {

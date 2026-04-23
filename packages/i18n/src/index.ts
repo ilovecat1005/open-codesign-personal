@@ -2,14 +2,14 @@
  * i18n entry point for open-codesign.
  *
  * Design notes:
- * - Two locales out of the gate: `en` and `zh-CN`. Adding a third means adding
- *   a JSON file under `./locales/` and registering it in `resources` + `availableLocales`.
+ * - Locale files live under `./locales/`; register each one in `resources`
+ *   + `availableLocales`.
  * - We do NOT silently swallow missing keys. In dev they render as `⟦key⟧` so
  *   they're visible in the UI; in any environment a `console.warn` records the
  *   namespace + locale + key path. (Principle §10: no silent fallbacks.)
  * - `normalizeLocale` is intentionally narrow — we only widen aliases that we
- *   are confident about (zh-Hans*, en-*). Anything else logs a warning and
- *   falls back to `DEFAULT_LOCALE`.
+ *   are confident about (zh-Hans*, zh-Hant*, en-*). Anything else logs a
+ *   warning and falls back to `DEFAULT_LOCALE`.
  */
 
 import i18next from 'i18next';
@@ -18,8 +18,9 @@ import { initReactI18next, useTranslation } from 'react-i18next';
 import en from './locales/en.json';
 import ptBR from './locales/pt-BR.json';
 import zhCN from './locales/zh-CN.json';
+import zhTW from './locales/zh-TW.json';
 
-export const availableLocales = ['en', 'zh-CN', 'pt-BR'] as const;
+export const availableLocales = ['en', 'zh-CN', 'zh-TW', 'pt-BR'] as const;
 export type Locale = (typeof availableLocales)[number];
 
 const DEFAULT_LOCALE: Locale = 'en';
@@ -27,6 +28,7 @@ const DEFAULT_LOCALE: Locale = 'en';
 const resources = {
   en: { translation: en },
   'zh-CN': { translation: zhCN },
+  'zh-TW': { translation: zhTW },
   'pt-BR': { translation: ptBR },
 } as const;
 
@@ -41,6 +43,17 @@ export function normalizeLocale(value: string | undefined | null): Locale {
   const lower = value.toLowerCase();
   if (lower === 'zh' || lower.startsWith('zh-hans') || lower === 'zh-cn' || lower === 'zh_cn') {
     return 'zh-CN';
+  }
+  if (
+    lower.startsWith('zh-hant') ||
+    lower === 'zh-tw' ||
+    lower === 'zh_tw' ||
+    lower === 'zh-hk' ||
+    lower === 'zh_hk' ||
+    lower === 'zh-mo' ||
+    lower === 'zh_mo'
+  ) {
+    return 'zh-TW';
   }
   if (lower === 'pt-br' || lower === 'pt_br' || lower === 'pt' || lower.startsWith('pt-')) {
     return 'pt-BR';
@@ -103,6 +116,41 @@ export async function setLocale(locale: string): Promise<Locale> {
   }
   await i18next.changeLanguage(target);
   return target;
+}
+
+function lookupTranslationValue(locale: Locale, key: string): unknown {
+  const table = resources[locale].translation as Record<string, unknown>;
+  return key.split('.').reduce<unknown>((acc, part) => {
+    if (acc && typeof acc === 'object' && part in acc) {
+      return (acc as Record<string, unknown>)[part];
+    }
+    return undefined;
+  }, table);
+}
+
+function interpolate(value: string, options: Record<string, unknown> | undefined): string {
+  if (!options) return value;
+  return value.replace(/\{\{(\w+)\}\}/g, (match, name: string) => {
+    const replacement = options[name];
+    if (replacement === undefined || replacement === null) return match;
+    return String(replacement);
+  });
+}
+
+/**
+ * Synchronous translation helper for non-React code paths, especially the
+ * Electron main process where hooks/i18next initialization are not available.
+ */
+export function translate(
+  locale: string | undefined | null,
+  key: string,
+  options?: Record<string, unknown>,
+): string {
+  const target = normalizeLocale(locale);
+  const value = lookupTranslationValue(target, key) ?? lookupTranslationValue(DEFAULT_LOCALE, key);
+  if (typeof value === 'string') return interpolate(value, options);
+  console.warn(`[i18n] missing translation key "${key}" for locale "${target}"`);
+  return key;
 }
 
 export function getCurrentLocale(): Locale {
