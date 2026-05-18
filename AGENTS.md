@@ -1,10 +1,10 @@
-# CLAUDE.md — Open CoDesign
+# AGENTS.md — Open CoDesign
 
-Instructions for Claude Code (and any AI coding agent) working in this repository. Read this before making changes.
+Instructions for Codex (and any AI coding agent) working in this repository. Read this before making changes.
 
 ## What this project is
 
-open-codesign is an Electron desktop app that turns natural-language prompts into design artifacts (HTML prototypes, PDFs, PPTX decks, marketing assets). It's the open-source counterpart to Anthropic's Claude Design, with multi-provider model support via `pi-ai` and a local-first storage model.
+open-codesign is an Electron desktop app that turns natural-language prompts into design artifacts (HTML prototypes, PDFs, PPTX decks, marketing assets). It's the open-source counterpart to Anthropic's Codex Design, with multi-provider model support via `pi-ai` and a local-first storage model.
 
 The full vision and locked decisions live in `docs/VISION.md`. Read it before suggesting architectural changes.
 
@@ -15,7 +15,7 @@ The full vision and locked decisions live in `docs/VISION.md`. Read it before su
 These are project-level commitments, not preferences:
 
 1. **No bundled model runtimes.** No Ollama, llama.cpp, Python, or browser binaries shipped in the installer. Use system installs or lazy-download on demand.
-2. **BYOK only.** No proxied API calls, no cloud account, no telemetry by default. User credentials stay in `~/.config/open-codesign/config.toml` (plaintext, file mode 0600 — matching Claude Code / Codex / gh CLI conventions).
+2. **BYOK only.** No proxied API calls, no cloud account, no telemetry by default. User credentials stay in `~/.config/open-codesign/config.toml` (plaintext, file mode 0600 — matching Codex / Codex / gh CLI conventions).
 3. **Local-first storage.** Designs, history, and codebase scans live on disk (SQLite via `better-sqlite3`). No mandatory cloud sync.
 4. **MIT-compatible permissive licenses only.** Reject GPL/AGPL/SSPL/proprietary deps. Check license before adding anything.
 5. **Lazy-load heavy features.** PPTX export, web capture, codebase scan, etc. must dynamic-import on first use, not on app start.
@@ -62,13 +62,13 @@ packages/
   templates/         # Built-in demo prompts and starter templates
   shared/            # Types, utils, zod schemas
 docs/                # Vision, roadmap, principles, RFCs (gitignored — internal only)
-examples/            # Reproductions of Claude Design public demos
+examples/            # Reproductions of Codex Design public demos
 ```
 
 ## Doing tasks here
 
 - **Always read `docs/VISION.md` and `docs/PRINCIPLES.md` first** for any non-trivial change. The constraints are not negotiable.
-- **Use the planning-with-files workflow** for any task spanning > 5 tool calls or > 3 files. Plans live in `.claude/workspace/`.
+- **Use the planning-with-files workflow** for any task spanning > 5 tool calls or > 3 files. Plans live in `.Codex/workspace/`.
 - **Use git worktrees for parallel work.** See `docs/COLLABORATION.md` for the workflow. Never run two unrelated feature branches in the same checkout.
 - **Check `docs/RESEARCH_QUEUE.md`** before starting work that touches sandbox / inline-comment / slider / PPTX / pi-ai capabilities — research may still be pending and decisions unresolved.
 - **Respect the lean budget.** Before adding a dependency: search for a tiny alternative, consider inlining, ask if it can be a peer dep.
